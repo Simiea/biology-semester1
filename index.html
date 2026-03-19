@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biology — Chapter 1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #131920;
+      --border: #1e2d3d;
+      --accent-1: #4fc3a1;
+      --accent-2: #e8a87c;
+      --text: #d4e3ec;
+      --muted: #5a7a8a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,195,161,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,195,161,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to   { background-position: 48px 48px; }
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+      animation: float 14s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 380px; height: 380px; background: var(--accent-1); top: -80px; left: -80px; animation-duration: 16s; }
+    .orb-2 { width: 280px; height: 280px; background: var(--accent-2); bottom: -60px; right: -40px; animation-duration: 12s; animation-delay: -5s; }
+
+    @keyframes float {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(30px, 40px) scale(1.08); }
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+    }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 3rem;
+    }
+
+    .label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 0.6rem;
+      opacity: 0;
+      animation: reveal 0.8s ease 0.5s forwards;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      line-height: 1.1;
+      color: #fff;
+      opacity: 0;
+      animation: reveal 0.9s ease 0.65s forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent-1);
+    }
+
+    .subtitle {
+      margin-top: 0.9rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: reveal 0.9s ease 0.8s forwards;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-1), transparent);
+      margin: 2rem 0;
+      opacity: 0;
+      animation: reveal 0.9s ease 0.9s forwards;
+    }
+
+    /* Cards */
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .card {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.6rem 2rem;
+      text-decoration: none;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      opacity: 0;
+    }
+
+    .card:nth-child(1) { animation: reveal 0.8s ease 1.0s forwards; }
+    .card:nth-child(2) { animation: reveal 0.8s ease 1.15s forwards; }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .card-1::before { background: linear-gradient(120deg, rgba(79,195,161,0.07), transparent 60%); }
+    .card-2::before { background: linear-gradient(120deg, rgba(232,168,124,0.07), transparent 60%); }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+    .card:hover::before { opacity: 1; }
+    .card-1:hover { border-color: var(--accent-1); }
+    .card-2:hover { border-color: var(--accent-2); }
+
+    /* Icon blob */
+    .icon {
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      transition: transform 0.3s;
+    }
+    .card:hover .icon { transform: scale(1.12) rotate(-4deg); }
+    .icon-1 { background: rgba(79,195,161,0.12); border: 1px solid rgba(79,195,161,0.25); }
+    .icon-2 { background: rgba(232,168,124,0.12); border: 1px solid rgba(232,168,124,0.25); }
+
+    /* Card text */
+    .card-body { flex: 1; }
+
+    .card-chapter {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .card-1 .card-chapter { color: var(--accent-1); }
+    .card-2 .card-chapter { color: var(--accent-2); }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-desc {
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Arrow */
+    .arrow {
+      font-size: 1.2rem;
+      color: var(--muted);
+      transition: transform 0.3s, color 0.3s;
+    }
+    .card-1:hover .arrow { transform: translateX(5px); color: var(--accent-1); }
+    .card-2:hover .arrow { transform: translateX(5px); color: var(--accent-2); }
+
+    /* Footer */
+    .footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      opacity: 0;
+      animation: reveal 0.8s ease 1.35s forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="container">
+    <div class="header">
+      <p class="label">Biology · Study Guide</p>
+      <h1>Chapter <em>One</em></h1>
+      <p class="subtitle">Select a topic below to begin your study session</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="cards">
+      <a href="chapter-1-5-cellmembrane-quiz.html" class="card card-1">
+        <div class="icon icon-1">🧬</div>
+        <div class="card-body">
+          <p class="card-chapter">Chapter 1.5</p>
+          <p class="card-title">Cell Membrane</p>
+          <p class="card-desc">Structure, function &amp; transport mechanisms of the plasma membrane</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="chapter-1-6-microorganisms.html" class="card card-2">
+        <div class="icon icon-2">🦠</div>
+        <div class="card-body">
+          <p class="card-chapter">Chapter 1.6</p>
+          <p class="card-title">Microorganisms</p>
+          <p class="card-desc">Bacteria, viruses, fungi &amp; their roles in biology and disease</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <p class="footer">2 topics · Chapter 1 · Biology</p>
+  </div>
+
+</body>
+</html>
