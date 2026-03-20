@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1.7 — Microorganisms and Food</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,700;9..144,900&family=Epilogue:wght@300;400;500;600&family=Inconsolata:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --bg2: #f2ede4;
+    --surface: #ffffff;
+    --border: #e2d9cc;
+    --border2: #c8bfb0;
+    --text: #1a1512;
+    --muted: #6b5f52;
+    --muted2: #9c8e82;
+
+    --red:    #c0392b;
+    --red-bg: #fdf1f0;
+    --red-border: #f5c6c2;
+
+    --amber:  #b7690a;
+    --amber-bg: #fdf6ed;
+    --amber-border: #f5d9a8;
+
+    --green:  #2d6a4f;
+    --green-bg: #f0f7f3;
+    --green-border: #b7deca;
+
+    --blue:   #1a5276;
+    --blue-bg: #eaf4fb;
+    --blue-border: #a8d4ea;
+
+    --teal:   #0e6655;
+    --teal-bg: #eafaf1;
+    --teal-border: #a2d9c5;
+
+    --purple: #6c3483;
+    --purple-bg: #f5eef8;
+    --purple-border: #d2a8e8;
+
+    --ink: #3d2b1f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    color: #faf7f2;
+    padding: 6rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.04) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.04) 60px);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 60px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #d4a96a;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: #e8b86d;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: rgba(250,247,242,0.65);
+    max-width: 560px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .hero-pills a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-family: 'Inconsolata', monospace;
+    letter-spacing: 0.05em;
+    padding: 0.45em 1.1em;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(250,247,242,0.75);
+    background: rgba(255,255,255,0.05);
+    transition: all 0.2s;
+  }
+
+  .hero-pills a:hover {
+    border-color: #e8b86d;
+    color: #e8b86d;
+    background: rgba(232,184,109,0.08);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  section {
+    padding: 5rem 0;
+  }
+
+  section + section {
+    border-top: 1px solid var(--border);
+  }
+
+  .sec-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.6rem;
+  }
+
+  .sec-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+  }
+
+  .sec-intro {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  strong { font-weight: 600; color: var(--text); }
+  em { font-style: italic; color: var(--muted); }
+
+  /* ─── REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.vis { opacity: 1; transform: none; }
+
+  /* ─── CALLOUT BOXES ─── */
+  .callout {
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .callout-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout.danger  { background: var(--red-bg);    border-color: var(--red-border);    color: #7b2220; }
+  .callout.danger  .callout-title { color: var(--red); }
+  .callout.warning { background: var(--amber-bg);  border-color: var(--amber-border);  color: #6b4206; }
+  .callout.warning .callout-title { color: var(--amber); }
+  .callout.info    { background: var(--blue-bg);   border-color: var(--blue-border);   color: #0f3460; }
+  .callout.info    .callout-title { color: var(--blue); }
+  .callout.good    { background: var(--green-bg);  border-color: var(--green-border);  color: #1a4033; }
+  .callout.good    .callout-title { color: var(--green); }
+
+  /* ─── SPOILAGE COMPARE ─── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+
+  .compare-card {
+    border-radius: 14px;
+    border: 1px solid;
+    overflow: hidden;
+  }
+
+  .compare-head {
+    padding: 1rem 1.5rem;
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .compare-body {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .compare-card.spoilage { border-color: var(--amber-border); }
+  .compare-card.spoilage .compare-head { background: var(--amber-bg); color: var(--amber); }
+  .compare-card.spoilage .compare-body { color: #6b4206; }
+
+  .compare-card.poisoning { border-color: var(--red-border); }
+  .compare-card.poisoning .compare-head { background: var(--red-bg); color: var(--red); }
+  .compare-card.poisoning .compare-body { color: #7b2220; }
+
+  /* ─── HYGIENE STEPS ─── */
+  .hygiene-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .hygiene-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: all 0.22s;
+  }
+
+  .hygiene-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border2);
+    box-shadow: 0 6px 24px rgba(61,43,31,0.1);
+  }
+
+  .hcard-icon { font-size: 2.2rem; margin-bottom: 0.85rem; }
+  .hcard-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .hcard-text { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+  /* ─── SOAP EXPLAINER ─── */
+  .soap-box {
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    border-radius: 14px;
+    padding: 2rem;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 680px) { .soap-box { grid-template-columns: 1fr; } }
+
+  .soap-step {
+    text-align: center;
+  }
+
+  .soap-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-family: 'Inconsolata', monospace;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 0.75rem;
+  }
+
+  .soap-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+  .soap-step-title { font-weight: 600; font-size: 0.88rem; color: var(--blue); margin-bottom: 0.3rem; }
+  .soap-step-text { font-size: 0.82rem; color: #0f3460; line-height: 1.6; }
+
+  /* ─── FRIDGE VISUAL ─── */
+  .fridge {
+    background: var(--surface);
+    border: 2px solid var(--border2);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-top: 2rem;
+    max-width: 680px;
+  }
+
+  .fridge-top {
+    background: var(--ink);
+    padding: 0.9rem 1.5rem;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    color: #e8b86d;
+    text-transform: uppercase;
+  }
+
+  .fridge-shelf {
+    border-bottom: 2px solid var(--border);
+    padding: 1.1rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: background 0.2s;
+  }
+
+  .fridge-shelf:last-child { border-bottom: none; }
+  .fridge-shelf:hover { background: var(--bg2); }
+
+  .shelf-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    width: 100px;
+    flex-shrink: 0;
+    padding-top: 0.1rem;
+  }
+
+  .shelf-content { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+  .shelf-content strong { color: var(--text); }
+
+  /* ─── PRESERVATION TABLE ─── */
+  .preservation-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+
+  .pres-group {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .pres-group-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .pres-group.heat    .pres-group-header { background: var(--red-bg);    color: var(--red);    border-bottom: 1px solid var(--red-border); }
+  .pres-group.cold    .pres-group-header { background: var(--blue-bg);   color: var(--blue);   border-bottom: 1px solid var(--blue-border); }
+  .pres-group.water   .pres-group-header { background: var(--teal-bg);   color: var(--teal);   border-bottom: 1px solid var(--teal-border); }
+  .pres-group.ph      .pres-group-header { background: var(--amber-bg);  color: var(--amber);  border-bottom: 1px solid var(--amber-border); }
+  .pres-group.oxygen  .pres-group-header { background: var(--green-bg);  color: var(--green);  border-bottom: 1px solid var(--green-border); }
+  .pres-group.extra   .pres-group-header { background: var(--purple-bg); color: var(--purple); border-bottom: 1px solid var(--purple-border); }
+
+  .pres-group-subtitle {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-left: 0.25rem;
+  }
+
+  .pres-method {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+    transition: background 0.18s;
+  }
+
+  .pres-method:last-child { border-bottom: none; }
+  .pres-method:hover { background: var(--bg2); }
+
+  .pres-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+    padding-top: 0.05rem;
+  }
+
+  .pres-name .pres-tag {
+    display: inline-block;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    padding: 0.15em 0.6em;
+    border-radius: 4px;
+    margin-top: 0.4rem;
+    border: 1px solid;
+  }
+
+  .pres-group.heat   .pres-tag { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
+  .pres-group.cold   .pres-tag { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
+  .pres-group.water  .pres-tag { background: var(--teal-bg);   color: var(--teal);   border-color: var(--teal-border); }
+  .pres-group.ph     .pres-tag { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
+  .pres-group.oxygen .pres-tag { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+  .pres-group.extra  .pres-tag { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-border); }
+
+  .pres-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+  @media (max-width: 620px) {
+    .pres-method { grid-template-columns: 1fr; gap: 0.5rem; }
+  }
+
+  /* ─── QUICK TIPS ─── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .tip-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.6;
+    transition: all 0.2s;
+  }
+
+  .tip-card:hover {
+    border-color: var(--border2);
+    background: var(--bg2);
+  }
+
+  .tip-icon { font-size: 1.35rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+  /* ─── STAT BAND ─── */
+  .stat-band {
+    background: var(--ink);
+    color: #faf7f2;
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .stat-item { flex: 1; min-width: 160px; }
+
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #e8b86d;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label { font-size: 0.82rem; color: rgba(250,247,242,0.6); line-height: 1.5; }
+
+  /* ─── PROCESS FLOW ─── */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .flow-step {
+    flex: 1;
+    min-width: 120px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    position: relative;
+    background: var(--surface);
+    transition: background 0.2s;
+  }
+
+  .flow-step:last-child { border-right: none; }
+  .flow-step:hover { background: var(--bg2); }
+
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -0.6em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted2);
+    font-size: 1rem;
+    z-index: 1;
+  }
+
+  .flow-step:last-child::after { display: none; }
+
+  .flow-num {
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted2);
+    margin-bottom: 0.4rem;
+  }
+
+  .flow-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .flow-name { font-size: 0.78rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+
+  @media (max-width: 680px) {
+    .flow { flex-direction: column; }
+    .flow-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-step::after { content: '↓'; right: auto; top: auto; bottom: -0.65em; left: 50%; transform: translateX(-50%); }
+    .flow-step:last-child::after { display: none; }
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    color: rgba(250,247,242,0.45);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-family: 'Inconsolata', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    margin-top: 2rem;
+  }
+
+  footer span { color: #e8b86d; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Topic 1 · Cells &amp; Microorganisms · Chapter 1.7</div>
+    <h1>Microorganisms<br>&amp; <em>Food</em></h1>
+    <p class="hero-desc">Food spoilage, hygienic practices, and the science behind preserving food by controlling microbial growth.</p>
+    <nav class="hero-pills">
+      <a href="#spoilage">Food Spoilage</a>
+      <a href="#hygiene">Hygiene Practices</a>
+      <a href="#preparation">Food Preparation</a>
+      <a href="#storage">Food Storage</a>
+      <a href="#preservation">Preservation Methods</a>
+    </nav>
+  </div>
+</header>
+
+<!-- FOOD SPOILAGE -->
+<section id="spoilage">
+  <div class="container">
+    <div class="sec-label">Section 1</div>
+    <h2 class="sec-title">Food Spoilage</h2>
+    <p class="sec-intro">Food spoilage is any <strong>undesirable change to a food</strong> — physical, chemical or microbiological. Most spoilage is microbiological, resulting in chemical changes that alter colour, texture and odour.</p>
+
+    <div class="stat-band reveal">
+      <div class="stat-item">
+        <div class="stat-num">5.4M</div>
+        <div class="stat-label">cases of foodborne illness in Australia each year (OzFoodNet)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">$1.2B</div>
+        <div class="stat-label">annual economic cost of foodborne illness in Australia</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">75°C</div>
+        <div class="stat-label">minimum cooking temperature to kill most pathogenic bacteria</div>
+      </div>
+    </div>
+
+    <!-- SPOILAGE vs POISONING -->
+    <div class="compare-grid reveal" style="margin-top:2.5rem;">
+      <div class="compare-card spoilage">
+        <div class="compare-head">🟡 Food Spoilage</div>
+        <div class="compare-body">
+          <strong>Definition:</strong> Undesirable changes to food from physical, chemical or microbiological activity.<br><br>
+          <strong>Causes:</strong> Fungi (moulds on bread, cheese, fruit) and non-pathogenic bacteria. Physical damage (bruising) increases surface area for microbial growth.<br><br>
+          <strong>Detection:</strong> <em>Usually detectable</em> — changes to colour, texture and odour act as sensory warnings.<br><br>
+          <strong>Risk:</strong> Spoilt food is less nutritious and can cause illness (especially fungal poisoning), but generally less dangerous than food poisoning.
+        </div>
+      </div>
+      <div class="compare-card poisoning">
+        <div class="compare-head">🔴 Food Poisoning</div>
+        <div class="compare-body">
+          <strong>Definition:</strong> Contamination by <em>pathogenic</em> (disease-causing) microorganisms that multiply exponentially and release toxins.<br><br>
+          <strong>Symptoms:</strong> Fatigue, vomiting, diarrhoea, dehydration.<br><br>
+          <strong>Detection:</strong> <em>Often undetectable</em> — most food poisoning bacteria and their toxins have no smell or taste. Contamination commonly goes unnoticed.<br><br>
+          <strong>⚠️ Key fact:</strong> Cooking above 75°C kills bacteria but <strong>does not destroy toxins already present</strong> in the food.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout danger reveal" style="margin-top:2rem;">
+      <div class="callout-title">⚠️ Important Distinction — Toxins Survive Cooking</div>
+      Heating food to 75°C or above kills most pathogenic bacteria, but the toxins they have already released remain in the food. This is why it is critical to prevent contamination before it occurs — not just to rely on cooking as a safeguard.
+    </div>
+
+  </div>
+</section>
+
+<!-- HYGIENE PRACTICES -->
+<section id="hygiene">
+  <div class="container">
+    <div class="sec-label">Section 2</div>
+    <h2 class="sec-title">Hygienic Practices</h2>
+    <p class="sec-intro">Safe food handling is required both in food businesses and at home. Applying proper hygiene can prevent most of the 5.4 million foodborne illness cases occurring each year in Australia.</p>
+
+    <div class="hygiene-grid reveal">
+      <div class="hygiene-card">
+        <div class="hcard-icon">🧼</div>
+        <div class="hcard-title">Handwashing</div>
+        <div class="hcard-text">Wash hands rigorously with soap for <strong>20 seconds</strong> then rinse. Soap molecules bind to and destroy microbial cell membranes (lipid bilayer). Friction from rubbing removes and destroys more microorganisms.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">👕</div>
+        <div class="hcard-title">Protective Clothing</div>
+        <div class="hcard-text">Wear clean aprons, tie back long hair and use hair nets. Cover all cuts and wounds with a band-aid or gloves to prevent transfer of microorganisms from wounds to food.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">🤧</div>
+        <div class="hcard-title">Personal Behaviour</div>
+        <div class="hcard-text">Never cough or sneeze over food or preparation areas. Anyone experiencing diarrhoea or vomiting should <strong>not</strong> prepare food for others.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">🔪</div>
+        <div class="hcard-title">Clean Surfaces &amp; Utensils</div>
+        <div class="hcard-text">Properly clean and sanitise all surfaces and utensils involved in food preparation. Use <strong>separate cutting boards</strong> for meats and vegetables. Cooked food must never contact surfaces used for raw meat.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">📱</div>
+        <div class="hcard-title">High-Touch Surfaces</div>
+        <div class="hcard-text">Wash hands frequently — especially after touching digital devices, changing nappies or handling raw meats. These surfaces carry many microorganisms that can transfer to food easily.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">🛒</div>
+        <div class="hcard-title">Purchasing Food</div>
+        <div class="hcard-text">Check packaging for damage, swelling (indicates microbial gas production) or slits. Verify use-by dates. Pack cold foods in insulated bags. Keep hot and cold foods separate during transport.</div>
+      </div>
+    </div>
+
+    <!-- HOW SOAP WORKS -->
+    <h3 style="font-family:'Fraunces',serif; font-size:1.3rem; margin-top:3rem; margin-bottom:0.5rem; color:var(--ink);">How Soap Destroys Microorganisms</h3>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0;">Soap molecules have a hydrophilic (water-loving) head and hydrophobic (water-avoiding) tail that targets lipid membranes.</p>
+    <div class="soap-box reveal">
+      <div class="soap-step">
+        <div class="soap-num">1</div>
+        <div class="soap-icon">🦠</div>
+        <div class="soap-step-title">Virus/Bacteria has Lipid Membrane</div>
+        <div class="soap-step-text">Microorganisms carry a membrane made of oily lipid molecules studded with proteins that help them infect cells.</div>
+      </div>
+      <div class="soap-step">
+        <div class="soap-num">2</div>
+        <div class="soap-icon">💧</div>
+        <div class="soap-step-title">Soap Wedges into Membrane</div>
+        <div class="soap-step-text">The hydrophobic tails of soap molecules wedge into the lipid membrane and pry it apart — destroying the microorganism.</div>
+      </div>
+      <div class="soap-step">
+        <div class="soap-num">3</div>
+        <div class="soap-icon">🫧</div>
+        <div class="soap-step-title">Micelles Wash Away</div>
+        <div class="soap-step-text">Soap traps dirt and destroyed virus/bacteria fragments in tiny bubbles called micelles, which rinse away with water.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOD PREPARATION -->
+<section id="preparation">
+  <div class="container">
+    <div class="sec-label">Section 3</div>
+    <h2 class="sec-title">Food Preparation</h2>
+    <p class="sec-intro">Three critical preparation steps reduce microbial contamination: proper defrosting, eliminating cross contamination, and cooking to the correct temperature.</p>
+
+    <div class="hygiene-grid reveal">
+      <div class="hygiene-card">
+        <div class="hcard-icon">🧊</div>
+        <div class="hcard-title">Defrosting</div>
+        <div class="hcard-text">Always defrost food in a <strong>fridge</strong>, never on a bench. Room temperature puts food in the temperature danger zone (5–60°C), promoting microbial growth and division.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">⚠️</div>
+        <div class="hcard-title">Cross Contamination</div>
+        <div class="hcard-text">Use <strong>separate cutting boards and utensils</strong> for meats and vegetables. Raw foods contain living microorganisms that can transfer to other foods, surfaces or equipment — known as cross contamination.</div>
+      </div>
+      <div class="hygiene-card">
+        <div class="hcard-icon">🌡️</div>
+        <div class="hcard-title">Cooking Temperature</div>
+        <div class="hcard-text">Cook or reheat food to <strong>75°C or above</strong> — verified with a food thermometer. High-risk foods like raw chicken must be cooked all the way through (well done) with no uncooked sections.</div>
+      </div>
+    </div>
+
+    <div class="callout warning reveal">
+      <div class="callout-title">🐔 High-Risk Foods — Raw Chicken</div>
+      Unlike beef, chicken must be cooked <strong>well done — all the way through</strong>. Even a small uncooked section can harbour enough live pathogenic bacteria to cause food poisoning. Use a food thermometer to verify the internal temperature reaches 75°C or above.
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOD STORAGE -->
+<section id="storage">
+  <div class="container">
+    <div class="sec-label">Section 4</div>
+    <h2 class="sec-title">Food Storage</h2>
+    <p class="sec-intro">Proper food storage maximises shelf life and reduces food poisoning risk. The placement of food in a fridge is critical — different zones have different temperatures.</p>
+
+    <!-- FRIDGE DIAGRAM -->
+    <h3 style="font-family:'Fraunces',serif; font-size:1.2rem; margin-bottom:0.5rem; color:var(--ink);">Recommended Fridge Organisation</h3>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">Set fridge between <strong>0°C and 5°C</strong>. Each shelf has a purpose — incorrect placement can lead to cross contamination.</p>
+    <div class="fridge reveal">
+      <div class="fridge-top">🌡️ Fridge: Set between 0°C – 5°C</div>
+      <div class="fridge-shelf">
+        <div class="shelf-label">Top Shelf</div>
+        <div class="shelf-content">Ready-to-eat foods: <strong>dairy products</strong>, yoghurts, creams, margarine, jams, sauces, and other packaged foods. These have no further cooking step to kill bacteria.</div>
+      </div>
+      <div class="fridge-shelf">
+        <div class="shelf-label">Middle Shelf</div>
+        <div class="shelf-content"><strong>Cooked meats</strong> and covered leftovers. Store cooked food in <strong>shallow airtight containers</strong> — large pots can take up to 24 hours to cool to 5°C in the centre, keeping the interior in the danger zone.</div>
+      </div>
+      <div class="fridge-shelf">
+        <div class="shelf-label">Lower Shelf</div>
+        <div class="shelf-content"><strong>Raw meat, poultry and fish</strong> — always in sealed containers. Stored below cooked foods to prevent juices leaking down and contaminating cooked items on lower shelves.</div>
+      </div>
+      <div class="fridge-shelf">
+        <div class="shelf-label">Salad Drawer</div>
+        <div class="shelf-content"><strong>Fruit and vegetables</strong> in sealed bags or containers. The drawer regulates airflow and humidity. Do <strong>not</strong> wash vegetables before refrigerating — moisture promotes microbial growth. Wash immediately before use.</div>
+      </div>
+    </div>
+
+    <!-- STORAGE TIPS -->
+    <h3 style="font-family:'Fraunces',serif; font-size:1.2rem; margin-top:2.5rem; margin-bottom:0.5rem; color:var(--ink);">Key Storage Rules</h3>
+    <div class="tips-grid reveal">
+      <div class="tip-card"><div class="tip-icon">⏰</div>Cooked food left in the danger zone for more than <strong>4 hours</strong> should be discarded.</div>
+      <div class="tip-card"><div class="tip-icon">❄️</div>'Cool rapidly': to 21°C within 2 hours, then 5°C within a further 4 hours.</div>
+      <div class="tip-card"><div class="tip-icon">🥩</div>High-risk foods like meats and expressed breastmilk go at the <strong>back of the fridge</strong> — coldest zone, not the door.</div>
+      <div class="tip-card"><div class="tip-icon">🌾</div>Large bags of grains should not sit on the floor — this allows pest access (cockroaches, mice, pantry moths).</div>
+      <div class="tip-card"><div class="tip-icon">📦</div>Store dry foods in <strong>airtight containers</strong> to prevent pantry moth infestation and maintain shelf life.</div>
+      <div class="tip-card"><div class="tip-icon">🛍️</div>Check packaging for swollen cans (microbial gas), slits, or damage — these increase spoilage risk.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOD PRESERVATION -->
+<section id="preservation">
+  <div class="container">
+    <div class="sec-label">Section 5</div>
+    <h2 class="sec-title">Food Preservation Methods</h2>
+    <p class="sec-intro">Food preservation aims to <strong>eliminate microorganisms</strong> already on food, <strong>deactivate enzymes</strong> causing spoilage, and <strong>prevent future contamination</strong>. It ensures a safe, continuous food supply and extends shelf life. Often multiple methods are combined.</p>
+
+    <!-- PEAR CANNING FLOW -->
+    <h3 style="font-family:'Fraunces',serif; font-size:1.15rem; margin-bottom:0.5rem; color:var(--ink);">Example: Canning Pears — Multiple Preservation Techniques</h3>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:0;">A single product often uses several preservation methods across its production.</p>
+    <div class="flow reveal">
+      <div class="flow-step"><div class="flow-num">01</div><div class="flow-icon">🚜</div><div class="flow-name">Harvest &amp; Cold Storage</div></div>
+      <div class="flow-step"><div class="flow-num">02</div><div class="flow-icon">🚿</div><div class="flow-name">Washing</div></div>
+      <div class="flow-step"><div class="flow-num">03</div><div class="flow-icon">🔪</div><div class="flow-name">Peeling, Coring &amp; Slicing</div></div>
+      <div class="flow-step"><div class="flow-num">04</div><div class="flow-icon">🔥</div><div class="flow-name">Blanching (Heat)</div></div>
+      <div class="flow-step"><div class="flow-num">05</div><div class="flow-icon">🍯</div><div class="flow-name">Adding Syrup</div></div>
+      <div class="flow-step"><div class="flow-num">06</div><div class="flow-icon">🥫</div><div class="flow-name">Canning &amp; Sterilisation</div></div>
+      <div class="flow-step"><div class="flow-num">07</div><div class="flow-icon">🔒</div><div class="flow-name">Vacuum Sealing</div></div>
+      <div class="flow-step"><div class="flow-num">08</div><div class="flow-icon">❄️</div><div class="flow-name">Cooling &amp; Storage</div></div>
+    </div>
+
+    <!-- PRESERVATION METHODS -->
+    <div class="preservation-sections" style="margin-top:3rem;">
+
+      <!-- HEAT -->
+      <div class="pres-group heat reveal">
+        <div class="pres-group-header">
+          🔥 Heating Techniques <span class="pres-group-subtitle">— kills microorganisms &amp; deactivates enzymes</span>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Cooking<br><span class="pres-tag">KILLS BACTERIA</span></div>
+          <div class="pres-desc">Cooking above 75°C eliminates microorganisms. Methods include frying, baking, boiling, steaming, blanching and microwaving. Does not destroy toxins already produced.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Canning Sterilisation<br><span class="pres-tag">KILLS BACTERIA + SEALS</span></div>
+          <div class="pres-desc">Food is placed in cans or jars and heated above 100°C. The process drives out oxygen and the container is vacuum sealed, preventing air exposure and re-contamination.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Pasteurisation<br><span class="pres-tag">REDUCES BACTERIA</span></div>
+          <div class="pres-desc">Standard treatment: 72°C for 15–20 seconds. Pasteurised products are not fully sterile — they still require refrigeration to maintain shelf life.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">UHT Pasteurisation<br><span class="pres-tag">STERILE + SHELF STABLE</span></div>
+          <div class="pres-desc">Heating to 138°C for 2 seconds. When placed in an aseptic container, UHT products last <strong>6–12 months at room temperature</strong> without refrigeration (e.g. long-life milk).</div>
+        </div>
+      </div>
+
+      <!-- COLD -->
+      <div class="pres-group cold reveal">
+        <div class="pres-group-header">
+          ❄️ Reducing Temperature <span class="pres-group-subtitle">— slows microbial growth below the danger zone</span>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Refrigeration<br><span class="pres-tag">SLOWS GROWTH</span></div>
+          <div class="pres-desc">Set between 0°C and 5°C (generally at 3°C). Keeps food out of the temperature danger zone. Bacteria survive but multiply very slowly. Food lasts days to weeks depending on the product.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Deep Freezing<br><span class="pres-tag">DORMANT</span></div>
+          <div class="pres-desc">Below −18°C, water in food converts to ice — reducing water activity to 0.0. Bacteria become dormant (no growth). Enzyme activity involved in spoilage is also significantly reduced.</div>
+        </div>
+      </div>
+
+      <!-- WATER ACTIVITY -->
+      <div class="pres-group water reveal">
+        <div class="pres-group-header">
+          💧 Reducing Water Activity (a<sub>w</sub>) <span class="pres-group-subtitle">— prevents bacterial reproduction (does not kill)</span>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Dehydration / Smoking<br><span class="pres-tag">REMOVES MOISTURE</span></div>
+          <div class="pres-desc">Air drying, commercial dehydrators, or smoking remove moisture from food. Microbes lose water and become dormant. Methods include dried fruits, jerky, and smoked meats.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Salt &amp; Sugar Additives<br><span class="pres-tag">OSMOSIS</span></div>
+          <div class="pres-desc">Salt (cured meats) and sugar (jams) bind to free water molecules, reducing water availability. The higher extracellular solute concentration draws water <strong>out of microbes by osmosis</strong>, further dehydrating them.</div>
+        </div>
+      </div>
+
+      <!-- PH -->
+      <div class="pres-group ph reveal">
+        <div class="pres-group-header">
+          ⚗️ Reducing pH (Acidification) <span class="pres-group-subtitle">— kills microorganisms by deactivating essential enzymes</span>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Pickling with Acetic Acid<br><span class="pres-tag">pH ≈ 2.4</span></div>
+          <div class="pres-desc">Acetic acid (vinegar) has a pH of ~2.4. Food does not need to be sterile before immersion — the acidic environment kills most microorganisms. Most microbes cannot survive below pH 4.5.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Saltwater + Lactic Acid Bacteria<br><span class="pres-tag">pH ≈ 3.5</span></div>
+          <div class="pres-desc">Saltwater dehydrates food and promotes anaerobic bacteria to ferment, producing lactic acid (pH ~3.5) as a byproduct. This progressively lowers the pH until it becomes unsuitable for microbial survival.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Chemical Preservatives<br><span class="pres-tag">LOWERS pH</span></div>
+          <div class="pres-desc">Additives such as <strong>sodium benzoate</strong>, <strong>sodium nitrate</strong> and <strong>sulfur dioxide</strong> are weak acids that lower food pH, disrupting normal cellular metabolism of microorganisms.</div>
+        </div>
+      </div>
+
+      <!-- OXYGEN -->
+      <div class="pres-group oxygen reveal">
+        <div class="pres-group-header">
+          💨 Oxygen Reduction <span class="pres-group-subtitle">— inhibits aerobic microorganisms &amp; reduces oxidation (does not kill)</span>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Vacuum Sealing<br><span class="pres-tag">REMOVES O₂</span></div>
+          <div class="pres-desc">Atmospheric gases are removed and the packaging is sealed tightly. Reduces oxygen available for aerobic microorganisms and slows oxidation of food (e.g. vacuum-packaged steak).</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Oxygen Absorbers<br><span class="pres-tag">ABSORBS O₂</span></div>
+          <div class="pres-desc">Small chemical packets inserted into packaging (e.g. pita wraps) that absorb oxygen from within the sealed environment — reducing it for both aerobic microbes and oxidative reactions.</div>
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Modified Atmosphere Packaging (MAP)<br><span class="pres-tag">REPLACES O₂</span></div>
+          <div class="pres-desc">Atmospheric gas is removed and replaced with a <strong>specific gas mixture</strong> optimised for each product. Example: processed meats like salami use 30% CO₂ and 70% nitrogen to extend shelf life.</div>
+        </div>
+      </div>
+
+      <!-- EXTRA -->
+      <div class="pres-group extra reveal">
+        <div class="pres-group-header">
+          ✨ Additional Techniques
+        </div>
+        <div class="pres-method">
+          <div class="pres-name">Food Irradiation<br><span class="pres-tag">IONISING RADIATION</span></div>
+          <div class="pres-desc">Certain foods are exposed to <strong>gamma rays, X-rays or high-energy electron beams</strong>. The ionising radiation destroys insects, parasites, bacteria and other microorganisms involved in spoilage. Generally has less effect on appearance, flavour and texture than heat methods.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUMMARY CALLOUT -->
+    <div class="callout good reveal" style="margin-top:2.5rem;">
+      <div class="callout-title">✓ Why Food Preservation Matters</div>
+      Food preservation ensures a <strong>safe, continuous and plentiful food supply</strong> by reducing nutrient loss and extending shelf life. It makes some foods available year-round, saves preparation time and reduces costs. Without it, food options would be severely limited and shopping would be needed far more frequently.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Chapter 1.7 — Microorganisms and Food · <span>Topic 1: Cells and Microorganisms</span></div>
+  <div style="margin-top:0.4rem;">© Essentials Education 2025 · Study resource for educational use</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 55);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
