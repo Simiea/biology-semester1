@@ -14,6 +14,7 @@
       --border: #1e2d3d;
       --accent-1: #4fc3a1;
       --accent-2: #e8a87c;
+      --accent-3: #a78bfa;
       --text: #d4e3ec;
       --muted: #5a7a8a;
     }
@@ -155,6 +156,7 @@
 
     .card:nth-child(1) { animation: reveal 0.8s ease 1.0s forwards; }
     .card:nth-child(2) { animation: reveal 0.8s ease 1.15s forwards; }
+    .card:nth-child(3) { animation: reveal 0.8s ease 1.30s forwards; }
 
     .card::before {
       content: '';
@@ -165,6 +167,7 @@
     }
     .card-1::before { background: linear-gradient(120deg, rgba(79,195,161,0.07), transparent 60%); }
     .card-2::before { background: linear-gradient(120deg, rgba(232,168,124,0.07), transparent 60%); }
+    .card-3::before { background: linear-gradient(120deg, rgba(167,139,250,0.07), transparent 60%); }
 
     .card:hover {
       transform: translateY(-3px);
@@ -173,6 +176,7 @@
     .card:hover::before { opacity: 1; }
     .card-1:hover { border-color: var(--accent-1); }
     .card-2:hover { border-color: var(--accent-2); }
+    .card-3:hover { border-color: var(--accent-3); }
 
     /* Icon blob */
     .icon {
@@ -189,6 +193,7 @@
     .card:hover .icon { transform: scale(1.12) rotate(-4deg); }
     .icon-1 { background: rgba(79,195,161,0.12); border: 1px solid rgba(79,195,161,0.25); }
     .icon-2 { background: rgba(232,168,124,0.12); border: 1px solid rgba(232,168,124,0.25); }
+    .icon-3 { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25); }
 
     /* Card text */
     .card-body { flex: 1; }
@@ -201,6 +206,7 @@
     }
     .card-1 .card-chapter { color: var(--accent-1); }
     .card-2 .card-chapter { color: var(--accent-2); }
+    .card-3 .card-chapter { color: var(--accent-3); }
 
     .card-title {
       font-family: 'Playfair Display', serif;
@@ -223,6 +229,7 @@
     }
     .card-1:hover .arrow { transform: translateX(5px); color: var(--accent-1); }
     .card-2:hover .arrow { transform: translateX(5px); color: var(--accent-2); }
+    .card-3:hover .arrow { transform: translateX(5px); color: var(--accent-3); }
 
     /* Footer */
     .footer {
@@ -232,7 +239,7 @@
       letter-spacing: 0.12em;
       color: var(--muted);
       opacity: 0;
-      animation: reveal 0.8s ease 1.35s forwards;
+      animation: reveal 0.8s ease 1.5s forwards;
     }
   </style>
 </head>
@@ -251,7 +258,7 @@
     <div class="divider"></div>
 
     <div class="cards">
-      <a href="chapter-1-5-cellmembrane-quiz.html" class="card card-1">
+      <a href="chapter-1-5-cellmembrane.html" class="card card-1">
         <div class="icon icon-1">🧬</div>
         <div class="card-body">
           <p class="card-chapter">Chapter 1.5</p>
@@ -270,9 +277,18 @@
         </div>
         <span class="arrow">→</span>
       </a>
+      <a href="chapter-1-7-microorganisms-and-food.html" class="card card-3">
+        <div class="icon icon-3">🍽️</div>
+        <div class="card-body">
+          <p class="card-chapter">Chapter 1.7</p>
+          <p class="card-title">Microorganisms &amp; Food</p>
+          <p class="card-desc">How microorganisms are used in food production, preservation &amp; spoilage</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
     </div>
 
-    <p class="footer">2 topics · Chapter 1 · Biology</p>
+    <p class="footer">3 topics · Chapter 1 · Biology</p>
   </div>
 
 </body>
