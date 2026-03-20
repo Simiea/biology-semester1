@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1.2 — Two Major Types of Cells</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #f0f2f5;
+    --bg2:     #e4e8ee;
+    --surface: #ffffff;
+    --border:  #d0d6e0;
+    --border2: #b8c0cc;
+    --text:    #0f1520;
+    --muted:   #5a6478;
+    --muted2:  #9aa0b0;
+
+    --pro:     #0f6b4e;   /* prokaryote green */
+    --pro-bg:  rgba(15,107,78,0.07);
+    --pro-bd:  rgba(15,107,78,0.22);
+
+    --eu:      #1d4ed8;   /* eukaryote blue */
+    --eu-bg:   rgba(29,78,216,0.07);
+    --eu-bd:   rgba(29,78,216,0.22);
+
+    --plant:   #16a34a;
+    --plant-bg: rgba(22,163,74,0.07);
+    --plant-bd: rgba(22,163,74,0.22);
+
+    --animal:  #b45309;
+    --animal-bg: rgba(180,83,9,0.07);
+    --animal-bd: rgba(180,83,9,0.22);
+
+    --org:     #7c3aed;
+    --org-bg:  rgba(124,58,237,0.07);
+    --org-bd:  rgba(124,58,237,0.22);
+
+    --both:    #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', serif;
+    font-weight: 300;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  strong { font-weight: 600; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: var(--bg);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-right { display: none; }
+  }
+
+  .hero-left {
+    padding: 5rem 3rem 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* split cell visual */
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 45% at 35% 40%, rgba(15,107,78,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 50% at 70% 60%, rgba(29,78,216,0.3) 0%, transparent 55%),
+      #141c2e;
+  }
+
+  .hero-right::after {
+    content: 'PROKARYOTE\AEUKARYOTE';
+    white-space: pre;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.04);
+    writing-mode: vertical-rl;
+    text-align: center;
+    line-height: 3;
+  }
+
+  /* vertical divider */
+  .hero-divider {
+    position: absolute;
+    top: 8%;
+    bottom: 8%;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent);
+  }
+
+  .hero-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6ee7b7;
+    margin-bottom: 1.75rem;
+    animation: up 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.6rem;
+    animation: up 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .sub {
+    display: block;
+    font-size: 0.42em;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: rgba(240,242,245,0.5);
+    margin-top: 0.5rem;
+  }
+
+  .hero-desc {
+    font-size: 0.92rem;
+    color: rgba(240,242,245,0.55);
+    max-width: 400px;
+    margin-top: 1.25rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+    animation: up 0.6s 0.2s ease both;
+  }
+
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    animation: up 0.6s 0.3s ease both;
+  }
+
+  .hero-nav a {
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.45em 1em;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(240,242,245,0.6);
+    background: rgba(255,255,255,0.04);
+    transition: all 0.18s;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-nav a.pro-link:hover { border-color: #6ee7b7; color: #6ee7b7; background: rgba(110,231,183,0.07); }
+  .hero-nav a.eu-link:hover  { border-color: #93c5fd; color: #93c5fd; background: rgba(147,197,253,0.07); }
+  .hero-nav a:not(.pro-link):not(.eu-link):hover {
+    border-color: rgba(255,255,255,0.3);
+    color: rgba(240,242,245,0.9);
+  }
+
+  .hero-skew {
+    height: 50px;
+    background: var(--bg);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    margin-top: -1px;
+    grid-column: 1 / -1;
+  }
+
+  @keyframes up {
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 5rem 0; border-top: 1px solid var(--border); }
+
+  .sec-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.4rem;
+  }
+
+  .sec-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    margin-bottom: 0.9rem;
+  }
+
+  .sec-intro {
+    font-size: 0.93rem;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.vis { opacity:1; transform:none; }
+
+  /* ── EVOLUTION TIMELINE ── */
+  .evo-strip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  .evo-row {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .evo-row:last-child { border-bottom: none; }
+
+  .evo-time {
+    width: 140px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    padding: 1rem 1.25rem;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: -0.01em;
+  }
+
+  .evo-content {
+    padding: 1rem 1.5rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .evo-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── PRO/EUK SPLIT PANEL ── */
+  .split-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .split-panel { grid-template-columns: 1fr; } }
+
+  .split-card {
+    border-radius: 16px;
+    border: 1px solid;
+    overflow: hidden;
+  }
+
+  .split-head {
+    padding: 1.1rem 1.5rem;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .split-body { padding: 1.25rem 1.5rem; font-size: 0.87rem; line-height: 1.7; }
+
+  .split-card.pro { border-color: var(--pro-bd); }
+  .split-card.pro .split-head { background: var(--pro-bg); color: var(--pro); }
+  .split-card.pro .split-body { color: rgba(15,107,78,0.85); }
+
+  .split-card.eu { border-color: var(--eu-bd); }
+  .split-card.eu .split-head { background: var(--eu-bg); color: var(--eu); }
+  .split-card.eu .split-body { color: rgba(29,78,216,0.85); }
+
+  .split-body strong { color: var(--text); }
+
+  /* ── STRUCTURES GRID ── */
+  .struct-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.1rem;
+    margin-top: 2rem;
+  }
+
+  .struct-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.35rem;
+    transition: all 0.2s;
+  }
+
+  .struct-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(15,21,32,0.1);
+    border-color: var(--border2);
+  }
+
+  .scard-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .scard-icon { font-size: 1.75rem; flex-shrink: 0; }
+
+  .scard-name {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .scard-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+    padding: 0.18em 0.65em;
+    border-radius: 4px;
+    border: 1px solid;
+    display: inline-block;
+    margin-top: 0.3rem;
+  }
+
+  .tag-all  { color: var(--both);   border-color: rgba(100,116,139,0.4); background: rgba(100,116,139,0.07); }
+  .tag-pro  { color: var(--pro);    border-color: var(--pro-bd); background: var(--pro-bg); }
+  .tag-eu   { color: var(--eu);     border-color: var(--eu-bd);  background: var(--eu-bg); }
+  .tag-plant{ color: var(--plant);  border-color: var(--plant-bd); background: var(--plant-bg); }
+  .tag-animal{ color: var(--animal); border-color: var(--animal-bd); background: var(--animal-bg); }
+  .tag-some { color: var(--org);    border-color: var(--org-bd);  background: var(--org-bg); }
+
+  .scard-func { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+  .scard-func strong { color: var(--text); }
+
+  /* ── PLANT VS ANIMAL ── */
+  .pva-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.88rem;
+  }
+
+  .pva-table th {
+    padding: 0.85rem 1.2rem;
+    text-align: left;
+    background: var(--bg2);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    border-bottom: 2px solid;
+  }
+
+  .pva-table th:nth-child(1) { color: var(--muted); border-bottom-color: var(--border2); }
+  .pva-table th:nth-child(2) { color: var(--plant); border-bottom-color: var(--plant); }
+  .pva-table th:nth-child(3) { color: var(--animal); border-bottom-color: var(--animal); }
+
+  .pva-table td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .pva-table td:first-child { font-weight: 600; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; }
+  .pva-table tr:hover td { background: var(--bg); }
+
+  .present  { color: var(--pro);    font-weight: 600; }
+  .absent   { color: var(--muted2); font-style: italic; }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.86rem;
+  }
+
+  .comp-table th {
+    padding: 0.85rem 1.2rem;
+    text-align: left;
+    background: var(--bg2);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    border-bottom: 2px solid;
+  }
+
+  .comp-table th:nth-child(1) { color: var(--muted2); border-bottom-color: var(--border2); }
+  .comp-table th:nth-child(2) { color: var(--pro);    border-bottom-color: var(--pro); }
+  .comp-table th:nth-child(3) { color: var(--eu);     border-bottom-color: var(--eu); }
+
+  .comp-table td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .comp-table td:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .comp-table tr:hover td { background: var(--bg); }
+
+  .pro-val { color: var(--pro);    font-weight: 600; }
+  .eu-val  { color: var(--eu);     font-weight: 600; }
+  .both-val{ color: var(--muted2); font-style: italic; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 14px;
+    border: 1px solid;
+    padding: 1.3rem 1.5rem;
+    margin-top: 2rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .callout-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout.ev  { background: var(--pro-bg); border-color: var(--pro-bd); }
+  .callout.ev  .callout-title { color: var(--pro); }
+  .callout.tip { background: var(--org-bg); border-color: var(--org-bd); }
+  .callout.tip .callout-title { color: var(--org); }
+  .callout.eu  { background: var(--eu-bg);  border-color: var(--eu-bd); }
+  .callout.eu  .callout-title { color: var(--eu); }
+
+  /* ── ORGANELLE IDENTIFIER ── */
+  .id-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 580px) { .id-grid { grid-template-columns: 1fr; } }
+
+  .id-cell {
+    background: var(--surface);
+    padding: 1.4rem;
+    text-align: center;
+    transition: background 0.18s;
+  }
+
+  .id-cell:hover { background: var(--bg2); }
+
+  .id-icon { font-size: 2.5rem; margin-bottom: 0.6rem; }
+
+  .id-name {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  .id-name.nucleus  { color: var(--eu); }
+  .id-name.chloro   { color: var(--plant); }
+  .id-name.mito     { color: var(--animal); }
+
+  .id-feature {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted2);
+    margin-bottom: 0.35rem;
+    line-height: 1.5;
+  }
+
+  .id-id {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: rgba(240,242,245,0.35);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73rem;
+    letter-spacing: 0.07em;
+    margin-top: 3rem;
+  }
+
+  footer span { color: #6ee7b7; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-chip">Topic 1 · Cells &amp; Microorganisms · Chapter 1.2</div>
+    <h1>Two Major<br>Types of<br>Cells
+      <span class="sub">Prokaryotic &amp; Eukaryotic</span>
+    </h1>
+    <p class="hero-desc">A comparison of cell types, their structures and functions — from simple prokaryotes to the complex compartmentalised eukaryote.</p>
+    <nav class="hero-nav">
+      <a href="#overview" class="pro-link">Overview</a>
+      <a href="#prokaryotic" class="pro-link">Prokaryotic</a>
+      <a href="#eukaryotic" class="eu-link">Eukaryotic</a>
+      <a href="#organelles" class="eu-link">Organelles</a>
+      <a href="#plantanimal" class="eu-link">Plant vs Animal</a>
+      <a href="#identify">Identifying Organelles</a>
+      <a href="#compare">Full Comparison</a>
+    </nav>
+  </div>
+  <div class="hero-right">
+    <div class="hero-divider"></div>
+  </div>
+  <div class="hero-skew"></div>
+</header>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="sec-label">Section 1</div>
+    <h2 class="sec-title">An Evolutionary Relationship</h2>
+    <p class="sec-intro">Prokaryotes were the first organisms on Earth. There is strong evidence that eukaryotes evolved from prokaryotes — supported by the shared features they still carry today and the fossil record.</p>
+
+    <!-- TIMELINE -->
+    <div class="evo-strip reveal">
+      <div class="evo-row">
+        <div class="evo-time">3.5 Billion<br>years ago</div>
+        <div class="evo-content">
+          <div class="evo-dot" style="background:var(--pro);"></div>
+          <div><strong>Oldest prokaryotes</strong> discovered in fossil records — the first living organisms on Earth.</div>
+        </div>
+      </div>
+      <div class="evo-row">
+        <div class="evo-time">2 Billion<br>years ago</div>
+        <div class="evo-content">
+          <div class="evo-dot" style="background:var(--eu);"></div>
+          <div><strong>Oldest unicellular eukaryotes</strong> appear in fossil records — 1.5 billion years after prokaryotes.</div>
+        </div>
+      </div>
+      <div class="evo-row">
+        <div class="evo-time">Evidence of<br>shared origin</div>
+        <div class="evo-content">
+          <div class="evo-dot" style="background:var(--both);"></div>
+          <div>Both cell types share <strong>cell membranes, nucleic acids (DNA &amp; RNA), ribosomes and proteins</strong> — reflecting their common evolutionary past.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPLIT PANEL -->
+    <div class="split-panel reveal" style="margin-top:2.5rem;">
+      <div class="split-card pro">
+        <div class="split-head">🦠 Prokaryotic Cells</div>
+        <div class="split-body">
+          <strong>Smaller</strong>, simpler, less specialised. No true nucleus — DNA resides in the <strong>cytoplasm (nucleoid region)</strong>. No membrane-bound organelles. Examples: <strong>bacteria and archaea</strong>.<br><br>
+          Despite their simplicity, prokaryotes possess all chemicals and processes needed to carry out life's processes. Their collective mass is considered many times that of all eukaryotes.
+        </div>
+      </div>
+      <div class="split-card eu">
+        <div class="split-head">🔬 Eukaryotic Cells</div>
+        <div class="split-body">
+          <strong>Larger</strong>, more complex, highly compartmentalised. DNA stored in a <strong>nucleus</strong>. Contain many membrane-bound organelles. Examples: <strong>protists, fungi, plants and animals</strong>.<br><br>
+          Compartmentalisation allows different environments within a single cell — enabling numerous metabolic reactions to occur simultaneously.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROKARYOTIC -->
+<section id="prokaryotic">
+  <div class="container">
+    <div class="sec-label">Section 2</div>
+    <h2 class="sec-title">Prokaryotic Cells</h2>
+    <p class="sec-intro">Unicellular cells approximately <strong>0.1–5 μm</strong> in size. May be rod-shaped (bacillus), spherical (coccus), or spiral. DNA is a single circular chromosome located in the <strong>nucleoid region</strong> of the cytoplasm — there is no nucleus.</p>
+
+    <div class="struct-grid reveal">
+
+      <!-- ALWAYS PRESENT -->
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🛡️</div>
+          <div>
+            <div class="scard-name">Cell Wall</div>
+            <span class="scard-tag tag-pro">Prokaryote · Always present</span>
+          </div>
+        </div>
+        <div class="scard-func">Contains <strong>peptidoglycan</strong>. Strengthens the cell and maintains its shape. Surrounds the cell membrane.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🔵</div>
+          <div>
+            <div class="scard-name">Cell Surface Membrane</div>
+            <span class="scard-tag tag-all">All cells · Always present</span>
+          </div>
+        </div>
+        <div class="scard-func">Controls the <strong>entry and exit of materials</strong> to and from the cell. Facilitates communication between cells.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🧫</div>
+          <div>
+            <div class="scard-name">Cytoplasm</div>
+            <span class="scard-tag tag-all">All cells · Always present</span>
+          </div>
+        </div>
+        <div class="scard-func">Contains the <strong>cytosol</strong> (fluid). Provides a medium suitable for biochemical reactions. In prokaryotes, all cellular components float here — there is no nucleus.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🧬</div>
+          <div>
+            <div class="scard-name">Circular Chromosome (DNA)</div>
+            <span class="scard-tag tag-pro">Prokaryote · Always present</span>
+          </div>
+        </div>
+        <div class="scard-func">A single <strong>circular chromosome</strong> resides freely in the <strong>nucleoid region</strong> of the cytoplasm. Stores the cell's genetic information.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">⚙️</div>
+          <div>
+            <div class="scard-name">Ribosomes</div>
+            <span class="scard-tag tag-all">All cells · Always present</span>
+          </div>
+        </div>
+        <div class="scard-func"><strong>Smaller ribosomes</strong> than eukaryotes. Free-floating in the cytoplasm. Site of <strong>protein synthesis</strong>.</div>
+      </div>
+
+      <!-- SOMETIMES PRESENT -->
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🫧</div>
+          <div>
+            <div class="scard-name">Capsule</div>
+            <span class="scard-tag tag-some">Sometimes present</span>
+          </div>
+        </div>
+        <div class="scard-func">A layer of <strong>sticky material</strong> covering the cell wall. Used for <strong>protection</strong> and sticking to surfaces.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🪱</div>
+          <div>
+            <div class="scard-name">Pili (singular: pilus)</div>
+            <span class="scard-tag tag-some">Sometimes present</span>
+          </div>
+        </div>
+        <div class="scard-func">Hair-like structures projecting from the cell wall. Used for <strong>attachment</strong> to other cells or surfaces.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🌀</div>
+          <div>
+            <div class="scard-name">Flagella (singular: flagellum)</div>
+            <span class="scard-tag tag-some">Sometimes present</span>
+          </div>
+        </div>
+        <div class="scard-func">Filaments attached to the cell wall. Rotate to propel the bacterium — used for <strong>movement</strong>.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">💾</div>
+          <div>
+            <div class="scard-name">Plasmids</div>
+            <span class="scard-tag tag-some">Sometimes present</span>
+          </div>
+        </div>
+        <div class="scard-func">Small, separate <strong>loops of DNA</strong> in the cytoplasm. Independent of the main chromosome. Can carry useful genes (e.g. antibiotic resistance).</div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- EUKARYOTIC -->
+<section id="eukaryotic">
+  <div class="container">
+    <div class="sec-label">Section 3</div>
+    <h2 class="sec-title">Eukaryotic Cells</h2>
+    <p class="sec-intro">Generally <strong>10–100 μm</strong> in size. DNA is stored as <strong>pairs of linear chromosomes</strong> inside a nucleus. Many membrane-bound organelles allow compartmentalised, simultaneous metabolic reactions. Found in protists, fungi, plants and animals.</p>
+
+    <div class="callout eu reveal">
+      <div class="callout-title">🔑 Why Compartmentalisation Matters</div>
+      The membrane-bound organelles of eukaryotic cells create separate internal environments. This means the cell can maintain different conditions in different compartments simultaneously — allowing many more types of metabolic reactions than a prokaryote can manage. This is why eukaryotic cells can grow much larger and specialise far more.
+    </div>
+
+  </div>
+</section>
+
+<!-- ORGANELLES -->
+<section id="organelles">
+  <div class="container">
+    <div class="sec-label">Section 4</div>
+    <h2 class="sec-title">Eukaryotic Structures &amp; Functions</h2>
+    <p class="sec-intro">The following structures are found in eukaryotic cells. Note which are found in all eukaryotes and which are plant- or animal-specific.</p>
+
+    <div class="struct-grid reveal">
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🔵</div>
+          <div>
+            <div class="scard-name">Cell Membrane</div>
+            <span class="scard-tag tag-all">All cells</span>
+          </div>
+        </div>
+        <div class="scard-func">Controls the <strong>exchange of materials</strong> between the cell and its external environment. Facilitates communication between cells. Not a membrane-bound organelle.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🧫</div>
+          <div>
+            <div class="scard-name">Cytoplasm</div>
+            <span class="scard-tag tag-all">All cells</span>
+          </div>
+        </div>
+        <div class="scard-func">Contains the cytosol — provides a medium for biochemical reactions. Houses all internal organelles. Not considered an organelle itself.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">⚫</div>
+          <div>
+            <div class="scard-name">Nucleus</div>
+            <span class="scard-tag tag-eu">All eukaryotes</span>
+          </div>
+        </div>
+        <div class="scard-func"><strong>Stores and protects genetic information (DNA)</strong>. Coordinates overall cell function. Contains a <strong>nucleolus</strong> inside it. Houses <strong>linear chromosomes in pairs</strong>. Largest organelle (apart from central vacuole in plants).</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">⚡</div>
+          <div>
+            <div class="scard-name">Mitochondrion</div>
+            <span class="scard-tag tag-eu">All eukaryotes</span>
+          </div>
+        </div>
+        <div class="scard-func">Carries out <strong>aerobic respiration</strong> to produce <strong>ATP</strong> — the cell's energy-carrying molecule. Has inner membrane folds called <strong>cristae</strong> and an outer membrane.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🟢</div>
+          <div>
+            <div class="scard-name">Chloroplast</div>
+            <span class="scard-tag tag-plant">Plant cells only</span>
+          </div>
+        </div>
+        <div class="scard-func">Carries out <strong>photosynthesis</strong> — produces glucose from CO₂ and H₂O using light energy. Contains <strong>grana</strong> (stacks of membrane with chlorophyll), a stroma, and inner/outer membranes.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🧱</div>
+          <div>
+            <div class="scard-name">Cell Wall</div>
+            <span class="scard-tag tag-plant">Plant &amp; fungi only</span>
+          </div>
+        </div>
+        <div class="scard-func">Strengthens the cell and maintains its shape. In plants: made of <strong>cellulose</strong>. In fungi: made of <strong>chitin</strong>. Not present in animal cells. Not an internal membrane-bound organelle.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">💧</div>
+          <div>
+            <div class="scard-name">Large Central Vacuole</div>
+            <span class="scard-tag tag-plant">Plant cells only</span>
+          </div>
+        </div>
+        <div class="scard-func">Multiple functions: <strong>water storage</strong>, structural support &amp; regulating cell shape, nutrient storage, and storage/disposal of waste products. Animal cells have small vacuoles only.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🔴</div>
+          <div>
+            <div class="scard-name">Rough ER (RER)</div>
+            <span class="scard-tag tag-eu">Eukaryotes</span>
+          </div>
+        </div>
+        <div class="scard-func">Packages <strong>proteins made by ribosomes</strong> into small vacuoles for transport to the Golgi body. Studded with ribosomes — hence "rough".</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🟠</div>
+          <div>
+            <div class="scard-name">Smooth ER (SER)</div>
+            <span class="scard-tag tag-eu">Eukaryotes</span>
+          </div>
+        </div>
+        <div class="scard-func">Synthesises <strong>lipids</strong> (e.g. phospholipids and cholesterol) and metabolises carbohydrates. No ribosomes — hence "smooth".</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">📦</div>
+          <div>
+            <div class="scard-name">Golgi Body (Golgi Apparatus)</div>
+            <span class="scard-tag tag-eu">Eukaryotes</span>
+          </div>
+        </div>
+        <div class="scard-func"><strong>Modification, processing and packaging</strong> of proteins into vesicles for storage in the cell or secretion outside the cell by exocytosis.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">⚙️</div>
+          <div>
+            <div class="scard-name">Ribosomes</div>
+            <span class="scard-tag tag-all">All cells</span>
+          </div>
+        </div>
+        <div class="scard-func"><strong>Larger than prokaryotic ribosomes</strong>. Generally attached to the RER, but can also be free-floating. Site of <strong>protein synthesis</strong> for the cell or for secretion.</div>
+      </div>
+
+      <div class="struct-card">
+        <div class="scard-top">
+          <div class="scard-icon">🔧</div>
+          <div>
+            <div class="scard-name">Centrioles</div>
+            <span class="scard-tag tag-animal">Animal cells only</span>
+          </div>
+        </div>
+        <div class="scard-func">Required for the development of the <strong>spindle apparatus</strong> during cell division — used to separate sister chromatids. Not found in plant cells.</div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- PLANT VS ANIMAL -->
+<section id="plantanimal">
+  <div class="container">
+    <div class="sec-label">Section 5</div>
+    <h2 class="sec-title">Plant Cell vs Animal Cell</h2>
+    <p class="sec-intro">Both are eukaryotic, but their structures differ in important ways. To confirm a cell is a plant cell, look for the three key plant-specific features below.</p>
+
+    <table class="pva-table reveal">
+      <thead>
+        <tr>
+          <th>Structure</th>
+          <th>🌿 Plant Cell</th>
+          <th>🐾 Animal Cell</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cell Wall</td>
+          <td><span class="present">✓ Present</span> — made of cellulose</td>
+          <td><span class="absent">✗ Absent</span></td>
+        </tr>
+        <tr>
+          <td>Large Central Vacuole</td>
+          <td><span class="present">✓ Present</span> — large and central</td>
+          <td><span class="absent">✗ Absent</span> (small vacuoles only)</td>
+        </tr>
+        <tr>
+          <td>Chloroplasts</td>
+          <td><span class="present">✓ Present</span> — in photosynthetic cells</td>
+          <td><span class="absent">✗ Absent</span></td>
+        </tr>
+        <tr>
+          <td>Centrioles</td>
+          <td><span class="absent">✗ Absent</span></td>
+          <td><span class="present">✓ Present</span></td>
+        </tr>
+        <tr>
+          <td>Nucleus</td>
+          <td><span class="present">✓ Present</span></td>
+          <td><span class="present">✓ Present</span></td>
+        </tr>
+        <tr>
+          <td>Mitochondria</td>
+          <td><span class="present">✓ Present</span></td>
+          <td><span class="present">✓ Present</span></td>
+        </tr>
+        <tr>
+          <td>Ribosomes</td>
+          <td><span class="present">✓ Present</span></td>
+          <td><span class="present">✓ Present</span></td>
+        </tr>
+        <tr>
+          <td>RER / SER / Golgi</td>
+          <td><span class="present">✓ Present</span></td>
+          <td><span class="present">✓ Present</span></td>
+        </tr>
+        <tr>
+          <td>Cell Membrane</td>
+          <td><span class="present">✓ Present</span></td>
+          <td><span class="present">✓ Present</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip reveal">
+      <div class="callout-title">⚠️ Don't Confuse Chloroplasts with Mitochondria</div>
+      Both are similar in <strong>shape and size</strong>, but differ in structure and function. Chloroplasts contain <strong>grana</strong> (visible stacks) and carry out photosynthesis. Mitochondria have internal <strong>cristae</strong> (folded inner membrane lines) and carry out aerobic respiration. Only chloroplasts are exclusive to plant cells — if a cell contains chloroplasts, it is a plant cell.
+    </div>
+
+  </div>
+</section>
+
+<!-- IDENTIFYING ORGANELLES -->
+<section id="identify">
+  <div class="container">
+    <div class="sec-label">Section 6</div>
+    <h2 class="sec-title">Identifying Organelles Under a Microscope</h2>
+    <p class="sec-intro">Three key organelles have distinctive internal structures that allow them to be identified in electron micrographs.</p>
+
+    <div class="id-grid reveal">
+      <div class="id-cell">
+        <div class="id-icon">⚫</div>
+        <div class="id-name nucleus">Nucleus</div>
+        <div class="id-feature">KEY IDENTIFIER: Nucleolus</div>
+        <div class="id-id">The largest organelle in the cell. Contains a clearly visible <strong>nucleolus</strong> inside. Surrounded by the nuclear membrane with nuclear pores.</div>
+      </div>
+      <div class="id-cell">
+        <div class="id-icon">🟢</div>
+        <div class="id-name chloro">Chloroplast</div>
+        <div class="id-feature">KEY IDENTIFIER: Grana (stacks)</div>
+        <div class="id-id">Clearly visible <strong>grana</strong> — stacks of membrane containing chlorophyll. These "stacks" are distinct from the "lines" of mitochondria.</div>
+      </div>
+      <div class="id-cell">
+        <div class="id-icon">⚡</div>
+        <div class="id-name mito">Mitochondrion</div>
+        <div class="id-feature">KEY IDENTIFIER: Cristae (lines)</div>
+        <div class="id-id">Folded inner membrane extensions called <strong>cristae</strong> appear as lines across the organelle. These "lines" contrast clearly with the "stacks" of chloroplasts.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FULL COMPARISON -->
+<section id="compare">
+  <div class="container">
+    <div class="sec-label">Section 7</div>
+    <h2 class="sec-title">Prokaryotic vs Eukaryotic — Full Comparison</h2>
+    <p class="sec-intro">A structural and functional comparison of the two major cell types.</p>
+
+    <table class="comp-table reveal">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>🦠 Prokaryotic</th>
+          <th>🔬 Eukaryotic</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Size</td>
+          <td><span class="pro-val">0.1–5 μm</span> (smaller)</td>
+          <td><span class="eu-val">10–100 μm</span> (larger)</td>
+        </tr>
+        <tr>
+          <td>Cell Type</td>
+          <td><span class="pro-val">Unicellular only</span></td>
+          <td><span class="eu-val">Unicellular or multicellular</span></td>
+        </tr>
+        <tr>
+          <td>Chromosome Shape</td>
+          <td><span class="pro-val">Single, circular chromosome</span></td>
+          <td><span class="eu-val">Many linear chromosomes (in pairs)</span></td>
+        </tr>
+        <tr>
+          <td>Location of DNA</td>
+          <td><span class="pro-val">Cytoplasm (nucleoid region)</span></td>
+          <td><span class="eu-val">Nucleus</span></td>
+        </tr>
+        <tr>
+          <td>True Nucleus</td>
+          <td><span class="pro-val">No</span></td>
+          <td><span class="eu-val">Yes</span></td>
+        </tr>
+        <tr>
+          <td>Membrane-Bound Organelles</td>
+          <td><span class="pro-val">None</span></td>
+          <td><span class="eu-val">Many different types</span></td>
+        </tr>
+        <tr>
+          <td>Ribosomes</td>
+          <td><span class="pro-val">Smaller — free floating in cytoplasm</span></td>
+          <td><span class="eu-val">Larger — mainly attached to RER</span></td>
+        </tr>
+        <tr>
+          <td>Cell Division</td>
+          <td><span class="pro-val">Binary fission</span></td>
+          <td><span class="eu-val">Mitotic division</span></td>
+        </tr>
+        <tr>
+          <td>Cell Wall</td>
+          <td><span class="pro-val">Present — peptidoglycan</span></td>
+          <td><span class="eu-val">Plant: cellulose · Fungi: chitin · Animals: absent</span></td>
+        </tr>
+        <tr>
+          <td>Cell Membrane</td>
+          <td><span class="both-val">Present in both</span></td>
+          <td><span class="both-val">Present in both</span></td>
+        </tr>
+        <tr>
+          <td>Cytoplasm</td>
+          <td><span class="both-val">Present in both</span></td>
+          <td><span class="both-val">Present in both</span></td>
+        </tr>
+        <tr>
+          <td>Examples</td>
+          <td><span class="pro-val">Bacteria, archaea</span></td>
+          <td><span class="eu-val">Protists, fungi, plants, animals</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout ev reveal">
+      <div class="callout-title">🌍 Shared Features = Shared Evolutionary Origin</div>
+      The fact that <strong>both prokaryotic and eukaryotic cells</strong> share cell membranes, nucleic acids (DNA and RNA), ribosomes and proteins provides strong evidence they share a common evolutionary ancestor — despite their significant structural differences.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Chapter 1.2 — Two Major Types of Cells · <span>Topic 1: Cells and Microorganisms</span></div>
+  <div style="margin-top:0.4rem; opacity:0.6;">© Essentials Education 2025 · Study resource for educational use</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 50);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

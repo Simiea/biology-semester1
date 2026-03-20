@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1.3 — Cell Division</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #f7f4ef;
+    --bg2:     #efe9e0;
+    --surface: #ffffff;
+    --border:  #ddd5c8;
+    --border2: #c8bfb0;
+    --text:    #1c1510;
+    --muted:   #6b5f52;
+    --muted2:  #a89a8a;
+
+    --dna:     #2563eb;
+    --dna-bg:  rgba(37,99,235,0.07);
+    --dna-bd:  rgba(37,99,235,0.22);
+
+    --split:   #059669;
+    --split-bg: rgba(5,150,105,0.07);
+    --split-bd: rgba(5,150,105,0.22);
+
+    --phase:   #7c3aed;
+    --phase-bg: rgba(124,58,237,0.07);
+    --phase-bd: rgba(124,58,237,0.22);
+
+    --danger:  #dc2626;
+    --danger-bg: rgba(220,38,38,0.07);
+    --danger-bd: rgba(220,38,38,0.22);
+
+    --amber:   #d97706;
+    --amber-bg: rgba(217,119,6,0.07);
+    --amber-bd: rgba(217,119,6,0.22);
+
+    --teal:    #0891b2;
+    --teal-bg: rgba(8,145,178,0.07);
+    --teal-bd: rgba(8,145,178,0.22);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  strong { font-weight: 600; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: var(--bg);
+    padding: 5.5rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0, transparent 79px, rgba(255,255,255,0.03) 80px),
+      repeating-linear-gradient(0deg,  transparent 0, transparent 79px, rgba(255,255,255,0.03) 80px);
+  }
+
+  /* DNA helix decorative dots */
+  .hero::after {
+    content: '●  ●  ●  ●  ●  ●  ●  ●  ●  ●  ●  ●';
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: right center;
+    font-size: 0.6rem;
+    letter-spacing: 1.2rem;
+    color: rgba(255,255,255,0.08);
+    white-space: nowrap;
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #86efac;
+    margin-bottom: 1.5rem;
+    animation: up 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(3.2rem, 9vw, 7rem);
+    font-weight: 800;
+    line-height: 0.93;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: up 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .hl { color: #86efac; }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(247,244,239,0.55);
+    max-width: 500px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+    animation: up 0.6s 0.2s ease both;
+  }
+
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    animation: up 0.6s 0.3s ease both;
+  }
+
+  .hero-links a {
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-family: 'Fira Code', monospace;
+    padding: 0.45em 1em;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(247,244,239,0.65);
+    background: rgba(255,255,255,0.04);
+    transition: all 0.18s;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-links a:hover {
+    border-color: #86efac;
+    color: #86efac;
+    background: rgba(134,239,172,0.07);
+  }
+
+  /* skewed divider */
+  .hero-skew {
+    height: 60px;
+    background: var(--bg);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    margin-top: -1px;
+  }
+
+  @keyframes up {
+    from { opacity:0; transform: translateY(18px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
+
+  section { padding: 5rem 0; border-top: 1px solid var(--border); }
+
+  .sec-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.4rem;
+  }
+
+  .sec-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.9rem, 4vw, 2.9rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+  }
+
+  .sec-intro {
+    font-size: 0.93rem;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.vis { opacity: 1; transform: none; }
+
+  /* ── PURPOSE CARDS ── */
+  .purpose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .purpose-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem;
+    transition: all 0.2s;
+    border-top: 4px solid;
+  }
+
+  .purpose-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(28,21,16,0.1);
+  }
+
+  .purpose-card.c1 { border-top-color: var(--dna); }
+  .purpose-card.c2 { border-top-color: var(--split); }
+  .purpose-card.c3 { border-top-color: var(--amber); }
+  .purpose-card.c4 { border-top-color: var(--phase); }
+
+  .pcard-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+  .pcard-text { font-size: 0.87rem; color: var(--muted); line-height: 1.65; }
+
+  /* ── DNA STEPS ── */
+  .dna-steps {
+    margin-top: 2rem;
+    border: 1px solid var(--dna-bd);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--dna-bg);
+  }
+
+  .dna-step {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--dna-bd);
+    align-items: flex-start;
+    transition: background 0.18s;
+  }
+
+  .dna-step:last-child { border-bottom: none; }
+  .dna-step:hover { background: rgba(37,99,235,0.05); }
+
+  .dna-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--dna);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .dna-text { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+  .dna-text strong { color: var(--text); }
+
+  /* ── BINARY FISSION ── */
+  .bf-steps {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .bf-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: all 0.2s;
+  }
+
+  .bf-card:hover {
+    border-color: var(--split-bd);
+    background: var(--split-bg);
+  }
+
+  .bf-num {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--split);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace;
+    font-weight: 500;
+    font-size: 0.82rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .bf-text { font-size: 0.87rem; color: var(--muted); line-height: 1.6; }
+  .bf-text strong { color: var(--text); }
+
+  /* ── MITOSIS PHASES ── */
+  .phase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .phase-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .phase-card:hover {
+    box-shadow: 0 6px 24px rgba(28,21,16,0.1);
+  }
+
+  .phase-head {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: default;
+  }
+
+  .phase-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  .phase-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .phase-body {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .phase-points { list-style: none; }
+
+  .phase-points li {
+    font-size: 0.88rem;
+    color: var(--muted);
+    padding: 0.35rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.6;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-points li:last-child { border-bottom: none; }
+
+  .phase-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--muted2);
+    font-size: 0.75rem;
+    top: 0.45rem;
+  }
+
+  .phase-points li strong { color: var(--text); }
+
+  /* phase colours */
+  .phase-card.prophase   .phase-head { background: rgba(37,99,235,0.06);  }
+  .phase-card.prophase   .phase-name { color: var(--dna); }
+  .phase-card.metaphase  .phase-head { background: rgba(124,58,237,0.06); }
+  .phase-card.metaphase  .phase-name { color: var(--phase); }
+  .phase-card.anaphase   .phase-head { background: rgba(5,150,105,0.06);  }
+  .phase-card.anaphase   .phase-name { color: var(--split); }
+  .phase-card.telophase  .phase-head { background: rgba(217,119,6,0.06);  }
+  .phase-card.telophase  .phase-name { color: var(--amber); }
+  .phase-card.cytokinesis .phase-head { background: rgba(8,145,178,0.06); }
+  .phase-card.cytokinesis .phase-name { color: var(--teal); }
+
+  /* ── MITOSIS OVERVIEW BAND ── */
+  .mitosis-flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 680px) {
+    .mitosis-flow { grid-template-columns: 1fr 1fr; }
+  }
+
+  .mf-step {
+    background: var(--surface);
+    padding: 1.1rem 0.9rem;
+    text-align: center;
+    transition: background 0.18s;
+  }
+
+  .mf-step:hover { background: var(--bg2); }
+
+  .mf-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+
+  .mf-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .mf-desc { font-size: 0.75rem; color: var(--muted2); line-height: 1.4; }
+
+  .mf-step.p1 .mf-name { color: var(--dna); }
+  .mf-step.p2 .mf-name { color: var(--phase); }
+  .mf-step.p3 .mf-name { color: var(--split); }
+  .mf-step.p4 .mf-name { color: var(--amber); }
+  .mf-step.p5 .mf-name { color: var(--teal); }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.88rem;
+  }
+
+  .comp-table th {
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    background: var(--bg2);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border2);
+    letter-spacing: -0.01em;
+  }
+
+  .comp-table th:nth-child(2) { color: var(--split); border-bottom-color: var(--split); }
+  .comp-table th:nth-child(3) { color: var(--phase); border-bottom-color: var(--phase); }
+
+  .comp-table td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .comp-table td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.84rem;
+    font-family: 'Fira Code', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .comp-table tr:hover td { background: var(--bg2); }
+
+  .same { color: var(--muted2); font-style: italic; font-size: 0.8rem; }
+  .diff-a { color: var(--split); font-weight: 600; }
+  .diff-b { color: var(--phase); font-weight: 600; }
+
+  /* ── CANCER CALLOUT ── */
+  .callout {
+    border-radius: 14px;
+    border: 1px solid;
+    padding: 1.4rem 1.6rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .callout-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout.danger { background: var(--danger-bg); border-color: var(--danger-bd); }
+  .callout.danger .callout-title { color: var(--danger); }
+
+  .callout.info { background: var(--dna-bg); border-color: var(--dna-bd); }
+  .callout.info .callout-title { color: var(--dna); }
+
+  /* ── GLOSSARY ── */
+  .gloss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .gloss-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.3rem;
+    transition: all 0.18s;
+  }
+
+  .gloss-card:hover {
+    border-color: var(--border2);
+    background: var(--bg2);
+  }
+
+  .gloss-term {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: var(--phase);
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+  }
+
+  .gloss-def { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .gloss-def strong { color: var(--text); }
+
+  /* ── EXAMPLES ── */
+  .example-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .ex-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.4em 1.1em;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: rgba(247,244,239,0.4);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.07em;
+    margin-top: 3rem;
+  }
+
+  footer span { color: #86efac; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Topic 1 · Cells &amp; Microorganisms · Chapter 1.3</div>
+    <h1>Cell<br><span class="hl">Division</span></h1>
+    <p class="hero-sub">Binary fission, mitosis, and how cells copy and distribute their genetic material to form two identical daughter cells.</p>
+    <nav class="hero-links">
+      <a href="#purpose">Purpose</a>
+      <a href="#dna">DNA Transfer</a>
+      <a href="#binaryfission">Binary Fission</a>
+      <a href="#mitosis">Mitotic Division</a>
+      <a href="#phases">The 4 Phases</a>
+      <a href="#cytokinesis">Cytokinesis</a>
+      <a href="#cancer">Cancer</a>
+      <a href="#compare">Comparison</a>
+    </nav>
+  </div>
+</header>
+<div class="hero-skew"></div>
+
+<!-- PURPOSE -->
+<section id="purpose">
+  <div class="container">
+    <div class="sec-label">Section 1</div>
+    <h2 class="sec-title">The Purpose of Cell Division</h2>
+    <p class="sec-intro">New cells are formed by cell division — a process fundamental to the continuity of life. Only <strong>binary fission</strong> (prokaryotes) and <strong>mitotic division</strong> (eukaryotes) are covered in Chapter 1.3. Meiotic division for sexual reproduction is a Stage 2 Biology topic.</p>
+
+    <div class="purpose-grid reveal">
+      <div class="purpose-card c1">
+        <div class="pcard-icon">🧬</div>
+        <div class="pcard-text"><strong>Transmit genetic information</strong> — DNA encoded in chromosomes is passed from generation to generation of cells.</div>
+      </div>
+      <div class="purpose-card c2">
+        <div class="pcard-icon">🌱</div>
+        <div class="pcard-text"><strong>Growth and development</strong> — multicellular organisms grow from a single fertilised ovum through repeated cell divisions.</div>
+      </div>
+      <div class="purpose-card c3">
+        <div class="pcard-icon">🩹</div>
+        <div class="pcard-text"><strong>Replace and repair cells</strong> — new cells replace dead cells or repair damaged tissue (e.g. intestinal lining replaced every 2–5 days).</div>
+      </div>
+      <div class="purpose-card c4">
+        <div class="pcard-icon">🔄</div>
+        <div class="pcard-text"><strong>Asexual reproduction</strong> — allows some organisms to produce new, genetically identical individuals without sexual reproduction.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; margin-top:2.5rem; margin-bottom:0.75rem;">Eukaryotes that reproduce asexually by mitotic division:</h3>
+    <div class="example-pills reveal">
+      <div class="ex-pill">🦠 Unicellular amoeba</div>
+      <div class="ex-pill">🪸 Multicellular hydra</div>
+      <div class="ex-pill">⭐ Multicellular sea stars</div>
+      <div class="ex-pill">🍓 Multicellular strawberry plants</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DNA TRANSFER -->
+<section id="dna">
+  <div class="container">
+    <div class="sec-label">Section 2</div>
+    <h2 class="sec-title">Transferring DNA Between Generations</h2>
+    <p class="sec-intro">Before a cell divides, its DNA must be <strong>replicated</strong> so each daughter cell receives an identical copy. Three essential events must occur in both binary fission and mitotic division.</p>
+
+    <div class="dna-steps reveal">
+      <div class="dna-step">
+        <div class="dna-num">1</div>
+        <div class="dna-text"><strong>DNA Replication:</strong> The cell's DNA is doubled before division begins. Each chromosome produces two identical sister chromatids joined at the centromere.</div>
+      </div>
+      <div class="dna-step">
+        <div class="dna-num">2</div>
+        <div class="dna-text"><strong>Separation of DNA copies:</strong> The two copies of DNA are moved to opposite ends of the parent cell — ensuring each daughter cell receives exactly one copy.</div>
+      </div>
+      <div class="dna-step">
+        <div class="dna-num">3</div>
+        <div class="dna-text"><strong>Division of cytoplasm:</strong> The cytoplasm of the parent cell is divided (cytokinesis), forming two new daughter cells — each with a complete, identical set of genetic material.</div>
+      </div>
+    </div>
+
+    <div class="callout info reveal">
+      <div class="callout-title">🧬 Why DNA Replication Must Come First</div>
+      If DNA replication does not occur <em>before</em> cell division, the parent cell has only one copy of its DNA — it cannot supply an identical copy to both daughter cells. Without replication, division would produce one cell with DNA and one without, breaking the continuity of genetic information.
+    </div>
+
+    <!-- KEY TERMS -->
+    <h3 style="font-family:'Outfit',sans-serif; font-size:1.15rem; font-weight:700; margin-top:3rem; margin-bottom:0.4rem;">Key Terms</h3>
+    <div class="gloss-grid reveal">
+      <div class="gloss-card">
+        <div class="gloss-term">Chromosome</div>
+        <div class="gloss-def">A structure made of <strong>DNA and proteins</strong>. In eukaryotes, chromosomes are linear; in prokaryotes, the chromosome is circular.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-term">Sister Chromatids</div>
+        <div class="gloss-def">Two <strong>identical copies</strong> of a chromosome produced by DNA replication, joined together at the centromere.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-term">Centromere</div>
+        <div class="gloss-def">The point where <strong>sister chromatids are joined</strong> together after DNA replication.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-term">Chromatin</div>
+        <div class="gloss-def">The <strong>decondensed (uncoiled)</strong> form of DNA in eukaryotic cells. Present during interphase — not visible under a light microscope.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-term">Parent Cell</div>
+        <div class="gloss-def">The <strong>dividing cell</strong> that gives rise to two daughter cells. Must have its DNA replicated before dividing.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-term">Daughter Cells</div>
+        <div class="gloss-def">The <strong>two new cells</strong> produced by cell division. Are genetically identical clones of the parent cell.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BINARY FISSION -->
+<section id="binaryfission">
+  <div class="container">
+    <div class="sec-label">Section 3</div>
+    <h2 class="sec-title">Binary Fission</h2>
+    <p class="sec-intro">Most unicellular <strong>prokaryotes</strong> (bacteria and archaea) reproduce by binary fission. Because prokaryotic DNA is located in the cytoplasm rather than a nucleus, the process is relatively simple compared to mitotic division.</p>
+
+    <h3 style="font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.75rem;">Steps of Binary Fission</h3>
+    <div class="bf-steps reveal">
+      <div class="bf-card">
+        <div class="bf-num">1</div>
+        <div class="bf-text">The cell's <strong>circular chromosome attaches</strong> to the inside of the cell membrane.</div>
+      </div>
+      <div class="bf-card">
+        <div class="bf-num">2</div>
+        <div class="bf-text"><strong>DNA replication</strong> occurs, resulting in two identical circular chromosomes both attached to the cell membrane.</div>
+      </div>
+      <div class="bf-card">
+        <div class="bf-num">3</div>
+        <div class="bf-text">The cell <strong>elongates lengthways</strong>, which begins to physically separate the two chromosomes.</div>
+      </div>
+      <div class="bf-card">
+        <div class="bf-num">4</div>
+        <div class="bf-text">As elongation continues, the separated chromosomes are moved to <strong>opposite ends</strong> of the parent cell.</div>
+      </div>
+      <div class="bf-card">
+        <div class="bf-num">5</div>
+        <div class="bf-text">A new <strong>cell wall and cell membrane</strong> (cross wall) form through the centre of the elongated cell.</div>
+      </div>
+      <div class="bf-card">
+        <div class="bf-num">6</div>
+        <div class="bf-text">The cell <strong>divides into two daughter cells</strong>, each containing one identical circular chromosome.</div>
+      </div>
+    </div>
+
+    <div class="callout info reveal" style="border-color:var(--split-bd); background:var(--split-bg);">
+      <div class="callout-title" style="color:var(--split);">🔬 Before Binary Fission Begins</div>
+      Prior to binary fission, the cell's entire contents doubles — including the synthesis of more <strong>ribosomes</strong>, more <strong>plasmids</strong>, and the doubling of <strong>DNA</strong>. This preparation ensures each daughter cell is a fully functional, independent cell.
+    </div>
+
+  </div>
+</section>
+
+<!-- MITOTIC DIVISION -->
+<section id="mitosis">
+  <div class="container">
+    <div class="sec-label">Section 4</div>
+    <h2 class="sec-title">Mitotic Division</h2>
+    <p class="sec-intro">Eukaryotic cells store DNA in a nucleus, requiring a more complex division process. Mitotic division involves two separate processes: <strong>Mitosis</strong> (division of the nucleus) followed by <strong>Cytokinesis</strong> (division of the cytoplasm).</p>
+
+    <!-- OVERVIEW FLOW -->
+    <div class="mitosis-flow reveal">
+      <div class="mf-step p1">
+        <div class="mf-icon">🔵</div>
+        <div class="mf-name">Prophase</div>
+        <div class="mf-desc">Chromosomes condense; nuclear membrane breaks down</div>
+      </div>
+      <div class="mf-step p2">
+        <div class="mf-icon">⚖️</div>
+        <div class="mf-name">Metaphase</div>
+        <div class="mf-desc">Chromosomes align at the equator (metaphase plate)</div>
+      </div>
+      <div class="mf-step p3">
+        <div class="mf-icon">↔️</div>
+        <div class="mf-name">Anaphase</div>
+        <div class="mf-desc">Sister chromatids pulled to opposite poles</div>
+      </div>
+      <div class="mf-step p4">
+        <div class="mf-icon">🔮</div>
+        <div class="mf-name">Telophase</div>
+        <div class="mf-desc">Nuclear membranes re-form; chromosomes decondense</div>
+      </div>
+      <div class="mf-step p5">
+        <div class="mf-icon">✂️</div>
+        <div class="mf-name">Cytokinesis</div>
+        <div class="mf-desc">Cytoplasm divides into two daughter cells</div>
+      </div>
+    </div>
+
+    <!-- PREPARATION -->
+    <div class="callout info reveal">
+      <div class="callout-title">📋 Before Mitosis Begins — Preparation</div>
+      DNA is initially in a <strong>decondensed chromatin</strong> form, making it easy for the replication machinery to access it. After DNA replication, the chromatin must <strong>condense (coil) tightly around histone proteins</strong> to form chromosomes. This protects the long DNA molecules and makes individual chromosomes visible under a light microscope. A human cell has 46 duplicated chromosomes — approximately <strong>4 metres of DNA</strong> — condensed into manageable structures.
+    </div>
+
+  </div>
+</section>
+
+<!-- 4 PHASES OF MITOSIS -->
+<section id="phases">
+  <div class="container">
+    <div class="sec-label">Section 5</div>
+    <h2 class="sec-title">The Four Phases of Mitosis</h2>
+    <p class="sec-intro">Mitosis is a <strong>continuous process</strong> during which the nucleus of the parent cell divides to produce two identical daughter nuclei. Four recognisable phases mark changes to chromosome visibility and location.</p>
+
+    <div class="phase-list reveal">
+
+      <div class="phase-card prophase">
+        <div class="phase-head">
+          <div class="phase-num">Phase 1</div>
+          <div class="phase-name">Prophase</div>
+        </div>
+        <div class="phase-body">
+          <ul class="phase-points">
+            <li>Chromatin <strong>condenses into visible chromosomes</strong> — each consisting of two identical sister chromatids joined at the centromere</li>
+            <li><strong>Nuclear membrane breaks down</strong> into small vesicles (not visible under light microscope)</li>
+            <li><strong>Centrioles duplicate</strong> and move to opposite ends of the cell to form the poles of the spindle apparatus</li>
+            <li><strong>Spindle fibres</strong> begin to radiate from the centrioles</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-card metaphase">
+        <div class="phase-head">
+          <div class="phase-num">Phase 2</div>
+          <div class="phase-name">Metaphase</div>
+        </div>
+        <div class="phase-body">
+          <ul class="phase-points">
+            <li>Each centriole reaches a pole; <strong>spindle fibres attach to the centromeres</strong> of chromosomes now in the cytoplasm</li>
+            <li>Chromosomes are <strong>lined up along the equator</strong> of the cell (the metaphase plate) by the spindle apparatus</li>
+            <li>The spindle is made from <strong>protein microtubules</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-card anaphase">
+        <div class="phase-head">
+          <div class="phase-num">Phase 3</div>
+          <div class="phase-name">Anaphase</div>
+        </div>
+        <div class="phase-body">
+          <ul class="phase-points">
+            <li>Each <strong>chromosome splits at the centromere</strong> — separating the sister chromatids</li>
+            <li>Spindle fibres <strong>pull sister chromatids to opposite poles</strong>, centromeres first</li>
+            <li>Results in <strong>identical sets of DNA at each pole</strong> of the cell</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-card telophase">
+        <div class="phase-head">
+          <div class="phase-num">Phase 4</div>
+          <div class="phase-name">Telophase</div>
+        </div>
+        <div class="phase-body">
+          <ul class="phase-points">
+            <li>Chromosomes at each pole are <strong>enclosed in a new nuclear membrane</strong></li>
+            <li>Chromosomes <strong>decondense back into chromatin</strong> — they are no longer visible, signalling the end of mitosis</li>
+            <li>Each centriole at each pole ensures daughter cells have the <strong>cellular machinery for future nuclear division</strong></li>
+            <li><strong>Cytokinesis</strong> (division of cytoplasm) begins in telophase</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- CYTOKINESIS -->
+<section id="cytokinesis">
+  <div class="container">
+    <div class="sec-label">Section 6</div>
+    <h2 class="sec-title">Cytokinesis</h2>
+    <p class="sec-intro">Cytokinesis is the division of the <strong>cytoplasm</strong> (not the nucleus) and is considered separate from mitosis. It begins during anaphase or telophase and finishes after telophase.</p>
+
+    <div class="dna-steps reveal" style="border-color:var(--teal-bd); background:var(--teal-bg);">
+      <div class="dna-step" style="border-color:var(--teal-bd);">
+        <div class="dna-num" style="background:var(--teal);">1</div>
+        <div class="dna-text"><strong>Microfilaments ring</strong> forms: A ring of protein fibres (microfilaments) assembles around the equator of the cell, just inside the cell membrane.</div>
+      </div>
+      <div class="dna-step" style="border-color:var(--teal-bd);">
+        <div class="dna-num" style="background:var(--teal);">2</div>
+        <div class="dna-text"><strong>Cleavage furrow</strong> forms: The microfilament ring constricts inward, creating an infolding of the cell membrane called a cleavage furrow.</div>
+      </div>
+      <div class="dna-step" style="border-color:var(--teal-bd);">
+        <div class="dna-num" style="background:var(--teal);">3</div>
+        <div class="dna-text"><strong>Pinching complete:</strong> Constriction continues until the cytoplasm is fully divided — producing <strong>two separate, genetically identical daughter cells</strong>.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CANCER -->
+<section id="cancer">
+  <div class="container">
+    <div class="sec-label">Section 7</div>
+    <h2 class="sec-title">Cancer &amp; Uncontrolled Cell Division</h2>
+    <p class="sec-intro">Mitotic division is highly regulated in multicellular organisms. Loss of this regulation can have serious consequences.</p>
+
+    <div class="callout danger reveal">
+      <div class="callout-title">⚠️ When Regulation Fails — Tumours and Cancer</div>
+      If one cell loses control over the mechanisms regulating cell division, it can undergo <strong>uncontrolled cell division</strong> — forming a mass of cells known as a <strong>tumour or cancer</strong>. Factors that increase this risk include:
+      <br><br>
+      🔴 Exposure to <strong>ionising radiation</strong> &nbsp;·&nbsp;
+      🚬 <strong>Cigarette smoke</strong> &nbsp;·&nbsp;
+      🏗️ <strong>Asbestos</strong> &nbsp;·&nbsp;
+      🦠 Some <strong>viruses</strong>
+      <br><br>
+      The cell cycle that controls cell division is covered in detail in <strong>Stage 2 Biology</strong>.
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="compare">
+  <div class="container">
+    <div class="sec-label">Section 8</div>
+    <h2 class="sec-title">Binary Fission vs Mitotic Division</h2>
+    <p class="sec-intro">Both processes produce two genetically identical daughter cells, but there are important differences in how they achieve this.</p>
+
+    <table class="comp-table reveal">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>🦠 Binary Fission</th>
+          <th>🔬 Mitotic Division</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Type of Cell</td>
+          <td><span class="diff-a">Prokaryotic</span></td>
+          <td><span class="diff-b">Eukaryotic</span></td>
+        </tr>
+        <tr>
+          <td>DNA Replication Before Division?</td>
+          <td><span class="same">Yes — identical in both</span></td>
+          <td><span class="same">Yes — identical in both</span></td>
+        </tr>
+        <tr>
+          <td>Nuclear Division?</td>
+          <td><span class="diff-a">No — prokaryotes have no nucleus</span></td>
+          <td><span class="diff-b">Yes — nucleus must divide first</span></td>
+        </tr>
+        <tr>
+          <td>Type of Chromosome</td>
+          <td><span class="diff-a">Single, circular chromosome</span></td>
+          <td><span class="diff-b">Many linear chromosomes</span></td>
+        </tr>
+        <tr>
+          <td>Spindle Fibres Used?</td>
+          <td><span class="diff-a">No</span></td>
+          <td><span class="diff-b">Yes — to move chromosomes</span></td>
+        </tr>
+        <tr>
+          <td>Number of Cells Produced</td>
+          <td><span class="same">Two — identical in both</span></td>
+          <td><span class="same">Two — identical in both</span></td>
+        </tr>
+        <tr>
+          <td>Daughter Cells</td>
+          <td><span class="same">Clones of parent cell — identical in both</span></td>
+          <td><span class="same">Clones of parent cell — identical in both</span></td>
+        </tr>
+        <tr>
+          <td>Growth Pattern (no restrictions)</td>
+          <td><span class="same">Exponential — identical in both</span></td>
+          <td><span class="same">Exponential — identical in both</span></td>
+        </tr>
+        <tr>
+          <td>Complexity</td>
+          <td><span class="diff-a">Relatively simple</span></td>
+          <td><span class="diff-b">More complex — 4 phases</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout info reveal" style="margin-top:2rem;">
+      <div class="callout-title">📌 Key Similarity</div>
+      Despite their differences, <strong>both binary fission and mitotic division</strong> share the same three essential events: (1) DNA replication, (2) separation of DNA copies to opposite ends, and (3) division of the cytoplasm. The result in both cases is two genetically identical daughter cells — clones of the parent.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Chapter 1.3 — Cell Division · <span>Topic 1: Cells and Microorganisms</span></div>
+  <div style="margin-top:0.4rem; opacity:0.5;">© Essentials Education 2025 · Study resource for educational use</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 50);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

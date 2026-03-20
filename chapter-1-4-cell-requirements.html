@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1.4 — Cell Requirements</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05080f;
+    --bg2: #090d18;
+    --surface: #0e1420;
+    --surface2: #131929;
+    --border: #1e2740;
+    --border2: #2a3655;
+    --text: #dde4f0;
+    --muted: #7a8aaa;
+    --muted2: #4a5878;
+
+    --sun:    #f0a500;
+    --sun-bg: rgba(240,165,0,0.07);
+    --sun-border: rgba(240,165,0,0.2);
+
+    --green:  #34d399;
+    --green-bg: rgba(52,211,153,0.07);
+    --green-border: rgba(52,211,153,0.2);
+
+    --blue:   #60a5fa;
+    --blue-bg: rgba(96,165,250,0.07);
+    --blue-border: rgba(96,165,250,0.2);
+
+    --red:    #f87171;
+    --red-bg: rgba(248,113,113,0.07);
+    --red-border: rgba(248,113,113,0.2);
+
+    --purple: #c084fc;
+    --purple-bg: rgba(192,132,252,0.07);
+    --purple-border: rgba(192,132,252,0.2);
+
+    --teal:   #2dd4bf;
+    --teal-bg: rgba(45,212,191,0.07);
+    --teal-border: rgba(45,212,191,0.2);
+
+    --orange: #fb923c;
+    --orange-bg: rgba(251,146,60,0.07);
+    --orange-border: rgba(251,146,60,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  strong { font-weight: 600; color: #eef2ff; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 2rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 50%, rgba(240,165,0,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 30%, rgba(52,211,153,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 60% 80%, rgba(96,165,250,0.05) 0%, transparent 50%);
+  }
+
+  /* orbiting dots bg */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .hero-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .hero-chip {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sun);
+    border: 1px solid var(--sun-border);
+    background: var(--sun-bg);
+    padding: 0.4em 1.1em;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 .accent { color: var(--green); }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+    line-height: 1.7;
+  }
+
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .hero-nav a {
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.5em 1.1em;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: var(--surface);
+    transition: all 0.2s;
+  }
+
+  .hero-nav a:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-bg);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
+
+  section { padding: 5rem 0; border-top: 1px solid var(--border); }
+
+  .sec-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.5rem;
+  }
+
+  .sec-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .sec-intro {
+    font-size: 0.93rem;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ─── REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.vis { opacity: 1; transform: none; }
+
+  /* ─── ATP BOX ─── */
+  .atp-box {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .atp-box { grid-template-columns: 1fr; } }
+
+  .atp-side { }
+
+  .atp-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sun);
+    margin-bottom: 0.6rem;
+  }
+
+  .atp-molecule {
+    background: var(--sun-bg);
+    border: 1px solid var(--sun-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--sun);
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  .atp-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+  .atp-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--muted2);
+    align-self: center;
+  }
+
+  /* ─── PROCESSES TABLE ─── */
+  .process-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.88rem;
+  }
+
+  .process-table th {
+    text-align: left;
+    padding: 0.85rem 1.2rem;
+    background: var(--surface2);
+    border-bottom: 2px solid var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  .process-table td {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .process-table td:first-child { color: var(--text); font-weight: 500; font-family: 'Syne', sans-serif; }
+  .process-table tr:hover td { background: var(--surface); }
+
+  /* ─── AUTO/HETERO CARDS ─── */
+  .duo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .duo-grid { grid-template-columns: 1fr; } }
+
+  .duo-card {
+    border-radius: 16px;
+    border: 1px solid;
+    overflow: hidden;
+  }
+
+  .duo-head {
+    padding: 1.25rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .duo-body { padding: 1.25rem 1.5rem; font-size: 0.88rem; line-height: 1.7; }
+
+  .duo-card.auto { border-color: var(--green-border); }
+  .duo-card.auto .duo-head { background: var(--green-bg); color: var(--green); }
+  .duo-card.auto .duo-body { color: rgba(52,211,153,0.8); }
+
+  .duo-card.hetero { border-color: var(--orange-border); }
+  .duo-card.hetero .duo-head { background: var(--orange-bg); color: var(--orange); }
+  .duo-card.hetero .duo-body { color: rgba(251,146,60,0.8); }
+
+  .duo-body strong { color: #eef2ff; }
+
+  /* ─── AUTOTROPH COMPARE TABLE ─── */
+  .auto-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.88rem;
+  }
+
+  .auto-table th {
+    text-align: left;
+    padding: 0.85rem 1.2rem;
+    background: var(--surface2);
+    border-bottom: 2px solid var(--teal);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .auto-table td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .auto-table tr:hover td { background: var(--surface); }
+  .auto-table td:first-child { color: var(--text); font-weight: 600; }
+
+  .yes { color: var(--green); font-weight: 600; }
+  .no  { color: var(--red);   font-weight: 600; }
+
+  /* ─── EQUATION BOX ─── */
+  .eq-block {
+    border-radius: 14px;
+    border: 1px solid;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .eq-header {
+    padding: 0.85rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .eq-body { padding: 1.25rem 1.5rem; }
+
+  .eq-word {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 0.65rem;
+    line-height: 1.5;
+  }
+
+  .eq-word span.arr { color: var(--muted2); margin: 0 0.4em; }
+
+  .eq-chem {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    line-height: 1.5;
+  }
+
+  .eq-block.photo  { border-color: var(--green-border); }
+  .eq-block.photo  .eq-header { background: var(--green-bg); color: var(--green); }
+  .eq-block.photo  .eq-chem   { background: var(--green-bg); color: var(--green); }
+
+  .eq-block.aerobic { border-color: var(--blue-border); }
+  .eq-block.aerobic .eq-header { background: var(--blue-bg); color: var(--blue); }
+  .eq-block.aerobic .eq-chem   { background: var(--blue-bg); color: var(--blue); }
+
+  .eq-block.ethanol { border-color: var(--purple-border); }
+  .eq-block.ethanol .eq-header { background: var(--purple-bg); color: var(--purple); }
+  .eq-block.ethanol .eq-chem   { background: var(--purple-bg); color: var(--purple); }
+
+  .eq-block.lactic  { border-color: var(--red-border); }
+  .eq-block.lactic  .eq-header { background: var(--red-bg); color: var(--red); }
+  .eq-block.lactic  .eq-chem   { background: var(--red-bg); color: var(--red); }
+
+  /* ─── RESPIRATION STAGES ─── */
+  .resp-stages {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .resp-stages { grid-template-columns: 1fr; } }
+
+  .stage {
+    background: var(--surface);
+    padding: 1.5rem;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .stage:hover { background: var(--surface2); }
+
+  .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.5rem;
+  }
+
+  .stage-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+
+  .stage-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .stage-loc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.2em 0.7em;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: 0.65rem;
+    border: 1px solid;
+  }
+
+  .stage-atp {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--sun);
+    margin-bottom: 0.3rem;
+  }
+
+  .stage-atp-label { font-size: 0.75rem; color: var(--muted); }
+  .stage-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-top: 0.5rem; }
+
+  .stage.glyc .stage-loc  { color: var(--blue);   border-color: var(--blue-border);   background: var(--blue-bg); }
+  .stage.krebs .stage-loc { color: var(--green);  border-color: var(--green-border);  background: var(--green-bg); }
+  .stage.etc .stage-loc   { color: var(--purple); border-color: var(--purple-border); background: var(--purple-bg); }
+
+  /* ─── FERMENTATION COMPARE ─── */
+  .ferm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .ferm-grid { grid-template-columns: 1fr; } }
+
+  .ferm-card {
+    border: 1px solid;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .ferm-head {
+    padding: 1rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ferm-body { padding: 1.25rem 1.5rem; font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+  .ferm-body strong { color: #eef2ff; }
+
+  .ferm-card.ethanol { border-color: var(--purple-border); }
+  .ferm-card.ethanol .ferm-head { background: var(--purple-bg); color: var(--purple); }
+
+  .ferm-card.lactic  { border-color: var(--red-border); }
+  .ferm-card.lactic  .ferm-head { background: var(--red-bg); color: var(--red); }
+
+  /* ─── COMPARISON TABLE ─── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.86rem;
+  }
+
+  .comp-table th {
+    text-align: left;
+    padding: 0.85rem 1.2rem;
+    background: var(--surface2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border2);
+  }
+
+  .comp-table th:nth-child(2) { color: var(--blue); border-bottom-color: var(--blue); }
+  .comp-table th:nth-child(3) { color: var(--red);  border-bottom-color: var(--red); }
+
+  .comp-table td {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .comp-table tr:hover td { background: var(--surface); }
+  .comp-table td:first-child { color: var(--text); font-weight: 500; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.05em; }
+
+  /* ─── MATERIALS GRID ─── */
+  .mat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .mat-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: all 0.22s;
+    border-left: 4px solid;
+  }
+
+  .mat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  .mat-card.c1 { border-left-color: var(--green); }
+  .mat-card.c2 { border-left-color: var(--blue); }
+  .mat-card.c3 { border-left-color: var(--sun); }
+  .mat-card.c4 { border-left-color: var(--purple); }
+  .mat-card.c5 { border-left-color: var(--orange); }
+  .mat-card.c6 { border-left-color: var(--teal); }
+
+  .mat-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .mat-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.45rem;
+  }
+  .mat-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+
+  /* ─── MINERALS TABLE ─── */
+  .min-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.84rem;
+  }
+
+  .min-table th {
+    text-align: center;
+    padding: 0.75rem 0.9rem;
+    background: var(--surface2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border2);
+  }
+
+  .min-table th:first-child { text-align: left; }
+
+  .min-table td {
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .min-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+  }
+
+  .min-table tr:hover td { background: var(--surface); }
+
+  .tick { color: var(--green); font-size: 1.1rem; font-weight: 700; }
+  .dash { color: var(--muted2); }
+
+  .min-note { font-size: 0.75rem; color: var(--muted2); margin-top: 0.25rem; display: block; line-height: 1.45; }
+
+  /* ─── WASTE CARDS ─── */
+  .waste-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .waste-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.22s;
+  }
+
+  .waste-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  .waste-head {
+    padding: 1rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .waste-body { padding: 1.25rem 1.5rem; font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+  .waste-body strong { color: #eef2ff; }
+
+  .waste-card.co2   .waste-head { background: var(--blue-bg);   color: var(--blue);   border-bottom-color: var(--blue-border); }
+  .waste-card.urea  .waste-head { background: var(--sun-bg);    color: var(--sun);    border-bottom-color: var(--sun-border); }
+  .waste-card.lact  .waste-head { background: var(--red-bg);    color: var(--red);    border-bottom-color: var(--red-border); }
+  .waste-card.eth   .waste-head { background: var(--purple-bg); color: var(--purple); border-bottom-color: var(--purple-border); }
+
+  /* ─── LIMITING FACTORS ─── */
+  .lf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 580px) { .lf-grid { grid-template-columns: 1fr; } }
+
+  .lf-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: transform 0.2s;
+  }
+
+  .lf-card:hover { transform: translateY(-3px); }
+
+  .lf-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .lf-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid;
+    margin-top: 1.5rem;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .callout-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; }
+
+  .callout.sun    { background: var(--sun-bg);    border-color: var(--sun-border);    }
+  .callout.sun    .callout-title { color: var(--sun); }
+  .callout.green  { background: var(--green-bg);  border-color: var(--green-border);  }
+  .callout.green  .callout-title { color: var(--green); }
+  .callout.blue   { background: var(--blue-bg);   border-color: var(--blue-border);   }
+  .callout.blue   .callout-title { color: var(--blue); }
+  .callout.red    { background: var(--red-bg);    border-color: var(--red-border);    }
+  .callout.red    .callout-title { color: var(--red); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted2);
+    letter-spacing: 0.06em;
+  }
+
+  footer span { color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-chip">Topic 1 · Cells &amp; Microorganisms · Chapter 1.4</div>
+    <h1>Cell<br><span class="accent">Requirements</span></h1>
+    <p class="hero-sub">Energy sources, photosynthesis, respiration, fermentation — and how cells obtain materials and dispose of waste.</p>
+    <nav class="hero-nav">
+      <a href="#energy">Energy &amp; ATP</a>
+      <a href="#authetero">Auto vs Heterotroph</a>
+      <a href="#photosynthesis">Photosynthesis</a>
+      <a href="#respiration">Respiration</a>
+      <a href="#fermentation">Fermentation</a>
+      <a href="#materials">Materials</a>
+      <a href="#waste">Waste Removal</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ENERGY & ATP -->
+<section id="energy">
+  <div class="container">
+    <div class="sec-label">Section 1</div>
+    <h2 class="sec-title">Cells Require Energy</h2>
+    <p class="sec-intro">All cells constantly perform processes — movement, synthesis of materials, and maintaining a stable internal environment. All of these require a continuous input of energy. The primary energy source for life on Earth is the sun.</p>
+
+    <!-- PROCESSES TABLE -->
+    <table class="process-table reveal">
+      <thead>
+        <tr>
+          <th>Process Type</th>
+          <th>Examples in Cells and Organisms</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Movement</td>
+          <td>Contraction of muscle cells · Spinning of sperm flagella · Movement of chromosomes by spindle fibres during cell division</td>
+        </tr>
+        <tr>
+          <td>Synthesis of Materials</td>
+          <td>DNA replication · Protein synthesis at ribosomes · Glucose synthesis through photosynthesis</td>
+        </tr>
+        <tr>
+          <td>Maintaining Stability</td>
+          <td>Regulating ion and waste concentrations in cells · Maintaining constant blood temperature · Regulating pH and blood glucose levels</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ATP -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; margin-top:3rem; margin-bottom:0.5rem; letter-spacing:-0.01em;">ATP — The Energy Currency of the Cell</h3>
+    <p class="sec-intro" style="margin-bottom:0;">Glucose stores chemical energy, but cells cannot use it directly. Respiration converts glucose into <strong>ATP (adenosine triphosphate)</strong> — the cell's immediate, usable form of energy.</p>
+
+    <div class="atp-box reveal">
+      <div class="atp-side">
+        <div class="atp-label">ATP Structure</div>
+        <div class="atp-molecule">Adenine — Ribose — P — P — P</div>
+        <div class="atp-desc">ATP has a triphosphate tail (three phosphate groups). The bond between the <strong>2nd and 3rd phosphate</strong> stores energy. Breaking this bond releases usable energy for the cell to do work.</div>
+      </div>
+      <div class="atp-side">
+        <div class="atp-label">ATP ⇌ ADP Cycle</div>
+        <div class="atp-molecule" style="background:var(--blue-bg); border-color:var(--blue-border); color:var(--blue);">ATP → ADP + Pᵢ + Energy</div>
+        <div class="atp-desc">When ATP is broken down to <strong>ADP (adenosine diphosphate)</strong> + a free phosphate group (Pᵢ), energy is released. ADP can be recharged back to ATP using energy from respiration — a continuous cycle.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AUTOTROPHS & HETEROTROPHS -->
+<section id="authetero">
+  <div class="container">
+    <div class="sec-label">Section 2</div>
+    <h2 class="sec-title">Autotrophs &amp; Heterotrophs</h2>
+    <p class="sec-intro">All organisms need energy-rich organic molecules (e.g. glucose). How they obtain them defines whether they are an autotroph or a heterotroph.</p>
+
+    <div class="duo-grid reveal">
+      <div class="duo-card auto">
+        <div class="duo-head">🌿 Autotrophs (Producers)</div>
+        <div class="duo-body">
+          <strong>Can synthesise their own</strong> organic energy-rich molecules from simple inorganic molecules (CO₂ and H₂O).<br><br>
+          Two types:<br>
+          <strong>1. Photosynthetic</strong> — use light energy (plants, algae, cyanobacteria)<br>
+          <strong>2. Chemosynthetic</strong> — use chemical energy (sulfur bacteria at hydrothermal vents)<br><br>
+          Ecosystems depend on autotrophs to produce the energy-rich molecules that fuel all life.
+        </div>
+      </div>
+      <div class="duo-card hetero">
+        <div class="duo-head">🦁 Heterotrophs (Consumers)</div>
+        <div class="duo-body">
+          <strong>Cannot synthesise their own</strong> organic molecules — must obtain them by consuming other organisms or parts of them.<br><br>
+          Rely entirely on autotrophs (directly or indirectly) for their supply of energy-rich molecules.<br><br>
+          <strong>Examples:</strong> all animals, fungi, most bacteria. They eat plants directly, or eat animals that have eaten plants.
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTO COMPARE TABLE -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; margin-top:3rem; margin-bottom:0.5rem; letter-spacing:-0.01em;">Comparing Photo- vs Chemo-Autotrophs</h3>
+    <table class="auto-table reveal">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Energy Source</th>
+          <th>Chlorophyll?</th>
+          <th>By-Products</th>
+          <th>Examples</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Photosynthetic</td>
+          <td>Light (from sun)</td>
+          <td><span class="yes">Yes</span></td>
+          <td>Oxygen</td>
+          <td>Plants, algae, cyanobacteria</td>
+        </tr>
+        <tr>
+          <td>Chemosynthetic</td>
+          <td>Chemical (e.g. H₂S, CH₄)</td>
+          <td><span class="no">No</span></td>
+          <td>Depends on reaction type</td>
+          <td>Sulfur bacteria (deep-ocean hydrothermal vents), nitrogen-fixing bacteria</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout sun reveal">
+      <div class="callout-title">🌋 Chemosynthesis — Life Without Sunlight</div>
+      In deep-ocean environments where light cannot penetrate, chemosynthetic organisms like sulfur bacteria use inorganic molecules (e.g. hydrogen sulfide, H₂S) released from hydrothermal vents as their energy source. They form the base of entire ecosystems that exist without sunlight.
+    </div>
+
+  </div>
+</section>
+
+<!-- PHOTOSYNTHESIS -->
+<section id="photosynthesis">
+  <div class="container">
+    <div class="sec-label">Section 3</div>
+    <h2 class="sec-title">Photosynthesis</h2>
+    <p class="sec-intro">Photosynthesis occurs in photosynthetic autotrophs. Light energy is trapped by the green pigment <strong>chlorophyll</strong> and used to convert inorganic molecules (CO₂ and H₂O) into the organic molecule glucose, releasing oxygen as a by-product.</p>
+
+    <div class="eq-block photo reveal">
+      <div class="eq-header">🌿 Photosynthesis Equations</div>
+      <div class="eq-body">
+        <div class="eq-word">
+          <strong>Word:</strong> carbon dioxide + water <span class="arr">→</span> glucose + oxygen
+        </div>
+        <div class="eq-chem">6CO₂  +  6H₂O  →  C₆H₁₂O₆  +  6O₂</div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-top:0.6rem; font-family:'JetBrains Mono',monospace;">(requires: light energy + chlorophyll)</div>
+      </div>
+    </div>
+
+    <!-- LIMITING FACTORS -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; margin-top:3rem; margin-bottom:0.4rem; letter-spacing:-0.01em;">Limiting Factors of Photosynthesis</h3>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0; line-height:1.7;">Factors that prevent photosynthesis reaching its maximum rate are called <strong>limiting factors</strong>. Understanding them helps humans maximise crop yields.</p>
+
+    <div class="lf-grid reveal">
+      <div class="lf-card">
+        <div class="lf-title">☀️ Light Intensity</div>
+        <div class="lf-desc">Increasing light intensity increases the rate of photosynthesis in a linear trend — until another factor (e.g. CO₂ concentration) becomes limiting, at which point the rate plateaus.</div>
+      </div>
+      <div class="lf-card">
+        <div class="lf-title">💨 CO₂ Concentration</div>
+        <div class="lf-desc">If CO₂ concentration is increased when light intensity has become limiting, the rate of photosynthesis will rise again — until yet another factor limits it.</div>
+      </div>
+      <div class="lf-card">
+        <div class="lf-title">🔵 Light Wavelength / Colour</div>
+        <div class="lf-desc">Chlorophyll absorbs <strong>violet/blue and red</strong> wavelengths most readily — peaks of photosynthesis occur at these wavelengths. <strong>Green light</strong> is poorly absorbed, so photosynthesis rate drops in green light.</div>
+      </div>
+      <div class="lf-card">
+        <div class="lf-title">🌾 Why It Matters</div>
+        <div class="lf-desc">Humans depend on photosynthetic organisms for food (fruits, vegetables, livestock feed). Manipulating limiting factors can increase crop yields, making this knowledge economically vital.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESPIRATION -->
+<section id="respiration">
+  <div class="container">
+    <div class="sec-label">Section 4</div>
+    <h2 class="sec-title">Cellular Respiration</h2>
+    <p class="sec-intro">Cellular respiration is the metabolic pathway that converts glucose into <strong>ATP</strong> — the usable energy currency for cells. There are two types: aerobic (with oxygen) and anaerobic (without oxygen).</p>
+
+    <!-- AEROBIC -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; margin-bottom:0.5rem; letter-spacing:-0.01em;">Aerobic Respiration</h3>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0; line-height:1.7;">Occurs in the presence of sufficient oxygen. Involves mitochondria. Produces <strong>36 ATP</strong> — a large yield due to the complete breakdown of glucose.</p>
+
+    <div class="eq-block aerobic reveal" style="margin-top:1.25rem;">
+      <div class="eq-header">⚡ Aerobic Respiration Equations</div>
+      <div class="eq-body">
+        <div class="eq-word">
+          <strong>Word:</strong> glucose + oxygen <span class="arr">→</span> carbon dioxide + water (+ ATP energy)
+        </div>
+        <div class="eq-chem">C₆H₁₂O₆  +  6O₂  →  6CO₂  +  6H₂O  (+36 ATP)</div>
+      </div>
+    </div>
+
+    <!-- 3 STAGES -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-top:2.5rem; margin-bottom:0.4rem; letter-spacing:-0.01em;">The Three Stages</h3>
+    <div class="resp-stages reveal">
+      <div class="stage glyc">
+        <div class="stage-num">Stage 1</div>
+        <div class="stage-icon">⚗️</div>
+        <div class="stage-name">Glycolysis</div>
+        <div class="stage-loc">Cytoplasm</div>
+        <div class="stage-atp">2</div>
+        <div class="stage-atp-label">ATP produced</div>
+        <div class="stage-desc">Glucose is split into 2 pyruvate molecules. Does not require oxygen — occurs in all respiring cells.</div>
+      </div>
+      <div class="stage krebs">
+        <div class="stage-num">Stage 2</div>
+        <div class="stage-icon">🔄</div>
+        <div class="stage-name">Krebs Cycle</div>
+        <div class="stage-loc">Mitochondria</div>
+        <div class="stage-atp">2</div>
+        <div class="stage-atp-label">ATP produced</div>
+        <div class="stage-desc">Pyruvate is further broken down. CO₂ is released as a waste product. Requires oxygen.</div>
+      </div>
+      <div class="stage etc">
+        <div class="stage-num">Stage 3</div>
+        <div class="stage-icon">⚡</div>
+        <div class="stage-name">Electron Transport Chain</div>
+        <div class="stage-loc">Mitochondria</div>
+        <div class="stage-atp">32</div>
+        <div class="stage-atp-label">ATP produced</div>
+        <div class="stage-desc">The majority of ATP is produced here using oxygen. Water is released as a by-product.</div>
+      </div>
+    </div>
+
+    <div class="callout blue reveal">
+      <div class="callout-title">🔑 Total: 36 ATP from Aerobic Respiration</div>
+      Glycolysis (2 ATP) + Krebs Cycle (2 ATP) + Electron Transport Chain (32 ATP) = <strong>36 ATP total</strong>. The large yield is possible because oxygen enables a complete breakdown of glucose.
+    </div>
+
+  </div>
+</section>
+
+<!-- FERMENTATION -->
+<section id="fermentation">
+  <div class="container">
+    <div class="sec-label">Section 5</div>
+    <h2 class="sec-title">Anaerobic Respiration (Fermentation)</h2>
+    <p class="sec-intro">When oxygen is insufficient — such as during intense exercise — cells switch to anaerobic respiration (fermentation). It occurs only in the <strong>cytoplasm</strong>, produces only <strong>2 ATP</strong>, and results in an incomplete breakdown of glucose.</p>
+
+    <div class="ferm-grid reveal">
+      <div class="ferm-card ethanol">
+        <div class="ferm-head">🍷 Ethanol (Alcohol) Fermentation</div>
+        <div class="ferm-body">
+          <strong>Occurs in:</strong> Plants and yeast<br><br>
+          <strong>Word equation:</strong><br>
+          glucose → ethanol + carbon dioxide<br><br>
+          <strong>Chemical equation:</strong><br>
+          C₆H₁₂O₆ → C₂H₅OH + 2CO₂<br><br>
+          Used industrially to produce bread (CO₂ makes dough rise), wine and beer (ethanol).
+        </div>
+      </div>
+      <div class="ferm-card lactic">
+        <div class="ferm-head">💪 Lactic Acid Fermentation</div>
+        <div class="ferm-body">
+          <strong>Occurs in:</strong> Animals and some bacteria<br><br>
+          <strong>Word equation:</strong><br>
+          glucose → lactic acid<br><br>
+          <strong>Chemical equation:</strong><br>
+          C₆H₁₂O₆ → C₃H₆O₃<br><br>
+          Occurs in human muscle cells during vigorous exercise when O₂ delivery cannot meet demand.
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL COMPARISON TABLE -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; margin-top:3rem; margin-bottom:0.4rem; letter-spacing:-0.01em;">Aerobic vs Anaerobic — Full Comparison</h3>
+    <table class="comp-table reveal">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>⚡ Aerobic Respiration</th>
+          <th>🌀 Anaerobic (Fermentation)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Oxygen needed?</td>
+          <td><span class="yes">Yes</span></td>
+          <td><span class="no">No</span></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td>Cytoplasm (glycolysis) + Mitochondria (Krebs &amp; ETC)</td>
+          <td>Cytoplasm only</td>
+        </tr>
+        <tr>
+          <td>ATP produced</td>
+          <td><span style="color:var(--blue); font-weight:600;">36 ATP</span> (high yield)</td>
+          <td><span style="color:var(--red); font-weight:600;">2 ATP</span> (low yield)</td>
+        </tr>
+        <tr>
+          <td>Glucose breakdown</td>
+          <td>Complete</td>
+          <td>Incomplete</td>
+        </tr>
+        <tr>
+          <td>Products</td>
+          <td>CO₂ + H₂O</td>
+          <td>Lactic acid (animals) or Ethanol + CO₂ (plants/yeast)</td>
+        </tr>
+        <tr>
+          <td>Occurs when</td>
+          <td>Sufficient O₂ available</td>
+          <td>O₂ is insufficient (e.g. vigorous exercise)</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<!-- MATERIALS -->
+<section id="materials">
+  <div class="container">
+    <div class="sec-label">Section 6</div>
+    <h2 class="sec-title">Material Requirements</h2>
+    <p class="sec-intro">As well as energy, cells need water, macronutrients (carbohydrates, proteins, lipids), micronutrients (vitamins and minerals), and nucleic acids. Different organisms obtain these in different ways.</p>
+
+    <div class="mat-grid reveal">
+      <div class="mat-card c1">
+        <div class="mat-icon">🌿</div>
+        <div class="mat-title">Autotrophs — Sources</div>
+        <div class="mat-desc">Photosynthetic autotrophs source <strong>CO₂ from air</strong> (through stomata), <strong>water from soil</strong> (via roots/xylem), and <strong>light from the sun</strong>. They also absorb at least <strong>14 mineral nutrients</strong> dissolved in water from soil.</div>
+      </div>
+      <div class="mat-card c2">
+        <div class="mat-icon">🍎</div>
+        <div class="mat-title">Heterotrophs — Sources</div>
+        <div class="mat-desc">Must <strong>consume other organisms</strong>. Carbohydrates, proteins, lipids and nucleic acids are broken down in the digestive system into building blocks (sugars, amino acids, fatty acids, nucleotides) and absorbed through the small intestine.</div>
+      </div>
+      <div class="mat-card c3">
+        <div class="mat-icon">💧</div>
+        <div class="mat-title">Water</div>
+        <div class="mat-desc">Essential for all chemical reactions in cells. Autotrophs absorb it from soil or water bodies. Heterotrophs obtain it from food and by drinking. Water molecules can be bound to salts or structures, making them unavailable.</div>
+      </div>
+      <div class="mat-card c4">
+        <div class="mat-icon">🧬</div>
+        <div class="mat-title">Macronutrients</div>
+        <div class="mat-desc">Carbohydrates (energy), proteins (structure and enzymes), lipids (membranes and energy storage). Heterotrophs digest these into their building blocks for absorption. Autotrophs synthesise their own via photosynthesis.</div>
+      </div>
+      <div class="mat-card c5">
+        <div class="mat-icon">⚗️</div>
+        <div class="mat-title">Micronutrients</div>
+        <div class="mat-desc">Vitamins and minerals required in small amounts for specific roles (e.g. enzyme function, cell membrane structure). Plants need at least 14 mineral nutrients — notably <strong>nitrogen</strong> and <strong>phosphorus</strong>.</div>
+      </div>
+      <div class="mat-card c6">
+        <div class="mat-icon">🔬</div>
+        <div class="mat-title">Nucleic Acids</div>
+        <div class="mat-desc">DNA and RNA are required for storing and expressing genetic information. Some organisms can synthesise their own nucleic acids; others may need to consume them. Nucleotides are absorbed after digestion.</div>
+      </div>
+    </div>
+
+    <!-- NITROGEN & PHOSPHORUS TABLE -->
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; margin-top:3rem; margin-bottom:0.5rem; letter-spacing:-0.01em;">Why Nitrogen &amp; Phosphorus Are Vital</h3>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0; line-height:1.7;">These two minerals are required in large amounts by plants and are incorporated into some of the most fundamental molecules of life.</p>
+
+    <table class="min-table reveal">
+      <thead>
+        <tr>
+          <th>Mineral</th>
+          <th>Photosynthesis</th>
+          <th>DNA/RNA Synthesis</th>
+          <th>Protein Synthesis</th>
+          <th>ATP Synthesis</th>
+          <th>Membrane Synthesis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nitrogen (N)</td>
+          <td><span class="tick">✓</span><span class="min-note">Key component of chlorophyll</span></td>
+          <td><span class="tick">✓</span><span class="min-note">Found in nitrogenous bases</span></td>
+          <td><span class="tick">✓</span><span class="min-note">Key component of amino acids</span></td>
+          <td><span class="tick">✓</span><span class="min-note">Part of the adenosine base</span></td>
+          <td><span class="dash">—</span></td>
+        </tr>
+        <tr>
+          <td>Phosphorus (P)</td>
+          <td><span class="dash">—</span></td>
+          <td><span class="tick">✓</span><span class="min-note">Sugar-phosphate backbone</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="tick">✓</span><span class="min-note">Makes up the triphosphate tail</span></td>
+          <td><span class="tick">✓</span><span class="min-note">Key component of phospholipids</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<!-- WASTE REMOVAL -->
+<section id="waste">
+  <div class="container">
+    <div class="sec-label">Section 7</div>
+    <h2 class="sec-title">Waste Production &amp; Removal</h2>
+    <p class="sec-intro">Some metabolic reactions produce waste products that are toxic if they build up. These must be <strong>excreted from cells</strong> and eventually removed from the organism to maintain a suitable internal environment for chemical reactions.</p>
+
+    <div class="waste-grid reveal">
+      <div class="waste-card co2">
+        <div class="waste-head">💨 Carbon Dioxide (CO₂)</div>
+        <div class="waste-body">
+          <strong>Produced by:</strong> All cells in aerobic respiration; plant and yeast cells in ethanol fermentation.<br><br>
+          <strong>In animals:</strong> Excreted into blood → transported to lungs → diffuses into lungs → exhaled.<br><br>
+          <strong>In plants:</strong> Transported to leaf cells → used as a reactant in photosynthesis.
+        </div>
+      </div>
+      <div class="waste-card urea">
+        <div class="waste-head">🟡 Urea</div>
+        <div class="waste-body">
+          <strong>Produced by:</strong> Breakdown (metabolism) of proteins in liver cells of animals.<br><br>
+          <strong>Removal:</strong> Excreted into blood → kidneys filter urea → excreted as urine via urination.<br><br>
+          <strong>In plants:</strong> Urea contains nitrogen — plants can absorb urea from soil and use it for essential molecules. Some need bacteria to convert it first.
+        </div>
+      </div>
+      <div class="waste-card lact">
+        <div class="waste-head">💪 Lactic Acid</div>
+        <div class="waste-body">
+          <strong>Produced by:</strong> Lactic acid fermentation in animal cells and some bacteria.<br><br>
+          <strong>Toxic if accumulated:</strong> Denatures proteins and can cause cell death. Contributes to <strong>muscle fatigue and soreness</strong> during strenuous exercise.<br><br>
+          <strong>Removal:</strong> Excreted into blood → transported to liver → metabolised with oxygen, releasing additional energy.
+        </div>
+      </div>
+      <div class="waste-card eth">
+        <div class="waste-head">🍷 Ethanol</div>
+        <div class="waste-body">
+          <strong>Produced by:</strong> Ethanol fermentation in plant and yeast cells.<br><br>
+          <strong>Toxic if accumulated:</strong> Can denature proteins and cause cell death at high concentrations.<br><br>
+          <strong>Further use:</strong> Ethanol is involved in further metabolic pathways in plant and yeast cells, making some energy available for cellular use.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout red reveal">
+      <div class="callout-title">⚠️ Why Waste Removal Is Essential</div>
+      Waste products such as CO₂, urea, lactic acid and ethanol are toxic at high concentrations — they can <strong>denature proteins</strong>, disrupting enzyme function and eventually causing cell death. Continuous excretion is necessary to maintain a stable internal cellular environment (homeostasis) where chemical reactions can occur efficiently.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Chapter 1.4 — Cell Requirements · <span>Topic 1: Cells and Microorganisms</span></div>
+  <div style="margin-top:0.4rem; color:var(--muted2);">© Essentials Education 2025 · Study resource for educational use</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 50);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

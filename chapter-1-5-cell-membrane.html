@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1.5 — The Cell Membrane</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #f8f5f0;
+    --bg2:     #f0ebe2;
+    --surface: #ffffff;
+    --border:  #e2d8cc;
+    --border2: #ccc0b0;
+    --text:    #181210;
+    --muted:   #6a5c50;
+    --muted2:  #a8998a;
+
+    --mem:     #0369a1;
+    --mem-bg:  rgba(3,105,161,0.07);
+    --mem-bd:  rgba(3,105,161,0.22);
+
+    --pass:    #059669;
+    --pass-bg: rgba(5,150,105,0.07);
+    --pass-bd: rgba(5,150,105,0.22);
+
+    --act:     #dc2626;
+    --act-bg:  rgba(220,38,38,0.07);
+    --act-bd:  rgba(220,38,38,0.22);
+
+    --osm:     #7c3aed;
+    --osm-bg:  rgba(124,58,237,0.07);
+    --osm-bd:  rgba(124,58,237,0.22);
+
+    --diff:    #0891b2;
+    --diff-bg: rgba(8,145,178,0.07);
+    --diff-bd: rgba(8,145,178,0.22);
+
+    --sav:     #d97706;
+    --sav-bg:  rgba(217,119,6,0.07);
+    --sav-bd:  rgba(217,119,6,0.22);
+
+    --hi:      #16a34a;
+    --hypo:    #2563eb;
+    --iso:     #64748b;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  strong { font-weight: 700; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: #f8f5f0;
+    padding: 5.5rem 2rem 8rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* membrane pattern */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 80% 50%, rgba(3,105,161,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 10% 60%, rgba(5,150,105,0.15) 0%, transparent 55%);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #7dd3fc;
+    margin-bottom: 1.75rem;
+    animation: up 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: up 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    font-size: 0.6em;
+    display: block;
+    color: rgba(248,245,240,0.5);
+    letter-spacing: 0.01em;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: rgba(248,245,240,0.55);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+    animation: up 0.6s 0.2s ease both;
+  }
+
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    animation: up 0.6s 0.3s ease both;
+  }
+
+  .hero-nav a {
+    text-decoration: none;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    padding: 0.45em 1.05em;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(248,245,240,0.6);
+    background: rgba(255,255,255,0.05);
+    transition: all 0.18s;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-nav a:hover { border-color: #7dd3fc; color: #7dd3fc; background: rgba(125,211,252,0.07); }
+
+  @keyframes up { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 5rem 0; border-top: 1px solid var(--border); }
+
+  .sec-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.67rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.4rem;
+  }
+
+  .sec-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 0.9rem;
+  }
+
+  .sec-intro {
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 700px;
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.vis { opacity:1; transform:none; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 13px;
+    border: 1px solid;
+    padding: 1.3rem 1.5rem;
+    margin-top: 1.75rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .callout-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .callout.mem   { background:var(--mem-bg);  border-color:var(--mem-bd);  }
+  .callout.mem   .callout-title { color:var(--mem); }
+  .callout.pass  { background:var(--pass-bg); border-color:var(--pass-bd); }
+  .callout.pass  .callout-title { color:var(--pass); }
+  .callout.act   { background:var(--act-bg);  border-color:var(--act-bd);  }
+  .callout.act   .callout-title { color:var(--act); }
+  .callout.osm   { background:var(--osm-bg);  border-color:var(--osm-bd);  }
+  .callout.osm   .callout-title { color:var(--osm); }
+  .callout.sav   { background:var(--sav-bg);  border-color:var(--sav-bd);  }
+  .callout.sav   .callout-title { color:var(--sav); }
+
+  /* ── MEMBRANE STRUCTURE ── */
+  .components-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.1rem;
+    margin-top: 2rem;
+  }
+
+  .comp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 1.3rem;
+    border-top: 4px solid;
+    transition: all 0.2s;
+  }
+
+  .comp-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(24,18,16,0.1); }
+
+  .comp-card.c1 { border-top-color: var(--mem); }
+  .comp-card.c2 { border-top-color: var(--pass); }
+  .comp-card.c3 { border-top-color: var(--osm); }
+  .comp-card.c4 { border-top-color: var(--diff); }
+  .comp-card.c5 { border-top-color: var(--sav); }
+
+  .cc-icon { font-size: 1.9rem; margin-bottom: 0.65rem; }
+
+  .cc-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .cc-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+  .cc-desc strong { color: var(--text); }
+
+  /* ── PROTEIN FUNCTIONS TABLE ── */
+  .protein-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.87rem;
+  }
+
+  .protein-table th {
+    text-align: left;
+    padding: 0.8rem 1.1rem;
+    background: var(--bg2);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mem);
+    border-bottom: 2px solid var(--mem-bd);
+  }
+
+  .protein-table td {
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .protein-table td:first-child { font-weight: 700; color: var(--text); white-space: nowrap; }
+  .protein-table tr:hover td { background: var(--bg); }
+
+  /* ── FLUID MOSAIC ── */
+  .fluid-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 580px) { .fluid-grid { grid-template-columns: 1fr; } }
+
+  .fluid-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 13px;
+    padding: 1.5rem;
+    transition: transform 0.2s;
+  }
+
+  .fluid-card:hover { transform: translateY(-3px); }
+
+  .fc-word {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--mem);
+    margin-bottom: 0.5rem;
+  }
+
+  .fc-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.65; }
+  .fc-desc strong { color: var(--text); }
+
+  /* ── PERMEABILITY SCALE ── */
+  .perm-scale {
+    margin-top: 2rem;
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .perm-row {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.18s;
+  }
+
+  .perm-row:last-child { border-bottom: none; }
+  .perm-row:hover { background: var(--bg2); }
+
+  .perm-level {
+    width: 170px;
+    flex-shrink: 0;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 0.82rem;
+    background: var(--bg2);
+  }
+
+  .perm-mols {
+    padding: 0.9rem 1.25rem;
+    font-size: 0.84rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .mol-pill {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    padding: 0.2em 0.7em;
+    border-radius: 100px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .perm-row.high   .perm-level { color: var(--pass); }
+  .perm-row.high   .mol-pill   { color: var(--pass); border-color: var(--pass-bd); background: var(--pass-bg); }
+  .perm-row.mod    .perm-level { color: var(--diff); }
+  .perm-row.mod    .mol-pill   { color: var(--diff); border-color: var(--diff-bd); background: var(--diff-bg); }
+  .perm-row.low    .perm-level { color: var(--sav); }
+  .perm-row.low    .mol-pill   { color: var(--sav); border-color: var(--sav-bd); background: var(--sav-bg); }
+  .perm-row.vlow   .perm-level { color: var(--act); }
+  .perm-row.vlow   .mol-pill   { color: var(--act); border-color: var(--act-bd); background: var(--act-bg); }
+
+  /* ── TRANSPORT TYPES ── */
+  .transport-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .transport-card {
+    border: 1px solid;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .transport-card:hover { box-shadow: 0 6px 24px rgba(24,18,16,0.12); }
+
+  .tc-head {
+    padding: 1.1rem 1.4rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid;
+  }
+
+  .tc-body { padding: 1.25rem 1.4rem; font-size: 0.87rem; color: var(--muted); line-height: 1.65; }
+  .tc-body strong { color: var(--text); }
+
+  .tc-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-tag {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    padding: 0.2em 0.7em;
+    border-radius: 5px;
+    border: 1px solid;
+    letter-spacing: 0.04em;
+  }
+
+  .transport-card.simple  { border-color: var(--pass-bd); }
+  .transport-card.simple  .tc-head { background: var(--pass-bg); color: var(--pass); border-color: var(--pass-bd); }
+  .transport-card.simple  .meta-tag { color: var(--pass); border-color: var(--pass-bd); background: var(--pass-bg); }
+
+  .transport-card.facilit { border-color: var(--diff-bd); }
+  .transport-card.facilit .tc-head { background: var(--diff-bg); color: var(--diff); border-color: var(--diff-bd); }
+  .transport-card.facilit .meta-tag { color: var(--diff); border-color: var(--diff-bd); background: var(--diff-bg); }
+
+  .transport-card.osmosis { border-color: var(--osm-bd); }
+  .transport-card.osmosis .tc-head { background: var(--osm-bg); color: var(--osm); border-color: var(--osm-bd); }
+  .transport-card.osmosis .meta-tag { color: var(--osm); border-color: var(--osm-bd); background: var(--osm-bg); }
+
+  .transport-card.active  { border-color: var(--act-bd); }
+  .transport-card.active  .tc-head { background: var(--act-bg); color: var(--act); border-color: var(--act-bd); }
+  .transport-card.active  .meta-tag { color: var(--act); border-color: var(--act-bd); background: var(--act-bg); }
+
+  .transport-card.endo    { border-color: var(--mem-bd); }
+  .transport-card.endo    .tc-head { background: var(--mem-bg); color: var(--mem); border-color: var(--mem-bd); }
+  .transport-card.endo    .meta-tag { color: var(--mem); border-color: var(--mem-bd); background: var(--mem-bg); }
+
+  .transport-card.exo     { border-color: var(--sav-bd); }
+  .transport-card.exo     .tc-head { background: var(--sav-bg); color: var(--sav); border-color: var(--sav-bd); }
+  .transport-card.exo     .meta-tag { color: var(--sav); border-color: var(--sav-bd); background: var(--sav-bg); }
+
+  /* ── ACTIVE vs PASSIVE TABLE ── */
+  .avp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.87rem;
+  }
+
+  .avp-table th {
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    background: var(--bg2);
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-bottom: 2px solid;
+  }
+
+  .avp-table th:nth-child(1) { color: var(--muted2); border-bottom-color: var(--border2); }
+  .avp-table th:nth-child(2) { color: var(--pass); border-bottom-color: var(--pass); }
+  .avp-table th:nth-child(3) { color: var(--act); border-bottom-color: var(--act); }
+
+  .avp-table td {
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+
+  .avp-table td:first-child {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.03em;
+  }
+
+  .avp-table tr:hover td { background: var(--bg); }
+
+  .p-val { color: var(--pass); font-weight: 600; }
+  .a-val { color: var(--act);  font-weight: 600; }
+
+  /* ── OSMOSIS SOLUTIONS ── */
+  .sol-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 620px) { .sol-grid { grid-template-columns: 1fr; } }
+
+  .sol-cell {
+    background: var(--surface);
+    padding: 1.4rem;
+    text-align: center;
+    transition: background 0.18s;
+  }
+
+  .sol-cell:hover { background: var(--bg2); }
+
+  .sol-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+
+  .sol-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .sol-name.hypo { color: var(--hypo); }
+  .sol-name.iso  { color: var(--iso); }
+  .sol-name.hyper { color: var(--hi); }
+
+  .sol-def { font-size: 0.8rem; color: var(--muted2); margin-bottom: 0.75rem; font-family: 'Courier Prime', monospace; }
+
+  .sol-animal { font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-bottom: 0.5rem; }
+  .sol-plant  { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+  .sol-divider {
+    border: none;
+    border-top: 1px dashed var(--border2);
+    margin: 0.6rem 0;
+  }
+
+  /* ── SA:V VISUAL ── */
+  .sav-visual {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 580px) { .sav-visual { grid-template-columns: 1fr; } }
+
+  .sav-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .sav-card:hover { transform: translateY(-3px); }
+
+  .sav-circle {
+    border-radius: 50%;
+    background: var(--sav-bg);
+    border: 2px solid var(--sav-bd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: var(--sav);
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  .sav-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.5rem;
+  }
+
+  .sav-ratio {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .sav-good { color: var(--pass); }
+  .sav-bad  { color: var(--act); }
+  .sav-mid  { color: var(--sav); }
+
+  .sav-note { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── FACTORS TABLE ── */
+  .factors-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.87rem;
+  }
+
+  .factors-table th {
+    text-align: left;
+    padding: 0.8rem 1.1rem;
+    background: var(--bg2);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sav);
+    border-bottom: 2px solid var(--sav-bd);
+  }
+
+  .factors-table td {
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    line-height: 1.65;
+    vertical-align: top;
+  }
+
+  .factors-table td:first-child { font-weight: 700; color: var(--text); width: 120px; }
+  .factors-table tr:hover td { background: var(--bg); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: rgba(248,245,240,0.35);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.73rem;
+    letter-spacing: 0.07em;
+    margin-top: 3rem;
+  }
+
+  footer span { color: #7dd3fc; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Topic 1 · Cells &amp; Microorganisms · Chapter 1.5</div>
+    <h1>The Cell<br>Membrane
+      <em>Structure · Selective permeability · Passive &amp; active transport · SA:V ratio</em>
+    </h1>
+    <p class="hero-sub">How the phospholipid bilayer controls what enters and exits cells — and why cell size is critical to survival.</p>
+    <nav class="hero-nav">
+      <a href="#structure">Structure</a>
+      <a href="#proteins">Proteins</a>
+      <a href="#fluid">Fluid Mosaic Model</a>
+      <a href="#permeability">Permeability</a>
+      <a href="#passive">Passive Transport</a>
+      <a href="#osmosis">Osmosis</a>
+      <a href="#active">Active Transport</a>
+      <a href="#compare">Active vs Passive</a>
+      <a href="#sav">SA:V Ratio</a>
+    </nav>
+  </div>
+</header>
+
+<!-- STRUCTURE -->
+<section id="structure">
+  <div class="container">
+    <div class="sec-label">Section 1</div>
+    <h2 class="sec-title">Structure of the Cell Membrane</h2>
+    <p class="sec-intro">The cell membrane is found in <strong>all living cells</strong>. It is called <strong>semi-permeable</strong> (or selectively permeable) because some molecules can pass through it but not all — based on size, charge and water solubility.</p>
+
+    <div class="components-grid reveal">
+      <div class="comp-card c1">
+        <div class="cc-icon">🔵</div>
+        <div class="cc-name">Phospholipid Bilayer</div>
+        <div class="cc-desc"><strong>Two layers</strong> of phospholipid molecules. Each phospholipid has a <strong>hydrophilic (water-loving) phosphate head</strong> that faces the aqueous environments, and <strong>two hydrophobic (water-fearing) fatty acid tails</strong> that point inward — away from water.</div>
+      </div>
+      <div class="comp-card c2">
+        <div class="cc-icon">🔩</div>
+        <div class="cc-name">Integral Proteins</div>
+        <div class="cc-desc">Proteins fully <strong>integrated (embedded) into the phospholipid bilayer</strong>. Include transport proteins, channel proteins and carrier proteins. Span the entire width of the membrane.</div>
+      </div>
+      <div class="comp-card c3">
+        <div class="cc-icon">📎</div>
+        <div class="cc-name">Peripheral Proteins</div>
+        <div class="cc-desc">Proteins that <strong>attach to the internal or external surfaces</strong> of the bilayer — they do not span the full width. Include receptor proteins, adhesion proteins and some enzymes.</div>
+      </div>
+      <div class="comp-card c4">
+        <div class="cc-icon">🍬</div>
+        <div class="cc-name">Glycoproteins &amp; Glycolipids</div>
+        <div class="cc-desc"><strong>Glycoproteins</strong> = carbohydrate chains attached to membrane proteins. <strong>Glycolipids</strong> = carbohydrate chains attached to phospholipids. Both act as <strong>cell identity markers</strong> — help the immune system distinguish self from non-self cells.</div>
+      </div>
+      <div class="comp-card c5">
+        <div class="cc-icon">🧈</div>
+        <div class="cc-name">Cholesterol</div>
+        <div class="cc-desc">A lipid <strong>embedded within the phospholipids</strong>. Contributes to the <strong>fluid nature</strong> of the membrane — maintaining its flexibility. Helps regulate membrane fluidity at varying temperatures.</div>
+      </div>
+    </div>
+
+    <div class="callout mem reveal">
+      <div class="callout-title">🔑 The Phospholipid Arrangement</div>
+      The bilayer structure arises naturally from the physical properties of phospholipids. <strong>Hydrophilic heads</strong> face outward toward the watery cytoplasm and extracellular fluid. <strong>Hydrophobic tails</strong> project inward toward each other — creating a water-excluding interior that forms a barrier to most polar and charged molecules.
+    </div>
+
+  </div>
+</section>
+
+<!-- PROTEINS -->
+<section id="proteins">
+  <div class="container">
+    <div class="sec-label">Section 2</div>
+    <h2 class="sec-title">Membrane Proteins &amp; Functions</h2>
+    <p class="sec-intro">The cell membrane performs many functions beyond being a simple barrier. A variety of proteins embedded in the bilayer are responsible for most of these functions.</p>
+
+    <table class="protein-table reveal">
+      <thead>
+        <tr>
+          <th>Protein Type</th>
+          <th>Function</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Transport Proteins<br><small style="font-weight:400; font-family:'Lora',serif; font-style:italic;">(channels &amp; carriers)</small></td>
+          <td>Control the <strong>selective exchange of molecules</strong> between the cell and its external environment. Specific to particular molecules.</td>
+          <td>Aquaporins (water channels), GLUT4 (glucose carrier), Na⁺/K⁺ ATPase pump</td>
+        </tr>
+        <tr>
+          <td>Receptor Proteins</td>
+          <td>Allow <strong>communication</strong> — bind complementary hormones or signalling molecules to trigger a cellular response.</td>
+          <td>Insulin receptors on muscle cells; hormone receptors</td>
+        </tr>
+        <tr>
+          <td>Recognition Proteins<br><small style="font-weight:400; font-family:'Lora',serif; font-style:italic;">(glycoproteins)</small></td>
+          <td>Act as <strong>cell identity markers</strong> — allow the immune system to identify the organism's own ("self") cells vs foreign ("non-self") cells.</td>
+          <td>MHC proteins on human cells; ABO blood group antigens</td>
+        </tr>
+        <tr>
+          <td>Adhesion Proteins</td>
+          <td>Stick out and <strong>bind to adjacent cells</strong>, providing structural support and helping to maintain cell shape.</td>
+          <td>Integrins; cadherins in tissue junctions</td>
+        </tr>
+        <tr>
+          <td>Enzymes</td>
+          <td>Catalyse specific <strong>biochemical reactions</strong> at the cell surface.</td>
+          <td>ATPase enzymes on mitochondrial membranes</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<!-- FLUID MOSAIC MODEL -->
+<section id="fluid">
+  <div class="container">
+    <div class="sec-label">Section 3</div>
+    <h2 class="sec-title">The Fluid Mosaic Model</h2>
+    <p class="sec-intro">Proposed by <strong>S.J. Singer and G.L. Nicholson in 1972</strong>, the fluid mosaic model is the accepted scientific model for visualising cell membrane structure.</p>
+
+    <div class="fluid-grid reveal">
+      <div class="fluid-card">
+        <div class="fc-word">"Fluid"</div>
+        <div class="fc-desc">Refers to the ability of both <strong>lipids and proteins to continually move</strong> laterally within the membrane. This fluidity is critical for membrane permeability — the ease with which molecules can cross the membrane. Cholesterol helps regulate this fluidity.</div>
+      </div>
+      <div class="fluid-card">
+        <div class="fc-word">"Mosaic"</div>
+        <div class="fc-desc">Refers to the <strong>pattern formed by the variety of proteins</strong> embedded within and on the surface of the phospholipid bilayer — resembling a mosaic tile pattern. These proteins are fundamental to the function of the membrane.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SELECTIVE PERMEABILITY -->
+<section id="permeability">
+  <div class="container">
+    <div class="sec-label">Section 4</div>
+    <h2 class="sec-title">Selective Permeability</h2>
+    <p class="sec-intro">Different molecules cross the cell membrane at very different rates — based on their <strong>size, water solubility (polarity) and charge</strong>. This is what makes the membrane "semi-permeable" or "selectively permeable."</p>
+
+    <div class="perm-scale reveal">
+      <div class="perm-row high">
+        <div class="perm-level">High Permeability</div>
+        <div class="perm-mols">
+          <span class="mol-pill">CO₂</span>
+          <span class="mol-pill">O₂</span>
+          <span class="mol-pill">ethanol</span>
+          <span style="font-size:0.8rem; color:var(--muted2); margin-left:0.25rem;">Small, non-polar, lipid-soluble gases and molecules — pass freely through the bilayer</span>
+        </div>
+      </div>
+      <div class="perm-row mod">
+        <div class="perm-level">Moderate Permeability</div>
+        <div class="perm-mols">
+          <span class="mol-pill">water (H₂O)</span>
+          <span class="mol-pill">urea</span>
+          <span style="font-size:0.8rem; color:var(--muted2); margin-left:0.25rem;">Very small uncharged polar molecules — can slip through slowly</span>
+        </div>
+      </div>
+      <div class="perm-row low">
+        <div class="perm-level">Low Permeability</div>
+        <div class="perm-mols">
+          <span class="mol-pill">glucose</span>
+          <span class="mol-pill">amino acids</span>
+          <span class="mol-pill">polar organic molecules</span>
+          <span style="font-size:0.8rem; color:var(--muted2); margin-left:0.25rem;">Larger polar molecules — need transport proteins</span>
+        </div>
+      </div>
+      <div class="perm-row vlow">
+        <div class="perm-level">Very Low Permeability</div>
+        <div class="perm-mols">
+          <span class="mol-pill">Na⁺ / K⁺ ions</span>
+          <span class="mol-pill">ATP</span>
+          <span class="mol-pill">proteins</span>
+          <span class="mol-pill">nucleic acids</span>
+          <span class="mol-pill">polysaccharides</span>
+          <span style="font-size:0.8rem; color:var(--muted2); margin-left:0.25rem;">Charged, large, or macromolecules — cannot pass without assistance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout mem reveal">
+      <div class="callout-title">💡 Two Key Properties Control Selectivity</div>
+      <strong>(1) The lipid nature of the bilayer</strong> — hydrophobic interior blocks water-soluble (hydrophilic) and charged molecules.<br>
+      <strong>(2) The specificity of transport proteins</strong> — each type of channel or carrier protein is selective for particular molecules, giving the membrane fine-grained control over what enters and exits.
+    </div>
+
+  </div>
+</section>
+
+<!-- PASSIVE TRANSPORT -->
+<section id="passive">
+  <div class="container">
+    <div class="sec-label">Section 5</div>
+    <h2 class="sec-title">Passive Transport</h2>
+    <p class="sec-intro">Passive transport is movement that does <strong>not require energy (ATP)</strong>. Molecules move <strong>down their concentration gradient</strong> — from high to low concentration — driven by the random kinetic motion of atoms and molecules.</p>
+
+    <div class="transport-grid reveal">
+
+      <div class="transport-card simple">
+        <div class="tc-head">💨 Simple Diffusion</div>
+        <div class="tc-body">
+          Movement of molecules from <strong>high concentration to low concentration</strong> directly through the phospholipid bilayer — no transport protein needed.<br><br>
+          Steeper gradient = <strong>greater rate of diffusion</strong>.<br><br>
+          <strong>Molecules:</strong> Small, non-polar molecules — O₂, CO₂, ethanol, lipid-soluble molecules.
+          <div class="tc-meta">
+            <span class="meta-tag">No energy needed</span>
+            <span class="meta-tag">Down gradient</span>
+            <span class="meta-tag">No protein needed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport-card facilit">
+        <div class="tc-head">🚪 Facilitated Diffusion</div>
+        <div class="tc-body">
+          Movement down the concentration gradient <strong>via specific transport proteins</strong> (channels or carriers) embedded in the bilayer. Still passive — no energy needed.<br><br>
+          <strong>Molecules:</strong> Hydrophilic molecules (glucose, amino acids) and ions (Na⁺, K⁺) that cannot cross the lipid bilayer directly.
+          <div class="tc-meta">
+            <span class="meta-tag">No energy needed</span>
+            <span class="meta-tag">Down gradient</span>
+            <span class="meta-tag">Transport protein required</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport-card osmosis">
+        <div class="tc-head">💧 Osmosis</div>
+        <div class="tc-body">
+          The diffusion of <strong>water</strong> from an area of <strong>high water concentration (low solute)</strong> to an area of <strong>low water concentration (high solute)</strong> through a semi-permeable membrane.<br><br>
+          Water can pass directly through the bilayer <em>or</em> through <strong>aquaporin</strong> channel proteins. Solute molecules bind to water, reducing free water molecules.
+          <div class="tc-meta">
+            <span class="meta-tag">No energy needed</span>
+            <span class="meta-tag">Water only</span>
+            <span class="meta-tag">Aquaporins help</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- OSMOSIS SOLUTIONS -->
+<section id="osmosis">
+  <div class="container">
+    <div class="sec-label">Section 6</div>
+    <h2 class="sec-title">Osmosis: Hypotonic, Isotonic &amp; Hypertonic</h2>
+    <p class="sec-intro">The effects of osmosis on a cell depend on the <strong>relative solute concentration</strong> of the solution outside vs inside the cell. The typical solute concentration of animal and plant cells is approximately <strong>0.9%</strong>.</p>
+
+    <div class="sol-grid reveal">
+      <div class="sol-cell">
+        <div class="sol-icon">💦</div>
+        <div class="sol-name hypo">Hypotonic</div>
+        <div class="sol-def">Low solute · High water · &lt;0.9%</div>
+        <div class="sol-animal">🐾 <strong>Animal cell:</strong> Water moves IN → cell swells → may <strong>burst (lysis)</strong></div>
+        <hr class="sol-divider">
+        <div class="sol-plant">🌿 <strong>Plant cell:</strong> Water moves IN → cell swells → becomes <strong>turgid</strong> (firm). Cell wall prevents bursting.</div>
+      </div>
+      <div class="sol-cell">
+        <div class="sol-icon">⚖️</div>
+        <div class="sol-name iso">Isotonic</div>
+        <div class="sol-def">Equal solute · Equal water · ~0.9%</div>
+        <div class="sol-animal">🐾 <strong>Animal cell:</strong> No net movement of water → <strong>normal shape</strong></div>
+        <hr class="sol-divider">
+        <div class="sol-plant">🌿 <strong>Plant cell:</strong> No net movement → <strong>normal</strong>. Dynamic equilibrium — water moves equally in both directions.</div>
+      </div>
+      <div class="sol-cell">
+        <div class="sol-icon">🏜️</div>
+        <div class="sol-name hyper">Hypertonic</div>
+        <div class="sol-def">High solute · Low water · &gt;0.9%</div>
+        <div class="sol-animal">🐾 <strong>Animal cell:</strong> Water moves OUT → cell <strong>shrivels</strong> → may die</div>
+        <hr class="sol-divider">
+        <div class="sol-plant">🌿 <strong>Plant cell:</strong> Water moves OUT → cell membrane pulls away from wall → <strong>plasmolysis</strong></div>
+      </div>
+    </div>
+
+    <div class="callout osm reveal">
+      <div class="callout-title">⚠️ Why Plant Cells Handle Osmosis Better</div>
+      Plant cells have a <strong>cell wall</strong> that prevents them from bursting in hypotonic environments — the wall limits further water entry once the cell is turgid. Animal cells lack this wall, making them more vulnerable to <strong>cell lysis</strong> in hypotonic environments and <strong>crenation (shrivelling)</strong> in hypertonic ones.
+    </div>
+
+  </div>
+</section>
+
+<!-- ACTIVE TRANSPORT -->
+<section id="active">
+  <div class="container">
+    <div class="sec-label">Section 7</div>
+    <h2 class="sec-title">Active Transport</h2>
+    <p class="sec-intro">Active transport moves molecules <strong>against the concentration gradient</strong> — from low to high concentration. This requires an <strong>input of energy (ATP)</strong>. Used when passive transport cannot meet the cell's needs.</p>
+
+    <div class="transport-grid reveal">
+
+      <div class="transport-card active">
+        <div class="tc-head">⚡ Active Transport</div>
+        <div class="tc-body">
+          Carrier proteins use <strong>ATP energy</strong> to pump solutes against their concentration gradient (low → high concentration).<br><br>
+          <strong>Example:</strong> Absorption of glucose from the small intestine when glucose concentration in the intestine is lower than in the epithelial cells.
+          <div class="tc-meta">
+            <span class="meta-tag">ATP required</span>
+            <span class="meta-tag">Against gradient</span>
+            <span class="meta-tag">Carrier protein</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport-card endo">
+        <div class="tc-head">📥 Endocytosis</div>
+        <div class="tc-body">
+          Large molecules or bulk particles <strong>outside the cell</strong> are engulfed. The cell membrane <strong>folds inward</strong> around the material and <strong>pinches off</strong> to form a vesicle inside the cell.<br><br>
+          <strong>Example:</strong> White blood cells engulfing bacteria (phagocytosis).
+          <div class="tc-meta">
+            <span class="meta-tag">ATP required</span>
+            <span class="meta-tag">Bulk INTO cell</span>
+            <span class="meta-tag">Vesicle formed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport-card exo">
+        <div class="tc-head">📤 Exocytosis</div>
+        <div class="tc-body">
+          Large molecules or bulk materials packaged in <strong>vesicles inside the cell</strong> (e.g. by the Golgi body) are transported to the membrane. The vesicle <strong>fuses with the cell membrane</strong> and releases contents to the extracellular environment.<br><br>
+          <strong>Example:</strong> Secretion of digestive enzymes, hormones, or neurotransmitters.
+          <div class="tc-meta">
+            <span class="meta-tag">ATP required</span>
+            <span class="meta-tag">Bulk OUT of cell</span>
+            <span class="meta-tag">Vesicle fuses</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ACTIVE vs PASSIVE COMPARISON -->
+<section id="compare">
+  <div class="container">
+    <div class="sec-label">Section 8</div>
+    <h2 class="sec-title">Active vs Passive Transport — Comparison</h2>
+
+    <table class="avp-table reveal">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>✅ Passive Transport</th>
+          <th>⚡ Active Transport</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Concentration Gradient</td>
+          <td><span class="p-val">With gradient</span> — high → low concentration</td>
+          <td><span class="a-val">Against gradient</span> — low → high concentration</td>
+        </tr>
+        <tr>
+          <td>Energy (ATP) Required?</td>
+          <td><span class="p-val">No — no energy needed</span></td>
+          <td><span class="a-val">Yes — ATP required</span></td>
+        </tr>
+        <tr>
+          <td>Transport Protein Needed?</td>
+          <td>Not always — simple diffusion needs none; facilitated diffusion and osmosis use proteins</td>
+          <td>Yes — carrier proteins (and membrane movement for endo/exocytosis)</td>
+        </tr>
+        <tr>
+          <td>Examples</td>
+          <td>Simple diffusion (O₂, CO₂), facilitated diffusion (glucose, ions), osmosis (water)</td>
+          <td>Active transport (Na⁺/K⁺ pump), endocytosis (engulfing bacteria), exocytosis (secretion of hormones)</td>
+        </tr>
+        <tr>
+          <td>Molecules Moved</td>
+          <td>Small non-polar molecules, water, hydrophilic molecules &amp; ions (with proteins)</td>
+          <td>Any molecules the cell requires, including large/bulk materials via endo/exocytosis</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<!-- SA:V RATIO -->
+<section id="sav">
+  <div class="container">
+    <div class="sec-label">Section 9</div>
+    <h2 class="sec-title">Surface Area to Volume Ratio (SA:V)</h2>
+    <p class="sec-intro">The SA:V ratio represents the relationship between a cell's <strong>external surface area</strong> (cell membrane available for exchange) and its <strong>internal volume</strong> (cytoplasm that needs to be supplied). It is critical to cell survival.</p>
+
+    <!-- VISUAL -->
+    <div class="sav-visual reveal">
+      <div class="sav-card">
+        <div class="sav-circle" style="width:60px; height:60px;">r = 1</div>
+        <div class="sav-label">Small Cell</div>
+        <div class="sav-ratio sav-good">SA:V = 3:1</div>
+        <div class="sav-note">Large ratio — very efficient exchange. Materials can reach all parts of the cytoplasm easily.</div>
+      </div>
+      <div class="sav-card">
+        <div class="sav-circle" style="width:90px; height:90px;">r = 2</div>
+        <div class="sav-label">Medium Cell</div>
+        <div class="sav-ratio sav-mid">SA:V = 1.5:1</div>
+        <div class="sav-note">Ratio decreasing. Exchange efficiency drops as volume grows faster than surface area.</div>
+      </div>
+      <div class="sav-card">
+        <div class="sav-circle" style="width:130px; height:130px;">r = 3</div>
+        <div class="sav-label">Large Cell</div>
+        <div class="sav-ratio sav-bad">SA:V = 1:1</div>
+        <div class="sav-note">Small ratio — inefficient exchange. Cannot sustain life — too little membrane relative to volume.</div>
+      </div>
+    </div>
+
+    <div class="callout sav reveal">
+      <div class="callout-title">📐 Why Cells Stay Microscopic</div>
+      As a cell grows, <strong>volume increases faster than surface area</strong>. When the SA:V ratio drops too low, the cell membrane cannot exchange materials fast enough to supply the cytoplasm — the cell cannot survive. This is why cells divide when they grow too large rather than continuing to grow. A decreasing SA:V ratio is a key stimulus for cell division.
+    </div>
+
+    <!-- FACTORS TABLE -->
+    <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:1.15rem; letter-spacing:-0.01em; margin-top:3rem; margin-bottom:0.5rem;">Factors Affecting Rate of Exchange Across the Membrane</h3>
+    <table class="factors-table reveal">
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>How it Affects Exchange Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Size</td>
+          <td>Only very small molecules (e.g. O₂, CO₂) pass freely. Larger molecules require transport proteins or endo/exocytosis.</td>
+        </tr>
+        <tr>
+          <td>Water Solubility</td>
+          <td>Hydrophilic molecules cannot cross the lipid bilayer easily — they need specific transport proteins. Lipophilic (fat-soluble) molecules like steroid hormones pass through easily.</td>
+        </tr>
+        <tr>
+          <td>Charge</td>
+          <td>Ions are charged and highly water-soluble — they cannot cross the bilayer without specific ion channel or carrier proteins.</td>
+        </tr>
+        <tr>
+          <td>Concentration Gradient</td>
+          <td>Greater difference in concentration between two regions = greater rate of diffusion. Applies to all passive transport. In osmosis, it is the <em>solute</em> concentration gradient that drives water movement.</td>
+        </tr>
+        <tr>
+          <td>SA:V Ratio</td>
+          <td>Higher SA:V ratio = more membrane surface available relative to volume = more efficient exchange. Small cells have high SA:V ratios — critical for survival.</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<footer>
+  <div>Chapter 1.5 — The Cell Membrane · <span>Topic 1: Cells and Microorganisms</span></div>
+  <div style="margin-top:0.4rem; opacity:0.6;">© Essentials Education 2025 · Study resource for educational use</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 50);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

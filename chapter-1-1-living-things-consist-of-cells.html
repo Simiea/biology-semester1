@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1.1 — Living Things Consist of Cells</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;900&family=Merriweather:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #080c14;
+    --bg2:     #0c1220;
+    --surface: #111827;
+    --surface2:#162032;
+    --border:  #1f2d45;
+    --border2: #2a3d5a;
+    --text:    #e8eef8;
+    --muted:   #7a90b0;
+    --muted2:  #3d506e;
+
+    --life:    #22d3ee;   /* cyan - life processes */
+    --life-bg: rgba(34,211,238,0.06);
+    --life-bd: rgba(34,211,238,0.2);
+
+    --cell:    #34d399;   /* green - cell theory */
+    --cell-bg: rgba(52,211,153,0.06);
+    --cell-bd: rgba(52,211,153,0.2);
+
+    --dna:     #818cf8;   /* indigo - DNA/heredity */
+    --dna-bg:  rgba(129,140,248,0.06);
+    --dna-bd:  rgba(129,140,248,0.2);
+
+    --micro:   #f59e0b;   /* amber - microscopes */
+    --micro-bg:rgba(245,158,11,0.06);
+    --micro-bd:rgba(245,158,11,0.2);
+
+    --mem:     #f472b6;   /* pink - membrane */
+    --mem-bg:  rgba(244,114,182,0.06);
+    --mem-bd:  rgba(244,114,182,0.2);
+
+    --calc:    #fb923c;   /* orange - calculations */
+    --calc-bg: rgba(251,146,60,0.06);
+    --calc-bd: rgba(251,146,60,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Merriweather', serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  strong { font-weight: 700; color: #f0f4ff; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 2rem 7rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* animated radial blobs */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 40%, rgba(34,211,238,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 60% at 85% 25%, rgba(52,211,153,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 85%, rgba(129,140,248,0.07) 0%, transparent 50%);
+    animation: breathe 10s ease-in-out infinite alternate;
+  }
+
+  @keyframes breathe {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+  }
+
+  /* hex grid bg */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .hero-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cell);
+    border: 1px solid var(--cell-bd);
+    background: var(--cell-bg);
+    padding: 0.4em 1.1em;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Raleway', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero h1 .line2 {
+    display: block;
+    color: var(--life);
+    font-style: italic;
+    font-weight: 300;
+    font-family: 'Merriweather', serif;
+    font-size: 0.55em;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    margin-top: 0.4rem;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+    line-height: 1.8;
+  }
+
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .hero-nav a {
+    text-decoration: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.45em 1em;
+    border-radius: 7px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: var(--surface);
+    transition: all 0.18s;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-nav a:hover { border-color: var(--life); color: var(--life); background: var(--life-bg); }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(18px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 5rem 0; border-top: 1px solid var(--border); }
+
+  .sec-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.4rem;
+  }
+
+  .sec-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 0.9rem;
+  }
+
+  .sec-intro {
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.vis { opacity:1; transform:none; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 14px;
+    border: 1px solid;
+    padding: 1.35rem 1.6rem;
+    margin-top: 1.75rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .callout-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout.cell  { background:var(--cell-bg);  border-color:var(--cell-bd);  }
+  .callout.cell  .callout-title { color:var(--cell); }
+  .callout.life  { background:var(--life-bg);  border-color:var(--life-bd);  }
+  .callout.life  .callout-title { color:var(--life); }
+  .callout.dna   { background:var(--dna-bg);   border-color:var(--dna-bd);   }
+  .callout.dna   .callout-title { color:var(--dna); }
+  .callout.micro { background:var(--micro-bg); border-color:var(--micro-bd); }
+  .callout.micro .callout-title { color:var(--micro); }
+  .callout.calc  { background:var(--calc-bg);  border-color:var(--calc-bd);  }
+  .callout.calc  .callout-title { color:var(--calc); }
+
+  /* ── CELL THEORY PANELS ── */
+  .theory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) { .theory-grid { grid-template-columns: 1fr; } }
+
+  .theory-card {
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .theory-head {
+    padding: 1rem 1.5rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .theory-body { padding: 1.2rem 1.5rem; }
+
+  .theory-list { list-style: none; }
+
+  .theory-list li {
+    font-size: 0.87rem;
+    color: var(--muted);
+    padding: 0.55rem 0;
+    padding-left: 1.3rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .theory-list li:last-child { border-bottom: none; }
+
+  .theory-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--muted2);
+    font-size: 0.75rem;
+    top: 0.65rem;
+  }
+
+  .theory-list li strong { color: var(--text); }
+
+  .theory-card.original .theory-head { background: var(--cell-bg); color: var(--cell); border-bottom: 1px solid var(--cell-bd); }
+  .theory-card.modern   .theory-head { background: var(--life-bg); color: var(--life); border-bottom: 1px solid var(--life-bd); }
+
+  /* ── HISTORY STRIP ── */
+  .history-strip {
+    margin-top: 2rem;
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .hist-row {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hist-row:last-child { border-bottom: none; }
+
+  .hist-who {
+    width: 160px;
+    flex-shrink: 0;
+    background: var(--surface2);
+    padding: 1rem 1.2rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .hist-when {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted2);
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .hist-content {
+    padding: 1rem 1.5rem;
+    font-size: 0.87rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .hist-content .hist-dot { margin-top: 0.45rem; }
+
+  .hist-content p { display: block; }
+
+  .hist-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── LIFE PROCESSES ── */
+  .life-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .life-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.3rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: all 0.2s;
+  }
+
+  .life-card:hover {
+    border-color: var(--life-bd);
+    background: var(--life-bg);
+    transform: translateY(-2px);
+  }
+
+  .life-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+  .life-text-wrap { }
+  .life-name { font-family: 'Raleway', sans-serif; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.01em; }
+  .life-example { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+  .life-example strong { color: var(--text); }
+
+  /* ── UNI VS MULTI ── */
+  .um-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 580px) { .um-grid { grid-template-columns: 1fr; } }
+
+  .um-card {
+    border-radius: 16px;
+    border: 1px solid;
+    overflow: hidden;
+  }
+
+  .um-head {
+    padding: 1.1rem 1.5rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .um-body {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .um-body strong { color: var(--text); }
+
+  .um-card.uni   { border-color: var(--cell-bd); }
+  .um-card.uni   .um-head { background: var(--cell-bg); color: var(--cell); }
+
+  .um-card.multi { border-color: var(--life-bd); }
+  .um-card.multi .um-head { background: var(--life-bg); color: var(--life); }
+
+  /* unicellular table */
+  .uni-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .uni-table th {
+    text-align: left;
+    padding: 0.8rem 1.1rem;
+    background: var(--surface2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cell);
+    border-bottom: 2px solid var(--cell-bd);
+  }
+
+  .uni-table td {
+    padding: 0.8rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: middle;
+    line-height: 1.5;
+  }
+
+  .uni-table tr:hover td { background: var(--surface); }
+  .uni-table td:first-child { color: var(--text); font-style: italic; font-weight: 400; }
+  .uni-table td:nth-child(3) { font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+
+  .pro-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.15em 0.6em;
+    border-radius: 4px;
+    background: var(--cell-bg);
+    color: var(--cell);
+    border: 1px solid var(--cell-bd);
+  }
+
+  .eu-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.15em 0.6em;
+    border-radius: 4px;
+    background: var(--life-bg);
+    color: var(--life);
+    border: 1px solid var(--life-bd);
+  }
+
+  /* ── DNA STRUCTURE ── */
+  .dna-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 600px) { .dna-grid { grid-template-columns: 1fr; } }
+
+  .dna-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: transform 0.2s;
+  }
+
+  .dna-card:hover { transform: translateY(-3px); }
+
+  .dna-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .dna-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.01em; color: var(--dna); }
+  .dna-text { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+  .dna-text strong { color: var(--text); }
+
+  /* base pair visual */
+  .base-pairs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  .bp-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .bp-base {
+    width: 36px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .bp-link {
+    flex: 1;
+    border-top: 2px dashed var(--muted2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    color: var(--muted2);
+    letter-spacing: 0.1em;
+    position: relative;
+    padding-top: 0;
+  }
+
+  .bp-label {
+    background: var(--bg);
+    padding: 0 0.4rem;
+    font-size: 0.62rem;
+    color: var(--muted2);
+    letter-spacing: 0.1em;
+  }
+
+  .bp-a  { background: rgba(34,211,238,0.15);  color: var(--life); }
+  .bp-t  { background: rgba(34,211,238,0.08);  color: #67e8f9; }
+  .bp-c  { background: rgba(129,140,248,0.15); color: var(--dna); }
+  .bp-g  { background: rgba(129,140,248,0.08); color: #a5b4fc; }
+
+  /* ── MICROSCOPE COMPARISON ── */
+  .micro-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 600px) { .micro-compare { grid-template-columns: 1fr; } }
+
+  .micro-card {
+    border-radius: 16px;
+    border: 1px solid;
+    overflow: hidden;
+  }
+
+  .micro-head {
+    padding: 1.1rem 1.5rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid;
+  }
+
+  .micro-body { padding: 0; }
+
+  .micro-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.84rem;
+  }
+
+  .micro-row:last-child { border-bottom: none; }
+
+  .micro-feat {
+    width: 110px;
+    flex-shrink: 0;
+    padding: 0.75rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    color: var(--muted2);
+    text-transform: uppercase;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    background: var(--surface2);
+  }
+
+  .micro-val {
+    padding: 0.75rem 1rem;
+    color: var(--muted);
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    font-size: 0.84rem;
+  }
+
+  .micro-val strong { color: var(--text); }
+
+  .micro-card.light  { border-color: var(--micro-bd); }
+  .micro-card.light  .micro-head { background: var(--micro-bg); color: var(--micro); border-bottom-color: var(--micro-bd); }
+  .micro-card.electron { border-color: var(--dna-bd); }
+  .micro-card.electron .micro-head { background: var(--dna-bg); color: var(--dna); border-bottom-color: var(--dna-bd); }
+
+  /* ── COMPONENTS OF LIGHT MICROSCOPE ── */
+  .comp-list {
+    margin-top: 2rem;
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .comp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.18s;
+  }
+
+  .comp-item:last-child { border-bottom: none; }
+  .comp-item:hover { background: var(--surface2); }
+
+  .comp-name {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--micro);
+    width: 180px;
+    flex-shrink: 0;
+    letter-spacing: -0.01em;
+    padding-top: 0.05rem;
+  }
+
+  .comp-func { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+  .comp-func strong { color: var(--text); }
+
+  /* ── IAM CALCULATOR ── */
+  .iam-section {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (max-width: 620px) { .iam-section { grid-template-columns: 1fr; } }
+
+  .iam-triangle {
+    background: var(--surface);
+    border: 1px solid var(--calc-bd);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    min-width: 200px;
+  }
+
+  .iam-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--muted2);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .triangle-visual {
+    display: inline-block;
+    position: relative;
+  }
+
+  .tri-top {
+    font-family: 'Raleway', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--calc);
+    background: var(--calc-bg);
+    border: 1px solid var(--calc-bd);
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    margin: 0 auto 8px;
+  }
+
+  .tri-bottom {
+    display: flex;
+    gap: 1px;
+  }
+
+  .tri-bot-cell {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    border: 1px solid;
+  }
+
+  .tri-bot-cell.a { color: var(--cell); background: var(--cell-bg); border-color: var(--cell-bd); }
+  .tri-bot-cell.m { color: var(--life); background: var(--life-bg); border-color: var(--life-bd); }
+
+  .tri-divider {
+    width: 100%;
+    height: 2px;
+    background: var(--calc);
+    margin: 4px 0;
+    border-radius: 2px;
+  }
+
+  .tri-between {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--muted2);
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+  }
+
+  .tri-legend {
+    margin-top: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted2);
+    text-align: left;
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+  }
+
+  .tri-legend span { color: var(--text); font-weight: 700; }
+
+  .iam-formulas { }
+
+  .formula-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .formula-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    width: 90px;
+    flex-shrink: 0;
+    padding-top: 0.3rem;
+    line-height: 1.5;
+  }
+
+  .formula-eq {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--calc);
+    font-weight: 700;
+    line-height: 1.5;
+    padding-top: 0.2rem;
+  }
+
+  /* ── UNIT CONVERSION ── */
+  .unit-strip {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  .unit-node {
+    text-align: center;
+    padding: 0.5rem 1rem;
+  }
+
+  .unit-name { font-weight: 700; color: var(--text); font-size: 0.9rem; }
+  .unit-abbr { color: var(--muted2); font-size: 0.68rem; letter-spacing: 0.08em; margin-top: 0.15rem; }
+
+  .unit-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0 0.25rem;
+    color: var(--muted2);
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    min-width: 80px;
+  }
+
+  .ua-top { color: var(--calc); }
+  .ua-bot { color: var(--muted2); }
+
+  /* ── WORKED EXAMPLE ── */
+  .worked {
+    background: var(--surface);
+    border: 1px solid var(--calc-bd);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  .worked-head {
+    background: var(--calc-bg);
+    padding: 1rem 1.5rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--calc);
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid var(--calc-bd);
+  }
+
+  .worked-body { padding: 1.5rem; }
+
+  .worked-step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .worked-step:last-child { margin-bottom: 0; }
+
+  .ws-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--calc);
+    color: var(--bg);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .ws-content { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+  .ws-content strong { color: var(--text); }
+
+  .ws-eq {
+    font-family: 'Space Mono', monospace;
+    background: var(--calc-bg);
+    border: 1px solid var(--calc-bd);
+    border-radius: 8px;
+    padding: 0.55rem 1rem;
+    color: var(--calc);
+    font-size: 0.84rem;
+    margin-top: 0.5rem;
+    display: block;
+    line-height: 1.6;
+  }
+
+  .ws-answer {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--cell);
+    font-weight: 700;
+    margin-top: 0.35rem;
+    display: block;
+  }
+
+  /* ── MEMBRANE ── */
+  .mem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.1rem;
+    margin-top: 2rem;
+  }
+
+  .mem-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.35rem;
+    border-left: 4px solid var(--mem);
+    transition: transform 0.2s;
+  }
+
+  .mem-card:hover { transform: translateY(-3px); }
+
+  .mem-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+  .mem-title { font-family: 'Raleway', sans-serif; font-size: 0.9rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--mem); letter-spacing: -0.01em; }
+  .mem-text { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+  .mem-text strong { color: var(--text); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted2);
+    letter-spacing: 0.06em;
+  }
+
+  footer span { color: var(--cell); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Topic 1 · Cells &amp; Microorganisms · Chapter 1.1</div>
+    <h1>Living Things<br>Consist of Cells
+      <span class="line2">The cell theory · Life processes · DNA · Microscopes · Magnification</span>
+    </h1>
+    <p class="hero-sub">The foundational chapter — from Robert Hooke's first glimpse of cells to the modern cell theory, the hallmarks of life, DNA structure, and microscopy calculations.</p>
+    <nav class="hero-nav">
+      <a href="#celltheory">Cell Theory</a>
+      <a href="#living">Living Things</a>
+      <a href="#lifeprocesses">Life Processes</a>
+      <a href="#organisms">Uni vs Multi</a>
+      <a href="#dna">DNA &amp; Heredity</a>
+      <a href="#membrane">Cell Membrane</a>
+      <a href="#microscopes">Microscopes</a>
+      <a href="#calculations">Calculations</a>
+    </nav>
+  </div>
+</header>
+
+<!-- CELL THEORY -->
+<section id="celltheory">
+  <div class="container">
+    <div class="sec-label">Section 1</div>
+    <h2 class="sec-title">The Cell Theory</h2>
+    <p class="sec-intro">The invention of the microscope enabled the discovery of cells. Robert Hooke named them "cells" in 1665 because cork cells reminded him of monastery rooms. Theodore Schwann proposed the original cell theory in the 19th century.</p>
+
+    <!-- HISTORY -->
+    <div class="history-strip reveal">
+      <div class="hist-row">
+        <div class="hist-who"><div class="hist-when">1665</div>Robert Hooke</div>
+        <div class="hist-content">
+          <div class="hist-dot" style="background:var(--cell);"></div>
+          <span>Named microscopic structures <strong>"cells"</strong> — cork cells viewed under the microscope reminded him of the rooms (cells) in monasteries.</span>
+        </div>
+      </div>
+      <div class="hist-row">
+        <div class="hist-who"><div class="hist-when">19th Century</div>Theodore Schwann</div>
+        <div class="hist-content">
+          <div class="hist-dot" style="background:var(--life);"></div>
+          <span>Proposed the <strong>original cell theory</strong> — a set of principles explaining how all living things are made up of cells.</span>
+        </div>
+      </div>
+      <div class="hist-row">
+        <div class="hist-who"><div class="hist-when">Modern Day</div>Scientific Advancements</div>
+        <div class="hist-content">
+          <div class="hist-dot" style="background:var(--dna);"></div>
+          <span>Three <strong>modern additions</strong> to the original theory, reflecting greater understanding of DNA, species similarity and energy flow within cells.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORIGINAL vs MODERN -->
+    <div class="theory-grid reveal" style="margin-top:2.5rem;">
+      <div class="theory-card original">
+        <div class="theory-head">📜 Original Cell Theory</div>
+        <div class="theory-body">
+          <ul class="theory-list">
+            <li>All organisms are <strong>made of cells</strong></li>
+            <li>Cells are the <strong>basic units of life</strong></li>
+            <li>Cells come from <strong>pre-existing cells</strong> that have multiplied</li>
+          </ul>
+        </div>
+      </div>
+      <div class="theory-card modern">
+        <div class="theory-head">🔬 Three Modern Additions</div>
+        <div class="theory-body">
+          <ul class="theory-list">
+            <li><strong>DNA is passed between cells</strong> during cell division</li>
+            <li>Cells of all organisms within a <strong>similar species</strong> are mostly the same structurally and chemically</li>
+            <li><strong>Energy flow occurs within cells</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout cell reveal">
+      <div class="callout-title">🔑 The Cell is the Smallest Independent Unit of Life</div>
+      The cell is the smallest unit capable of independently carrying out all of life's fundamental processes. Organelles within cells cannot carry out these processes independently — they are therefore considered <strong>non-living</strong>.
+    </div>
+
+  </div>
+</section>
+
+<!-- LIVING THINGS -->
+<section id="living">
+  <div class="container">
+    <div class="sec-label">Section 2</div>
+    <h2 class="sec-title">What Makes Something Alive?</h2>
+    <p class="sec-intro">The Earth is the only known place to sustain life. To biologists, something is alive if it carries out fundamental <strong>life processes</strong>. All living things carry out these same processes — this is what distinguishes them from non-living things.</p>
+
+    <div class="callout life reveal">
+      <div class="callout-title">🌍 Scale of Life</div>
+      It has been estimated that there are approximately <strong>35 trillion cells</strong> in an adult human being. All life on Earth evolved from a single cell over millions of years. Organisms can be <strong>unicellular</strong> (one cell) or <strong>multicellular</strong> (many cells — sometimes billions or trillions).
+    </div>
+
+  </div>
+</section>
+
+<!-- LIFE PROCESSES -->
+<section id="lifeprocesses">
+  <div class="container">
+    <div class="sec-label">Section 3</div>
+    <h2 class="sec-title">The Life Processes</h2>
+    <p class="sec-intro">All living things carry out all of the following fundamental life processes. If an organism — or an entity — cannot carry out these processes, it is not considered living.</p>
+
+    <div class="life-grid reveal">
+      <div class="life-card">
+        <div class="life-icon">🌡️</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Maintaining a Stable Internal Environment</div>
+          <div class="life-example"><strong>Example:</strong> Humans sweating on a hot day to regulate body temperature (homeostasis).</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">↔️</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Controlled Exchange of Materials</div>
+          <div class="life-example"><strong>Example:</strong> Plants absorbing CO₂ and releasing O₂ through stomata during photosynthesis.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">🐦</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Response to Stimuli</div>
+          <div class="life-example"><strong>Example:</strong> Birds migrating for winter in response to environmental cues.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">⚡</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Obtaining Energy and Chemical Elements</div>
+          <div class="life-example"><strong>Example:</strong> Reptiles catching, killing and consuming prey for nutrients and energy.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">🚛</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Transport of Materials</div>
+          <div class="life-example"><strong>Example:</strong> Blood carrying oxygen to muscle cells throughout the body.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">🗑️</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Removal of Waste</div>
+          <div class="life-example"><strong>Example:</strong> Human kidneys filtering blood and producing urine to excrete waste products.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">✂️</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Cell Division</div>
+          <div class="life-example"><strong>Example:</strong> A fertilised ovum dividing many times to form an embryo.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">🦋</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Growth and Development</div>
+          <div class="life-example"><strong>Example:</strong> The metamorphosis of a caterpillar into a butterfly.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">🐢</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Independent Movement</div>
+          <div class="life-example"><strong>Example:</strong> A turtle swimming through water.</div>
+        </div>
+      </div>
+      <div class="life-card">
+        <div class="life-icon">🔄</div>
+        <div class="life-text-wrap">
+          <div class="life-name">Reproduction</div>
+          <div class="life-example"><strong>Example:</strong> A bacterium dividing by binary fission to produce two new cells.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- UNI vs MULTI -->
+<section id="organisms">
+  <div class="container">
+    <div class="sec-label">Section 4</div>
+    <h2 class="sec-title">Unicellular vs Multicellular Organisms</h2>
+    <p class="sec-intro">Organisms are classified by how many cells they consist of — from single-celled microorganisms to complex multicellular life forms.</p>
+
+    <div class="um-grid reveal">
+      <div class="um-card uni">
+        <div class="um-head">🦠 Unicellular Organisms</div>
+        <div class="um-body">
+          Consist of <strong>one cell</strong>. Also called <strong>microorganisms</strong> because they generally cannot be seen with the naked eye.<br><br>
+          Can be <strong>prokaryotes or eukaryotes</strong>. Found in almost all habitats including thermal vents, caves and deep underground.<br><br>
+          Usually reproduce <strong>asexually</strong> and obtain nutrients through <strong>diffusion</strong>.
+        </div>
+      </div>
+      <div class="um-card multi">
+        <div class="um-head">🌿 Multicellular Organisms</div>
+        <div class="um-body">
+          Consist of <strong>more than one cell</strong> — sometimes billions or trillions. All multicellular organisms are <strong>eukaryotes</strong>.<br><br>
+          Examples include mushrooms, animals and plants. Consist of <strong>specialised cells</strong> with different structures and functions, produced through <strong>differentiation</strong> from stem cells.<br><br>
+          Require <strong>organs and organ systems</strong> to coordinate life processes across cells.
+        </div>
+      </div>
+    </div>
+
+    <!-- UNICELLULAR EXAMPLES TABLE -->
+    <h3 style="font-family:'Raleway',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:-0.01em; margin-top:3rem; margin-bottom:0.5rem;">Examples of Unicellular Organisms</h3>
+    <table class="uni-table reveal">
+      <thead>
+        <tr>
+          <th>Organism</th>
+          <th>Kingdom</th>
+          <th>Cell Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Escherichia coli (E. coli)</td>
+          <td>Bacteria</td>
+          <td><span class="pro-tag">Prokaryotic</span></td>
+        </tr>
+        <tr>
+          <td>Euglena</td>
+          <td>Protista</td>
+          <td><span class="eu-tag">Eukaryotic</span></td>
+        </tr>
+        <tr>
+          <td>Paramecium</td>
+          <td>Protista</td>
+          <td><span class="eu-tag">Eukaryotic</span></td>
+        </tr>
+        <tr>
+          <td>Baker's yeast (Saccharomyces cerevisiae)</td>
+          <td>Fungi</td>
+          <td><span class="eu-tag">Eukaryotic</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<!-- DNA & HEREDITY -->
+<section id="dna">
+  <div class="container">
+    <div class="sec-label">Section 5</div>
+    <h2 class="sec-title">DNA &amp; Hereditary Material</h2>
+    <p class="sec-intro">All cells contain <strong>hereditary material — DNA (deoxyribonucleic acid)</strong>. Heredity is the passing of characteristics from one generation to the next. DNA enables cells to synthesise proteins and divide to produce new cells.</p>
+
+    <div class="dna-grid reveal">
+      <div class="dna-card">
+        <div class="dna-icon">🧬</div>
+        <div class="dna-title">DNA Structure</div>
+        <div class="dna-text">Two complementary strands wound in a <strong>double helix</strong>. Each strand has a <strong>phosphate backbone</strong> and a sequence of four bases: <strong>Adenine (A), Thymine (T), Cytosine (C), Guanine (G)</strong>.</div>
+
+        <div class="base-pairs">
+          <div class="bp-row">
+            <div class="bp-base bp-a">A</div>
+            <div class="bp-link"><span class="bp-label">pairs only with</span></div>
+            <div class="bp-base bp-t">T</div>
+          </div>
+          <div class="bp-row">
+            <div class="bp-base bp-c">C</div>
+            <div class="bp-link"><span class="bp-label">pairs only with</span></div>
+            <div class="bp-base bp-g">G</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dna-card">
+        <div class="dna-icon">🗜️</div>
+        <div class="dna-title">Chromosomes — Packaging DNA</div>
+        <div class="dna-text">Human cells contain approximately <strong>2 metres of DNA</strong> — packed into chromosomes to fit inside a microscopic cell.<br><br>
+        <strong>Chromosomes</strong> = DNA wrapped around <strong>histone proteins</strong>. This packaging condenses DNA and protects the genetic code from mutations.<br><br>
+        Chromosomes are the <strong>structural unit of information</strong> in cells.</div>
+      </div>
+
+      <div class="dna-card">
+        <div class="dna-icon">🔁</div>
+        <div class="dna-title">Why DNA is Complementary</div>
+        <div class="dna-text">The complementary base pairing (A-T, C-G) means each strand can be used as a template to rebuild the other strand. This is how <strong>DNA replication</strong> works — enabling genetic information to be passed from parent cells to daughter cells during cell division.</div>
+      </div>
+
+      <div class="dna-card">
+        <div class="dna-icon">📍</div>
+        <div class="dna-title">Location of DNA</div>
+        <div class="dna-text">In <strong>eukaryotic cells</strong>: DNA is stored in the <strong>nucleus</strong> as linear chromosomes in pairs.<br><br>
+        In <strong>prokaryotic cells</strong>: DNA is a single, circular chromosome located in the <strong>cytoplasm (nucleoid region)</strong> — there is no nucleus.<br><br>
+        The differences are explored further in Chapter 1.2.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CELL MEMBRANE -->
+<section id="membrane">
+  <div class="container">
+    <div class="sec-label">Section 6</div>
+    <h2 class="sec-title">The Cell Membrane</h2>
+    <p class="sec-intro">The cell membrane is found in <strong>all cells</strong>. It defines a cell by separating the intracellular (inside) environment from the extracellular (outside) environment.</p>
+
+    <div class="mem-grid reveal">
+      <div class="mem-card">
+        <div class="mem-icon">📏</div>
+        <div class="mem-title">Structure</div>
+        <div class="mem-text">A very thin layer — only <strong>0.01 μm</strong> thick. Consists of <strong>two layers of phospholipid molecules</strong> (a phospholipid bilayer) with a range of different <strong>proteins embedded</strong> within it.</div>
+      </div>
+      <div class="mem-card">
+        <div class="mem-icon">🚪</div>
+        <div class="mem-title">Function</div>
+        <div class="mem-text">Controls the <strong>entry and exit of materials</strong> to and from the cell — acting as the boundary between the intracellular and extracellular environments. Facilitates communication between cells.</div>
+      </div>
+      <div class="mem-card">
+        <div class="mem-icon">🔵</div>
+        <div class="mem-title">What It Defines</div>
+        <div class="mem-text">The cell membrane <strong>defines a cell</strong>. Everything inside it is <strong>intracellular</strong>; everything outside is <strong>extracellular</strong>. The membrane is the cell's boundary with its surroundings. Covered further in Chapter 1.5.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MICROSCOPES -->
+<section id="microscopes">
+  <div class="container">
+    <div class="sec-label">Section 7</div>
+    <h2 class="sec-title">Microscopes</h2>
+    <p class="sec-intro">Cells are microscopic and cannot be seen with the naked eye. Two major types of microscopes are used in biology — light and electron — each with different capabilities and applications.</p>
+
+    <div class="micro-compare reveal">
+
+      <div class="micro-card light">
+        <div class="micro-head">🔦 Light Microscope</div>
+        <div class="micro-body">
+          <div class="micro-row">
+            <div class="micro-feat">Light source</div>
+            <div class="micro-val">Uses <strong>visible light</strong> to illuminate specimens</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Magnification</div>
+            <div class="micro-val">Generally <strong>×400</strong>; maximum ~<strong>×2,000</strong></div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Resolution</div>
+            <div class="micro-val"><strong>200 nm</strong> (lower resolution)</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Specimens</div>
+            <div class="micro-val"><strong>Living or non-living</strong> (must be thin to allow light through)</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Size &amp; cost</div>
+            <div class="micro-val">Small, compact, <strong>portable</strong>. Affordable and low maintenance</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Uses</div>
+            <div class="micro-val">Biology, medicine. Versatile, easy to use, <strong>real-time imaging</strong> of living samples</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="micro-card electron">
+        <div class="micro-head">⚡ Electron Microscope</div>
+        <div class="micro-body">
+          <div class="micro-row">
+            <div class="micro-feat">Light source</div>
+            <div class="micro-val">Uses a <strong>beam of electrons</strong> to illuminate specimens</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Magnification</div>
+            <div class="micro-val">Generally <strong>×500,000</strong>; maximum ~<strong>×2,000,000</strong></div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Resolution</div>
+            <div class="micro-val"><strong>0.5 nm</strong> (extremely high resolution)</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Specimens</div>
+            <div class="micro-val"><strong>Non-living (dead) specimens only</strong></div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Size &amp; cost</div>
+            <div class="micro-val">Big, bulky, requires <strong>permanent installation</strong>. Expensive and high maintenance</div>
+          </div>
+          <div class="micro-row">
+            <div class="micro-feat">Types</div>
+            <div class="micro-val"><strong>SEM</strong>: 3D surface images · <strong>TEM</strong>: high-resolution internal cross sections</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LIGHT MICROSCOPE COMPONENTS -->
+    <h3 style="font-family:'Raleway',sans-serif; font-weight:800; font-size:1.15rem; letter-spacing:-0.01em; margin-top:3rem; margin-bottom:0.5rem;">Components of a Light Microscope</h3>
+    <div class="comp-list reveal">
+      <div class="comp-item">
+        <div class="comp-name">Eyepiece Lens (×10)</div>
+        <div class="comp-func">The lens the observer looks through. Standard magnification of <strong>×10</strong>.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Objective Lenses</div>
+        <div class="comp-func"><strong>Low (×4)</strong>, medium <strong>(×10)</strong>, and high power <strong>(×40)</strong>. Combined with the eyepiece to give total magnification (e.g. ×10 eyepiece × ×40 objective = ×400 total).</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Revolving Nosepiece</div>
+        <div class="comp-func">Rotates to bring different <strong>objective lenses</strong> into position over the specimen.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Stage</div>
+        <div class="comp-func">The platform where the <strong>microscope slide is placed</strong> for viewing.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Coarse Focus</div>
+        <div class="comp-func">Used to focus using <strong>low and medium power</strong> objective lenses. Makes large adjustments.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Fine Focus</div>
+        <div class="comp-func">Used to focus with the <strong>high-power objective lens</strong>. Makes small, precise adjustments.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Light Source</div>
+        <div class="comp-func">Illuminates the specimen from below. Light passes <strong>through</strong> the specimen and up to the lenses.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-name">Condenser</div>
+        <div class="comp-func">Used to <strong>vary the intensity of light</strong> reaching the specimen — improving image quality.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CALCULATIONS -->
+<section id="calculations">
+  <div class="container">
+    <div class="sec-label">Section 8</div>
+    <h2 class="sec-title">Magnification Calculations</h2>
+    <p class="sec-intro">Use the <strong>IAM triangle</strong> to calculate actual size, image size, or magnification. Note: magnification has <strong>no units</strong> — written as ×10 or ×400.</p>
+
+    <div class="iam-section reveal">
+      <div class="iam-triangle">
+        <div class="iam-title">The IAM Triangle</div>
+        <div>
+          <div class="tri-top">I</div>
+          <div class="tri-divider"></div>
+          <div class="tri-bottom">
+            <div class="tri-bot-cell a">A</div>
+            <div class="tri-between">×</div>
+            <div class="tri-bot-cell m">M</div>
+          </div>
+        </div>
+        <div class="tri-legend">
+          <span>I</span> = Image size<br>
+          <span>A</span> = Actual size<br>
+          <span>M</span> = Magnification
+          <br><br>
+          Cover what you want to find.<br>
+          Remaining shows operation.
+        </div>
+      </div>
+
+      <div class="iam-formulas">
+        <div class="formula-card">
+          <div class="formula-label">Actual Size</div>
+          <div class="formula-eq">A  =  I  ÷  M</div>
+        </div>
+        <div class="formula-card">
+          <div class="formula-label">Magnification</div>
+          <div class="formula-eq">M  =  I  ÷  A</div>
+        </div>
+        <div class="formula-card">
+          <div class="formula-label">Image Size</div>
+          <div class="formula-eq">I  =  A  ×  M</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIT CONVERSION -->
+    <h3 style="font-family:'Raleway',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:-0.01em; margin-top:2.5rem; margin-bottom:0.5rem;">Unit Conversions</h3>
+    <div class="unit-strip reveal">
+      <div class="unit-node">
+        <div class="unit-name">metres</div>
+        <div class="unit-abbr">m</div>
+      </div>
+      <div class="unit-arrow">
+        <div class="ua-top">× 1000 →</div>
+        <div class="ua-bot">← ÷ 1000</div>
+      </div>
+      <div class="unit-node">
+        <div class="unit-name">millimetres</div>
+        <div class="unit-abbr">mm</div>
+      </div>
+      <div class="unit-arrow">
+        <div class="ua-top">× 1000 →</div>
+        <div class="ua-bot">← ÷ 1000</div>
+      </div>
+      <div class="unit-node">
+        <div class="unit-name">micrometres</div>
+        <div class="unit-abbr">μm</div>
+      </div>
+      <div class="unit-arrow">
+        <div class="ua-top">× 1000 →</div>
+        <div class="ua-bot">← ÷ 1000</div>
+      </div>
+      <div class="unit-node">
+        <div class="unit-name">nanometres</div>
+        <div class="unit-abbr">nm</div>
+      </div>
+    </div>
+
+    <!-- WORKED EXAMPLE -->
+    <div class="worked reveal">
+      <div class="worked-head">📐 Worked Example</div>
+      <div class="worked-body">
+        <div style="font-size:0.92rem; color:var(--muted); margin-bottom:1.25rem; padding: 0.75rem 1rem; background:var(--surface2); border-radius:10px; font-style:italic; border-left:3px solid var(--calc);">
+          An image of an animal cell is <strong style="color:var(--text);">30 mm</strong> in size and has been magnified by a factor of <strong style="color:var(--text);">×3000</strong>. Determine the <strong style="color:var(--text);">actual size</strong> of the cell.
+        </div>
+        <div class="worked-step">
+          <div class="ws-num">1</div>
+          <div class="ws-content">
+            <strong>Identify what you need to find:</strong> Actual size (A).
+            Cover A in the IAM triangle → this leaves I ÷ M.
+          </div>
+        </div>
+        <div class="worked-step">
+          <div class="ws-num">2</div>
+          <div class="ws-content">
+            <strong>Substitute the known values:</strong>
+            <span class="ws-eq">A  =  I  ÷  M  =  30 mm  ÷  3000</span>
+          </div>
+        </div>
+        <div class="worked-step">
+          <div class="ws-num">3</div>
+          <div class="ws-content">
+            <strong>Calculate and convert units:</strong>
+            <span class="ws-eq">A  =  0.01 mm</span>
+            <span class="ws-answer">0.01 mm  =  10 μm  ✓</span>
+            Convert: 0.01 mm × 1000 = 10 μm (since 1 mm = 1000 μm)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout calc reveal">
+      <div class="callout-title">📌 Important Reminders</div>
+      <strong>Magnification has no units</strong> — write it as ×3000 not "3000 mm". Always check your units before calculating — image size is usually measured in mm from the slide/microscope field, and actual size is typically expressed in μm. Convert as needed using the chart above.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Chapter 1.1 — Living Things Consist of Cells · <span>Topic 1: Cells and Microorganisms</span></div>
+  <div style="margin-top:0.4rem; opacity:0.5;">© Essentials Education 2025 · Study resource for educational use</div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 50);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
