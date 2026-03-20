@@ -1,295 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Biology — Chapter 1</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Topic 1 — Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090f;
+    --bg2: #0d1117;
+    --surface: #111620;
+    --surface2: #171e2e;
+    --border: #1c2538;
+    --border2: #253047;
+    --text: #dde6f5;
+    --muted: #6b80a8;
+    --muted2: #364d6e;
 
-    :root {
-      --bg: #0d1117;
-      --surface: #131920;
-      --border: #1e2d3d;
-      --accent-1: #4fc3a1;
-      --accent-2: #e8a87c;
-      --accent-3: #a78bfa;
-      --text: #d4e3ec;
-      --muted: #5a7a8a;
+    --c11: #22d3ee;
+    --c12: #34d399;
+    --c13: #a78bfa;
+    --c14: #fb923c;
+    --c15: #f472b6;
+    --c16: #4ade80;
+    --c17: #facc15;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* animated constellation background */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(34,211,238,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(52,211,153,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 50% at 90% 70%, rgba(167,139,250,0.05) 0%, transparent 50%);
+    animation: bgPulse 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--c12);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 9vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero h1 .dim { opacity: 0.35; }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 460px;
+    margin: 0 auto 3rem;
+    line-height: 1.75;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  /* chapter count pills */
+  .hero-stats {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .stat-pill {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    padding: 0.45em 1.2em;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .stat-pill .num {
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--text);
+  }
+
+  .scroll-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--muted2);
+    animation: fadeUp 0.7s 0.4s ease both;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .scroll-arrow {
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(5px); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CHAPTERS SECTION ── */
+  .chapters-section {
+    padding: 5rem 2rem 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .section-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ── CHAPTER CARDS ── */
+  .chapters-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .chapter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    position: relative;
+  }
+
+  .chapter-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+  }
+
+  /* coloured left accent that changes per chapter */
+  .chapter-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 18px 0 0 18px;
+    background: var(--chapter-color);
+    transition: width 0.25s;
+  }
+
+  .chapter-card:hover::before { width: 6px; }
+
+  .chapter-inner {
+    padding: 1.5rem 1.75rem 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 640px) {
+    .chapter-inner {
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
+    .chapter-links { justify-content: flex-start; }
+  }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      overflow: hidden;
-    }
+  /* number badge */
+  .chap-num {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--chapter-color) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--chapter-color) 30%, transparent);
+    color: var(--chapter-color);
+  }
 
-    /* Animated background grid */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(79,195,161,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(79,195,161,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      animation: gridDrift 20s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
+  .chap-info { min-width: 0; }
 
-    @keyframes gridDrift {
-      from { background-position: 0 0; }
-      to   { background-position: 48px 48px; }
-    }
+  .chap-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 0.25rem;
+  }
 
-    /* Floating orbs */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 0;
-      animation: float 14s ease-in-out infinite alternate;
-    }
-    .orb-1 { width: 380px; height: 380px; background: var(--accent-1); top: -80px; left: -80px; animation-duration: 16s; }
-    .orb-2 { width: 280px; height: 280px; background: var(--accent-2); bottom: -60px; right: -40px; animation-duration: 12s; animation-delay: -5s; }
+  .chap-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    @keyframes float {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(30px, 40px) scale(1.08); }
-    }
+  .chap-topics {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-    /* Main container */
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 680px;
-      width: 100%;
-      opacity: 0;
-      transform: translateY(24px);
-      animation: reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-    }
+  /* link buttons */
+  .chapter-links {
+    display: flex;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
 
-    @keyframes reveal {
-      to { opacity: 1; transform: translateY(0); }
-    }
+  .link-btn {
+    text-decoration: none;
+    padding: 0.55em 1.15em;
+    border-radius: 10px;
+    border: 1px solid;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
 
-    /* Header */
-    .header {
-      margin-bottom: 3rem;
-    }
+  .link-btn.notes {
+    background: color-mix(in srgb, var(--chapter-color) 8%, transparent);
+    border-color: color-mix(in srgb, var(--chapter-color) 25%, transparent);
+    color: var(--chapter-color);
+  }
 
-    .label {
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent-1);
-      margin-bottom: 0.6rem;
-      opacity: 0;
-      animation: reveal 0.8s ease 0.5s forwards;
-    }
+  .link-btn.notes:hover {
+    background: color-mix(in srgb, var(--chapter-color) 18%, transparent);
+    border-color: var(--chapter-color);
+  }
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 6vw, 3.6rem);
-      line-height: 1.1;
-      color: #fff;
-      opacity: 0;
-      animation: reveal 0.9s ease 0.65s forwards;
-    }
+  .link-btn.quiz {
+    background: var(--surface2);
+    border-color: var(--border2);
+    color: var(--muted);
+  }
 
-    h1 em {
-      font-style: italic;
-      color: var(--accent-1);
-    }
+  .link-btn.quiz:hover {
+    background: color-mix(in srgb, var(--chapter-color) 10%, var(--surface2));
+    border-color: color-mix(in srgb, var(--chapter-color) 40%, transparent);
+    color: var(--text);
+  }
 
-    .subtitle {
-      margin-top: 0.9rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-      opacity: 0;
-      animation: reveal 0.9s ease 0.8s forwards;
-    }
+  /* ── QUICK ACCESS ── */
+  .quick-section {
+    padding: 0 2rem 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, var(--accent-1), transparent);
-      margin: 2rem 0;
-      opacity: 0;
-      animation: reveal 0.9s ease 0.9s forwards;
-    }
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
 
-    /* Cards */
-    .cards {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
+  .quick-card {
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
 
-    .card {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.6rem 2rem;
-      text-decoration: none;
-      color: var(--text);
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-      opacity: 0;
-    }
+  .quick-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    border-color: var(--border2);
+  }
 
-    .card:nth-child(1) { animation: reveal 0.8s ease 1.0s forwards; }
-    .card:nth-child(2) { animation: reveal 0.8s ease 1.15s forwards; }
-    .card:nth-child(3) { animation: reveal 0.8s ease 1.30s forwards; }
+  .qc-icon { font-size: 1.5rem; }
 
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .card-1::before { background: linear-gradient(120deg, rgba(79,195,161,0.07), transparent 60%); }
-    .card-2::before { background: linear-gradient(120deg, rgba(232,168,124,0.07), transparent 60%); }
-    .card-3::before { background: linear-gradient(120deg, rgba(167,139,250,0.07), transparent 60%); }
+  .qc-chapter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
 
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
-    }
-    .card:hover::before { opacity: 1; }
-    .card-1:hover { border-color: var(--accent-1); }
-    .card-2:hover { border-color: var(--accent-2); }
-    .card-3:hover { border-color: var(--accent-3); }
+  .qc-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
 
-    /* Icon blob */
-    .icon {
-      flex-shrink: 0;
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      transition: transform 0.3s;
-    }
-    .card:hover .icon { transform: scale(1.12) rotate(-4deg); }
-    .icon-1 { background: rgba(79,195,161,0.12); border: 1px solid rgba(79,195,161,0.25); }
-    .icon-2 { background: rgba(232,168,124,0.12); border: 1px solid rgba(232,168,124,0.25); }
-    .icon-3 { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25); }
+  .qc-type {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.2em 0.65em;
+    border-radius: 100px;
+    display: inline-block;
+    width: fit-content;
+  }
 
-    /* Card text */
-    .card-body { flex: 1; }
+  .qc-type.notes {
+    background: rgba(52,211,153,0.1);
+    color: var(--c12);
+    border: 1px solid rgba(52,211,153,0.25);
+  }
 
-    .card-chapter {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 0.3rem;
-    }
-    .card-1 .card-chapter { color: var(--accent-1); }
-    .card-2 .card-chapter { color: var(--accent-2); }
-    .card-3 .card-chapter { color: var(--accent-3); }
+  .qc-type.quiz {
+    background: rgba(167,139,250,0.1);
+    color: var(--c13);
+    border: 1px solid rgba(167,139,250,0.25);
+  }
 
-    .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-      color: #fff;
-      margin-bottom: 0.3rem;
-    }
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted2);
+    letter-spacing: 0.06em;
+  }
 
-    .card-desc {
-      font-size: 0.7rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+  footer span { color: var(--c12); }
 
-    /* Arrow */
-    .arrow {
-      font-size: 1.2rem;
-      color: var(--muted);
-      transition: transform 0.3s, color 0.3s;
-    }
-    .card-1:hover .arrow { transform: translateX(5px); color: var(--accent-1); }
-    .card-2:hover .arrow { transform: translateX(5px); color: var(--accent-2); }
-    .card-3:hover .arrow { transform: translateX(5px); color: var(--accent-3); }
+  /* ── TOPIC TAG ── */
+  .topic-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    padding: 0.35em 1em;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.7s ease both;
+  }
 
-    /* Footer */
-    .footer {
-      margin-top: 2.5rem;
-      text-align: center;
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      opacity: 0;
-      animation: reveal 0.8s ease 1.5s forwards;
-    }
-  </style>
+  .topic-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--c12);
+    box-shadow: 0 0 6px var(--c12);
+  }
+</style>
 </head>
 <body>
 
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <div class="container">
-    <div class="header">
-      <p class="label">Biology · Study Guide</p>
-      <h1>Chapter <em>One</em></h1>
-      <p class="subtitle">Select a topic below to begin your study session</p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="topic-tag"><div class="topic-dot"></div> Stage 1 Biology</div>
+    <div class="hero-eyebrow">Study Hub</div>
+    <h1>Topic 1<br><span class="dim">Cells &</span><br>Microorganisms</h1>
+    <p class="hero-desc">Your complete study resource — chapter notes and practice quizzes for all 7 chapters of Topic 1.</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><span class="num">7</span> Chapters</div>
+      <div class="stat-pill"><span class="num">7</span> Notes Pages</div>
+      <div class="stat-pill"><span class="num">7</span> Quizzes</div>
+      <div class="stat-pill"><span class="num">140+</span> Flashcards</div>
+      <div class="stat-pill"><span class="num">70</span> MCQ Questions</div>
     </div>
-
-    <div class="divider"></div>
-
-    <div class="cards">
-      <a href="chapter-1-5-cell-membrane.html" class="card card-1">
-        <div class="icon icon-1">🧬</div>
-        <div class="card-body">
-          <p class="card-chapter">Chapter 1.5</p>
-          <p class="card-title">Cell Membrane</p>
-          <p class="card-desc">Structure, function &amp; transport mechanisms of the plasma membrane</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
-
-      <a href="chapter-1-6-microorganisms.html" class="card card-2">
-        <div class="icon icon-2">🦠</div>
-        <div class="card-body">
-          <p class="card-chapter">Chapter 1.6</p>
-          <p class="card-title">Microorganisms</p>
-          <p class="card-desc">Bacteria, viruses, fungi &amp; their roles in biology and disease</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="chapter-1-7-microorganisms-and-food.html" class="card card-3">
-        <div class="icon icon-3">🍽️</div>
-        <div class="card-body">
-          <p class="card-chapter">Chapter 1.7</p>
-          <p class="card-title">Microorganisms &amp; Food</p>
-          <p class="card-desc">How microorganisms are used in food production, preservation &amp; spoilage</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-
-    <p class="footer">3 topics · Chapter 1 · Biology</p>
+    <div class="scroll-hint"><span class="scroll-arrow">↓</span> scroll to browse chapters</div>
   </div>
+</section>
+
+<!-- CHAPTERS -->
+<div class="chapters-section">
+  <div class="section-header">
+    <div class="section-title">All Chapters</div>
+    <div class="section-sub">Click Notes to read, Quiz to practice</div>
+  </div>
+
+  <div class="chapters-grid">
+
+    <!-- 1.1 -->
+    <div class="chapter-card" style="--chapter-color: #22d3ee;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.1</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.1</div>
+          <div class="chap-title">Living Things Consist of Cells</div>
+          <div class="chap-topics">Cell theory · Life processes · DNA structure · Microscopes · Magnification calculations</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-1-living-things-consist-of-cells.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-1-living-things.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.2 -->
+    <div class="chapter-card" style="--chapter-color: #34d399;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.2</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.2</div>
+          <div class="chap-title">Two Major Types of Cells</div>
+          <div class="chap-topics">Prokaryotic vs eukaryotic · Cell structures & organelles · Plant vs animal cells · Evolutionary evidence</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-2-two-major-cell-types.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-2-two-cell-types.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.3 -->
+    <div class="chapter-card" style="--chapter-color: #a78bfa;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.3</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.3</div>
+          <div class="chap-title">Cell Division</div>
+          <div class="chap-topics">Binary fission · Mitosis (4 phases) · Cytokinesis · DNA replication · Cancer</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-3-cell-division.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-3-cell-division.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.4 -->
+    <div class="chapter-card" style="--chapter-color: #fb923c;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.4</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.4</div>
+          <div class="chap-title">Cell Requirements</div>
+          <div class="chap-topics">ATP · Autotrophs & heterotrophs · Photosynthesis · Aerobic & anaerobic respiration · Fermentation · Waste removal</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-4-cell-requirements.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-4-cell-requirements.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.5 -->
+    <div class="chapter-card" style="--chapter-color: #f472b6;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.5</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.5</div>
+          <div class="chap-title">The Cell Membrane</div>
+          <div class="chap-topics">Phospholipid bilayer · Fluid mosaic model · Diffusion · Osmosis · Active transport · SA:V ratio</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-5-cell-membrane.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-5-cell-membrane.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.6 -->
+    <div class="chapter-card" style="--chapter-color: #4ade80;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.6</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.6</div>
+          <div class="chap-title">The Importance of Microorganisms</div>
+          <div class="chap-topics">Bacteria · Archaea · Fungi · Protists · Viruses · Gut microbiome · Genetic engineering · Food production</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-6-microorganisms.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-6-importance-of-microorganisms.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.7 -->
+    <div class="chapter-card" style="--chapter-color: #facc15;">
+      <div class="chapter-inner">
+        <div class="chap-num">1.7</div>
+        <div class="chap-info">
+          <div class="chap-label">Chapter 1.7</div>
+          <div class="chap-title">Microorganisms and Food</div>
+          <div class="chap-topics">Food spoilage vs poisoning · Hygiene practices · Fridge storage · Preservation methods · Heat, salt, pickling, vacuum</div>
+        </div>
+        <div class="chapter-links">
+          <a class="link-btn notes" href="chapter-1-7-microorganisms-and-food.html">📖 Notes</a>
+          <a class="link-btn quiz" href="quiz-1-7-microorganisms-and-food.html">⚡ Quiz</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK ACCESS — ALL QUIZZES -->
+<div class="quick-section">
+  <div class="section-header">
+    <div class="section-title">Quick Access — Quizzes</div>
+    <div class="section-sub">Jump straight to practice</div>
+  </div>
+  <div class="quick-grid">
+    <a class="quick-card" href="quiz-1-1-living-things.html">
+      <div class="qc-icon">🔬</div>
+      <div class="qc-chapter">Chapter 1.1</div>
+      <div class="qc-name">Living Things & Cells</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+    <a class="quick-card" href="quiz-1-2-two-cell-types.html">
+      <div class="qc-icon">🦠</div>
+      <div class="qc-chapter">Chapter 1.2</div>
+      <div class="qc-name">Two Cell Types</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+    <a class="quick-card" href="quiz-1-3-cell-division.html">
+      <div class="qc-icon">✂️</div>
+      <div class="qc-chapter">Chapter 1.3</div>
+      <div class="qc-name">Cell Division</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+    <a class="quick-card" href="quiz-1-4-cell-requirements.html">
+      <div class="qc-icon">⚡</div>
+      <div class="qc-chapter">Chapter 1.4</div>
+      <div class="qc-name">Cell Requirements</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+    <a class="quick-card" href="quiz-1-5-cell-membrane.html">
+      <div class="qc-icon">🔵</div>
+      <div class="qc-chapter">Chapter 1.5</div>
+      <div class="qc-name">Cell Membrane</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+    <a class="quick-card" href="quiz-1-6-importance-of-microorganisms.html">
+      <div class="qc-icon">🧬</div>
+      <div class="qc-chapter">Chapter 1.6</div>
+      <div class="qc-name">Microorganisms</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+    <a class="quick-card" href="quiz-1-7-microorganisms-and-food.html">
+      <div class="qc-icon">🍽️</div>
+      <div class="qc-chapter">Chapter 1.7</div>
+      <div class="qc-name">Microorganisms & Food</div>
+      <span class="qc-type quiz">⚡ Quiz</span>
+    </a>
+  </div>
+
+  <!-- QUICK ACCESS — ALL NOTES -->
+  <div class="section-header" style="margin-top: 3rem;">
+    <div class="section-title">Quick Access — Notes</div>
+    <div class="section-sub">Jump straight to reading</div>
+  </div>
+  <div class="quick-grid">
+    <a class="quick-card" href="chapter-1-1-living-things-consist-of-cells.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.1</div>
+      <div class="qc-name">Living Things & Cells</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+    <a class="quick-card" href="chapter-1-2-two-major-cell-types.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.2</div>
+      <div class="qc-name">Two Cell Types</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+    <a class="quick-card" href="chapter-1-3-cell-division.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.3</div>
+      <div class="qc-name">Cell Division</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+    <a class="quick-card" href="chapter-1-4-cell-requirements.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.4</div>
+      <div class="qc-name">Cell Requirements</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+    <a class="quick-card" href="chapter-1-5-cell-membrane.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.5</div>
+      <div class="qc-name">Cell Membrane</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+    <a class="quick-card" href="chapter-1-6-microorganisms.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.6</div>
+      <div class="qc-name">Microorganisms</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+    <a class="quick-card" href="chapter-1-7-microorganisms-and-food.html">
+      <div class="qc-icon">📖</div>
+      <div class="qc-chapter">Chapter 1.7</div>
+      <div class="qc-name">Microorganisms & Food</div>
+      <span class="qc-type notes">📖 Notes</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div>Biology Topic 1 — Cells &amp; Microorganisms · <span>Study Hub</span></div>
+  <div style="margin-top:0.3rem; opacity:0.5;">© Essentials Education 2025 · All files must be in the same folder for links to work</div>
+</footer>
 
 </body>
 </html>
