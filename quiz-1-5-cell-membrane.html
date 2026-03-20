@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz &mdash; Chapter 1.5 Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b0f1a;--surface:#111827;--surface2:#1a2235;--border:#1f2d45;--border2:#2d3f5c;--text:#e4eaf4;--muted:#6b7fa0;--muted2:#3a4d6a;--accent:#f472b6;--correct:#34d399;--correct-bg:rgba(52,211,153,0.1);--correct-bd:rgba(52,211,153,0.35);--wrong:#f87171;--wrong-bg:rgba(248,113,113,0.1);--wrong-bd:rgba(248,113,113,0.35);}
+  *{margin:0;padding:0;box-sizing:border-box;}body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
+  .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .hdr-left{display:flex;align-items:center;gap:0.75rem;}.hdr-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);}
+  .hdr-title{font-weight:800;font-size:0.9rem;}.hdr-sub{font-size:0.75rem;color:var(--muted);margin-top:0.1rem;}
+  .score-box{font-family:'Fira Code',monospace;font-size:0.8rem;color:var(--muted);}.score-box span{color:var(--accent);}
+  .wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+  .tabs{display:flex;gap:0.4rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.3rem;width:fit-content;margin-bottom:2rem;}
+  .tab{padding:0.45em 1.1em;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .tab.on{background:var(--surface2);color:var(--text);border:1px solid var(--border2);}
+  .prog-bar{height:4px;background:var(--surface2);border-radius:2px;margin-bottom:1.5rem;overflow:hidden;}
+  .prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease;}
+  .prog-label{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--muted2);margin-bottom:0.5rem;}
+  .fc-wrap{perspective:1200px;margin-bottom:1.5rem;}
+  .fc{width:100%;min-height:220px;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+  .fc.flipped{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;background:var(--surface);}
+  .fc-back{transform:rotateY(180deg);background:var(--surface2);}
+  .fc-tag{font-family:'Fira Code',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;}
+  .fc-q{font-size:1.05rem;font-weight:700;line-height:1.45;}
+  .fc-a{font-size:0.92rem;color:var(--correct);line-height:1.6;}
+  .fc-hint{font-size:0.75rem;color:var(--muted2);margin-top:0.5rem;font-style:italic;}
+  .fc-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:2rem;}
+  .fc-btn{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0.6em 1.4em;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .fc-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .fc-count{font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--muted);}
+  .fc-knew{display:flex;gap:0.5rem;justify-content:center;margin-bottom:2.5rem;}
+  .btn-knew{padding:0.5em 1.4em;border-radius:8px;border:1px solid;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.15s;}
+  .btn-yes{background:var(--correct-bg);border-color:var(--correct-bd);color:var(--correct);}.btn-yes:hover{background:rgba(52,211,153,0.2);}
+  .btn-no{background:var(--wrong-bg);border-color:var(--wrong-bd);color:var(--wrong);}.btn-no:hover{background:rgba(248,113,113,0.2);}
+  .q-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:1.75rem;margin-bottom:1.25rem;}
+  .q-num{font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:0.6rem;}
+  .q-text{font-size:0.97rem;font-weight:600;line-height:1.55;margin-bottom:1.1rem;}
+  .opts{display:flex;flex-direction:column;gap:0.5rem;}
+  .opt{padding:0.75rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:0.88rem;color:var(--muted);transition:all 0.15s;display:flex;align-items:flex-start;gap:0.75rem;line-height:1.5;}
+  .opt:hover:not(.locked){border-color:var(--border2);color:var(--text);}
+  .opt.chosen{border-color:rgba(139,92,246,0.5);background:rgba(139,92,246,0.1);color:var(--text);}
+  .opt.correct{border-color:var(--correct-bd);background:var(--correct-bg);color:var(--correct);}
+  .opt.wrong{border-color:var(--wrong-bd);background:var(--wrong-bg);color:var(--wrong);}
+  .opt-letter{font-family:'Fira Code',monospace;font-size:0.75rem;font-weight:500;flex-shrink:0;margin-top:0.1rem;}
+  .q-feedback{margin-top:1rem;padding:0.75rem 1rem;border-radius:10px;font-size:0.85rem;line-height:1.55;display:none;border:1px solid;}
+  .q-feedback.show{display:block;}.q-feedback.ok{background:var(--correct-bg);border-color:var(--correct-bd);color:var(--correct);}.q-feedback.bad{background:var(--wrong-bg);border-color:var(--wrong-bd);color:var(--wrong);}
+  .submit-row{display:flex;justify-content:flex-end;margin-top:1rem;}
+  .btn-check{padding:0.55em 1.5em;border-radius:8px;border:none;background:var(--accent);color:#000;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+  .results{display:none;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:2rem;text-align:center;margin-top:2rem;}
+  .results.show{display:block;}.res-score{font-size:3rem;font-weight:800;color:var(--accent);line-height:1;}
+  .res-label{color:var(--muted);font-size:0.9rem;margin-top:0.4rem;margin-bottom:1.5rem;}
+  .btn-reset{padding:0.6em 1.8em;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+  .btn-reset:hover{border-color:var(--accent);color:var(--accent);}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-left"><div class="hdr-dot"></div><div><div class="hdr-title">Chapter 1.5 Quiz</div><div class="hdr-sub">The Cell Membrane</div></div></div>
+  <div class="score-box">MCQ Score: <span id="scoreDisp">0 / 0</span></div>
+</header>
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab on" onclick="setMode('flash')">&#9889; Flashcards</button>
+    <button class="tab" onclick="setMode('mcq')">&#128221; MCQ Quiz</button>
+  </div>
+  <div id="flashMode">
+    <div class="prog-label" id="fcLabel">Card 1 of N</div>
+    <div class="prog-bar"><div class="prog-fill" id="fcProg" style="width:5%"></div></div>
+    <div class="fc-wrap"><div class="fc" id="fc" onclick="flipCard()">
+      <div class="fc-face fc-front"><div class="fc-tag">Question &mdash; tap to reveal</div><div class="fc-q" id="fcQ"></div></div>
+      <div class="fc-face fc-back"><div class="fc-tag">Answer</div><div class="fc-a" id="fcA"></div><div class="fc-hint" id="fcHint"></div></div>
+    </div></div>
+    <div class="fc-knew"><button class="btn-knew btn-no" onclick="markCard(false)">&#10007; Still learning</button><button class="btn-knew btn-yes" onclick="markCard(true)">&#10003; Got it</button></div>
+    <div class="fc-nav"><button class="fc-btn" onclick="prevCard()">&larr; Prev</button><div class="fc-count" id="fcCount">0 known</div><button class="fc-btn" onclick="nextCard()">Next &rarr;</button></div>
+  </div>
+  <div id="mcqMode" class="hidden">
+    <div id="mcqQuestions"></div>
+    <div class="submit-row"><button class="btn-check" onclick="submitQuiz()">Submit Quiz</button></div>
+    <div class="results" id="results"><div class="res-score" id="resScore"></div><div class="res-label" id="resLabel"></div><button class="btn-reset" onclick="resetQuiz()">Try Again</button></div>
+  </div>
+</div>
+<script>
+const cards = [{"q": "What is the cell membrane also known as?", "a": "The plasma membrane.", "hint": ""}, {"q": "Why is the cell membrane called semi-permeable?", "a": "Because some molecules can pass through it but not all \u2014 based on size, charge and water solubility.", "hint": ""}, {"q": "List the five components of the cell membrane.", "a": "1. Phospholipid bilayer. 2. Integral proteins. 3. Peripheral proteins. 4. Glycoproteins/glycolipids. 5. Cholesterol.", "hint": ""}, {"q": "Why do phospholipid tails point inward in the bilayer?", "a": "Fatty acid tails are hydrophobic \u2014 they project inward away from the aqueous cytoplasm and extracellular fluid. Phosphate heads are hydrophilic and face outward.", "hint": "Hydrophobic tails hide from water"}, {"q": "What is the fluid mosaic model and who proposed it?", "a": "A model of cell membrane structure proposed by Singer and Nicholson (1972). Fluid = lipids and proteins move laterally. Mosaic = pattern of various proteins in the bilayer.", "hint": "1972"}, {"q": "What is simple diffusion?", "a": "Movement of molecules from high to low concentration directly through the phospholipid bilayer. No energy or transport protein needed. Steeper gradient = faster rate.", "hint": "High to low, no energy"}, {"q": "What is facilitated diffusion?", "a": "Movement of molecules down the concentration gradient via specific transport proteins (channels or carriers). Still passive \u2014 no energy needed. Examples: glucose, amino acids, ions.", "hint": ""}, {"q": "What is osmosis?", "a": "The diffusion of water from high water concentration (low solute) to low water concentration (high solute) through a semi-permeable membrane.", "hint": "Water moves toward high solute"}, {"q": "What are aquaporins?", "a": "Specific channel proteins that facilitate and regulate the movement of water molecules across the cell membrane.", "hint": "Water channels"}, {"q": "Define isotonic, hypotonic and hypertonic solutions.", "a": "Isotonic = equal solute, no net water movement. Hypotonic = lower solute outside, water moves INTO cell. Hypertonic = higher solute outside, water moves OUT of cell.", "hint": ""}, {"q": "What happens to an animal cell in a hypotonic solution?", "a": "Water moves into the cell by osmosis. Pressure builds until the cell bursts \u2014 called cell lysis.", "hint": "Lysis = burst"}, {"q": "What happens to a plant cell in a hypertonic solution?", "a": "Water moves out. The cell membrane pulls away from the cell wall \u2014 called plasmolysis.", "hint": "Plasmolysis"}, {"q": "What is active transport?", "a": "Movement of solutes against the concentration gradient (low to high) using energy (ATP) and carrier proteins.", "hint": "Against gradient, needs ATP"}, {"q": "What is endocytosis?", "a": "The cell membrane folds inward around large molecules outside the cell and pinches off to form a vesicle inside the cell.", "hint": "Into the cell"}, {"q": "What is exocytosis?", "a": "Vesicles containing large molecules fuse with the cell membrane and release contents to the extracellular environment.", "hint": "Out of the cell"}, {"q": "Name three factors affecting rate of exchange across the cell membrane.", "a": "1. Nature of the material (size, solubility, charge). 2. Concentration gradient. 3. Surface area to volume ratio (SA:V).", "hint": ""}, {"q": "Why do lipophilic molecules cross the membrane more easily than hydrophilic molecules?", "a": "The bilayer is made of lipids \u2014 lipophilic (fat-soluble) molecules interact well with lipids and pass through easily. Hydrophilic molecules cannot cross the lipid interior.", "hint": ""}, {"q": "What is the surface area to volume ratio (SA:V) and why does it matter?", "a": "SA:V = surface area divided by volume. High SA:V = efficient exchange of materials. As cells grow, volume increases faster than surface area \u2014 SA:V decreases and exchange becomes inefficient.", "hint": "Small cells = high SA:V"}, {"q": "What happens to SA:V as a cell grows larger?", "a": "SA:V decreases \u2014 volume increases faster than surface area. When too low the cell cannot exchange materials fast enough \u2014 it divides.", "hint": ""}, {"q": "What is the typical internal solute concentration of animal and plant cells?", "a": "Approximately 0.9%.", "hint": ""}];
+const mcqs = [{"q": "Which molecule can pass directly through the phospholipid bilayer WITHOUT a transport protein?", "opts": ["Glucose", "Sodium ions", "Oxygen (O2)", "Amino acids"], "ans": 2, "exp": "Oxygen is small and non-polar \u2014 it can diffuse directly through the lipid bilayer. Glucose, ions and amino acids need transport proteins."}, {"q": "What does 'fluid' refer to in the fluid mosaic model?", "opts": ["The ability of molecules to dissolve in water", "The lateral movement of lipids and proteins in the membrane", "The movement of water through aquaporins", "The flexibility of the cell wall"], "ans": 1, "exp": "'Fluid' refers to the continuous lateral movement of both lipids and proteins within the membrane \u2014 critical for membrane permeability."}, {"q": "A cell is placed in a very high solute concentration. What will happen?", "opts": ["Water moves into the cell", "No net movement of water", "Water moves out of the cell", "The cell membrane dissolves"], "ans": 2, "exp": "The external solution is hypertonic \u2014 water moves out of the cell by osmosis toward the higher solute concentration."}, {"q": "Facilitated diffusion differs from simple diffusion because it:", "opts": ["Requires ATP", "Moves molecules against the gradient", "Uses specific transport proteins", "Only moves water"], "ans": 2, "exp": "Facilitated diffusion uses specific transport proteins. It still moves molecules down the gradient and requires no ATP."}, {"q": "Active transport differs from passive transport because active transport:", "opts": ["Moves molecules down the gradient", "Requires ATP energy", "Does not need transport proteins", "Only moves water molecules"], "ans": 1, "exp": "Active transport requires ATP to move molecules AGAINST the concentration gradient \u2014 from low to high concentration."}, {"q": "What happens to an animal cell in a hypotonic solution?", "opts": ["It shrinks", "It stays normal", "It swells and may burst (cell lysis)", "It undergoes plasmolysis"], "ans": 2, "exp": "In a hypotonic solution (lower solute outside), water enters by osmosis. Animal cells lack a cell wall so the pressure builds until the cell bursts \u2014 cell lysis."}, {"q": "Plasmolysis occurs when a plant cell is in a:", "opts": ["Hypotonic solution", "Isotonic solution", "Hypertonic solution", "Distilled water"], "ans": 2, "exp": "In a hypertonic solution, water leaves the plant cell by osmosis. The cell membrane shrinks away from the cell wall \u2014 this is plasmolysis."}, {"q": "Which process involves the cell membrane folding INWARD to engulf large molecules?", "opts": ["Exocytosis", "Active transport", "Endocytosis", "Facilitated diffusion"], "ans": 2, "exp": "Endocytosis: the cell membrane folds inward around external material and pinches off to form a vesicle inside the cell."}, {"q": "As a cell grows larger, its SA:V ratio:", "opts": ["Increases", "Stays the same", "Decreases", "Doubles"], "ans": 2, "exp": "As a cell grows, volume increases faster than surface area \u2014 the SA:V ratio decreases. This reduces the efficiency of material exchange."}, {"q": "Which channel proteins specifically facilitate water movement?", "opts": ["Carrier proteins", "Receptor proteins", "Aquaporins", "Ion channels"], "ans": 2, "exp": "Aquaporins are specific channel proteins that regulate water movement across the cell membrane."}];
+let fcIdx=0,fcKnown=new Set(),answered=new Array(mcqs.length).fill(null),correct=0;
+function setMode(m){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));event.target.classList.add('on');document.getElementById('flashMode').classList.toggle('hidden',m!=='flash');document.getElementById('mcqMode').classList.toggle('hidden',m!=='mcq');if(m==='mcq')buildMCQ();}
+function showCard(){const c=cards[fcIdx];document.getElementById('fcQ').textContent=c.q;document.getElementById('fcA').textContent=c.a;document.getElementById('fcHint').textContent=c.hint?'Hint: '+c.hint:'';document.getElementById('fcLabel').textContent='Card '+(fcIdx+1)+' of '+cards.length;document.getElementById('fcProg').style.width=(((fcIdx+1)/cards.length)*100)+'%';document.getElementById('fcCount').textContent=fcKnown.size+' known';document.getElementById('fc').classList.remove('flipped');}
+function flipCard(){document.getElementById('fc').classList.toggle('flipped');}
+function nextCard(){if(fcIdx<cards.length-1){fcIdx++;showCard();}}
+function prevCard(){if(fcIdx>0){fcIdx--;showCard();}}
+function markCard(k){if(k)fcKnown.add(fcIdx);else fcKnown.delete(fcIdx);nextCard();}
+function buildMCQ(){const c=document.getElementById('mcqQuestions');if(c.children.length>0)return;mcqs.forEach(function(q,qi){const d=document.createElement('div');d.className='q-card';const optsHtml=q.opts.map(function(o,oi){return '<div class="opt" id="opt'+qi+'_'+oi+'" onclick="choose('+qi+','+oi+')"><span class="opt-letter">'+['A','B','C','D'][oi]+'</span><span>'+o+'</span></div>';}).join('');d.innerHTML='<div class="q-num">Question '+(qi+1)+' of '+mcqs.length+'</div><div class="q-text">'+q.q+'</div><div class="opts" id="opts'+qi+'">'+optsHtml+'</div><div class="q-feedback" id="fb'+qi+'"></div>';c.appendChild(d);});}
+function choose(qi,oi){if(answered[qi]!==null)return;document.querySelectorAll('#opts'+qi+' .opt').forEach(function(o){o.classList.remove('chosen');});document.getElementById('opt'+qi+'_'+oi).classList.add('chosen');answered[qi]=oi;}
+function submitQuiz(){correct=0;mcqs.forEach(function(q,qi){const sel=answered[qi];if(sel===null)return;const opts=document.querySelectorAll('#opts'+qi+' .opt');opts.forEach(function(o){o.classList.add('locked');});opts[q.ans].classList.add('correct');const fb=document.getElementById('fb'+qi);if(sel===q.ans){correct++;fb.className='q-feedback show ok';fb.textContent='Correct! '+q.exp;}else{opts[sel].classList.add('wrong');fb.className='q-feedback show bad';fb.textContent='Incorrect. '+q.exp;}});document.getElementById('scoreDisp').textContent=correct+' / '+mcqs.length;const res=document.getElementById('results');res.classList.add('show');document.getElementById('resScore').textContent=correct+' / '+mcqs.length;const pct=Math.round((correct/mcqs.length)*100);document.getElementById('resLabel').textContent=pct>=80?'Excellent work!':pct>=60?'Good effort - review the ones you missed.':'Keep studying - you will get there!';res.scrollIntoView({behavior:'smooth'});}
+function resetQuiz(){answered=new Array(mcqs.length).fill(null);correct=0;document.getElementById('mcqQuestions').innerHTML='';document.getElementById('results').classList.remove('show');document.getElementById('scoreDisp').textContent='0 / 0';buildMCQ();}
+showCard();
+</script>
+</body>
+</html>

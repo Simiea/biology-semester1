@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Chapter 1.3 Cell Division</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b0f1a;--surface:#111827;--surface2:#1a2235;--border:#1f2d45;--border2:#2d3f5c;--text:#e4eaf4;--muted:#6b7fa0;--muted2:#3a4d6a;--accent:#a78bfa;--correct:#34d399;--correct-bg:rgba(52,211,153,0.1);--correct-bd:rgba(52,211,153,0.35);--wrong:#f87171;--wrong-bg:rgba(248,113,113,0.1);--wrong-bd:rgba(248,113,113,0.35);}
+  *{margin:0;padding:0;box-sizing:border-box;}body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
+  .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .hdr-left{display:flex;align-items:center;gap:0.75rem;}.hdr-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);}
+  .hdr-title{font-weight:800;font-size:0.9rem;}.hdr-sub{font-size:0.75rem;color:var(--muted);margin-top:0.1rem;}
+  .score-box{font-family:'Fira Code',monospace;font-size:0.8rem;color:var(--muted);}.score-box span{color:var(--accent);}
+  .wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+  .tabs{display:flex;gap:0.4rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.3rem;width:fit-content;margin-bottom:2rem;}
+  .tab{padding:0.45em 1.1em;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .tab.on{background:var(--surface2);color:var(--text);border:1px solid var(--border2);}
+  .prog-bar{height:4px;background:var(--surface2);border-radius:2px;margin-bottom:1.5rem;overflow:hidden;}
+  .prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease;}
+  .prog-label{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--muted2);margin-bottom:0.5rem;}
+  .fc-wrap{perspective:1200px;margin-bottom:1.5rem;}
+  .fc{width:100%;min-height:220px;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+  .fc.flipped{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;background:var(--surface);}
+  .fc-back{transform:rotateY(180deg);background:var(--surface2);}
+  .fc-tag{font-family:'Fira Code',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;}
+  .fc-q{font-size:1.1rem;font-weight:700;line-height:1.45;}
+  .fc-a{font-size:0.93rem;color:var(--correct);line-height:1.6;}
+  .fc-hint{font-size:0.75rem;color:var(--muted2);margin-top:0.5rem;font-style:italic;}
+  .fc-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:2rem;}
+  .fc-btn{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0.6em 1.4em;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .fc-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .fc-count{font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--muted);}
+  .fc-knew{display:flex;gap:0.5rem;justify-content:center;margin-bottom:2.5rem;}
+  .btn-knew{padding:0.5em 1.4em;border-radius:8px;border:1px solid;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.15s;}
+  .btn-yes{background:var(--correct-bg);border-color:var(--correct-bd);color:var(--correct);}.btn-yes:hover{background:rgba(52,211,153,0.2);}
+  .btn-no{background:var(--wrong-bg);border-color:var(--wrong-bd);color:var(--wrong);}.btn-no:hover{background:rgba(248,113,113,0.2);}
+  .q-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:1.75rem;margin-bottom:1.25rem;}
+  .q-num{font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:0.6rem;}
+  .q-text{font-size:0.97rem;font-weight:600;line-height:1.55;margin-bottom:1.1rem;}
+  .opts{display:flex;flex-direction:column;gap:0.5rem;}
+  .opt{padding:0.75rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:0.88rem;color:var(--muted);transition:all 0.15s;display:flex;align-items:flex-start;gap:0.75rem;line-height:1.5;}
+  .opt:hover:not(.locked){border-color:var(--border2);color:var(--text);}
+  .opt.chosen{border-color:rgba(139,92,246,0.5);background:rgba(139,92,246,0.1);color:var(--text);}
+  .opt.correct{border-color:var(--correct-bd);background:var(--correct-bg);color:var(--correct);}
+  .opt.wrong{border-color:var(--wrong-bd);background:var(--wrong-bg);color:var(--wrong);}
+  .opt-letter{font-family:'Fira Code',monospace;font-size:0.75rem;font-weight:500;flex-shrink:0;margin-top:0.1rem;}
+  .q-feedback{margin-top:1rem;padding:0.75rem 1rem;border-radius:10px;font-size:0.85rem;line-height:1.55;display:none;border:1px solid;}
+  .q-feedback.show{display:block;}.q-feedback.ok{background:var(--correct-bg);border-color:var(--correct-bd);color:var(--correct);}.q-feedback.bad{background:var(--wrong-bg);border-color:var(--wrong-bd);color:var(--wrong);}
+  .submit-row{display:flex;justify-content:flex-end;margin-top:1rem;}
+  .btn-check{padding:0.55em 1.5em;border-radius:8px;border:none;background:var(--accent);color:#000;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+  .results{display:none;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:2rem;text-align:center;margin-top:2rem;}
+  .results.show{display:block;}.res-score{font-size:3rem;font-weight:800;color:var(--accent);line-height:1;}
+  .res-label{color:var(--muted);font-size:0.9rem;margin-top:0.4rem;margin-bottom:1.5rem;}
+  .btn-reset{padding:0.6em 1.8em;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+  .btn-reset:hover{border-color:var(--accent);color:var(--accent);}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-left"><div class="hdr-dot"></div><div><div class="hdr-title">Chapter 1.3 Quiz</div><div class="hdr-sub">Cell Division</div></div></div>
+  <div class="score-box">MCQ Score: <span id="scoreDisp">0 / 0</span></div>
+</header>
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab on" onclick="setMode('flash')">⚡ Flashcards</button>
+    <button class="tab" onclick="setMode('mcq')">📝 MCQ Quiz</button>
+  </div>
+  <div id="flashMode">
+    <div class="prog-label" id="fcLabel">Card 1 of 20</div>
+    <div class="prog-bar"><div class="prog-fill" id="fcProg" style="width:5%"></div></div>
+    <div class="fc-wrap"><div class="fc" id="fc" onclick="flipCard()">
+      <div class="fc-face fc-front"><div class="fc-tag">Question — tap to reveal</div><div class="fc-q" id="fcQ"></div></div>
+      <div class="fc-face fc-back"><div class="fc-tag">Answer</div><div class="fc-a" id="fcA"></div><div class="fc-hint" id="fcHint"></div></div>
+    </div></div>
+    <div class="fc-knew"><button class="btn-knew btn-no" onclick="markCard(false)">✗ Still learning</button><button class="btn-knew btn-yes" onclick="markCard(true)">✓ Got it</button></div>
+    <div class="fc-nav"><button class="fc-btn" onclick="prevCard()">← Prev</button><div class="fc-count" id="fcCount">0 known</div><button class="fc-btn" onclick="nextCard()">Next →</button></div>
+  </div>
+  <div id="mcqMode" class="hidden">
+    <div id="mcqQuestions"></div>
+    <div class="submit-row"><button class="btn-check" onclick="submitQuiz()">Submit Quiz</button></div>
+    <div class="results" id="results"><div class="res-score" id="resScore"></div><div class="res-label" id="resLabel"></div><button class="btn-reset" onclick="resetQuiz()">Try Again</button></div>
+  </div>
+</div>
+<script>
+const cards = [
+  {q:"What are the four reasons cell division is fundamental to life?",a:"1. Transmits DNA between generations. 2. Allows multicellular organisms to grow from a fertilised ovum. 3. Replaces dead or repairs damaged cells. 4. Allows asexual reproduction.",hint:""},
+  {q:"What must happen to DNA before a cell can divide?",a:"DNA replication must occur — the cell's DNA must be doubled so each daughter cell receives an identical copy.",hint:"Replication before division"},
+  {q:"What are the three essential events required for both binary fission and mitotic division?",a:"1. DNA replication (doubling of DNA). 2. The two DNA copies are moved to opposite ends of the cell. 3. The cytoplasm is divided to form two daughter cells.",hint:""},
+  {q:"What type of cells undergo binary fission?",a:"Prokaryotic cells (bacteria and archaea).",hint:""},
+  {q:"Describe the steps of binary fission.",a:"1. Circular chromosome attaches to cell membrane. 2. DNA replicates — two identical chromosomes. 3. Cell elongates, separating the chromosomes. 4. Chromosomes move to opposite ends. 5. Cross wall forms through the centre. 6. Cell divides into two daughter cells.",hint:""},
+  {q:"What type of cells undergo mitotic division?",a:"Eukaryotic cells.",hint:""},
+  {q:"What are the two processes of mitotic division?",a:"Mitosis (division of the nucleus) and cytokinesis (division of the cytoplasm).",hint:"Mitosis + Cytokinesis"},
+  {q:"What is chromatin?",a:"The decondensed (uncoiled) form of DNA in eukaryotic cells present during interphase — not visible under a light microscope.",hint:"Uncoiled DNA"},
+  {q:"Why must chromatin condense before mitosis?",a:"To protect the long DNA molecules, allow them to be moved around the cell, and make individual chromosomes visible under a light microscope.",hint:""},
+  {q:"What are sister chromatids?",a:"Two identical copies of a chromosome produced by DNA replication, joined together at the centromere.",hint:""},
+  {q:"What happens during PROPHASE?",a:"Chromosomes condense and become visible. Nuclear membrane breaks down. Centrioles duplicate and move to opposite poles. Spindle fibres start forming.",hint:"Condense + nuclear membrane breaks"},
+  {q:"What happens during METAPHASE?",a:"Chromosomes line up along the equator (metaphase plate) of the cell. Spindle fibres attach to the centromeres.",hint:"Chromosomes line up in middle"},
+  {q:"What happens during ANAPHASE?",a:"Sister chromatids are pulled apart at the centromere. Chromatids move to opposite poles, centromere first.",hint:"Apart to opposite poles"},
+  {q:"What happens during TELOPHASE?",a:"Nuclear membranes reform around each set of chromosomes. Chromosomes decondense back into chromatin. End of mitosis.",hint:"Nucleus reforms"},
+  {q:"What is cytokinesis and how does it occur in animal cells?",a:"Division of the cytoplasm. Microfilaments form a ring that constricts inward, forming a cleavage furrow, until the cell pinches into two daughter cells.",hint:"Cleavage furrow"},
+  {q:"What are the daughter cells produced by mitosis?",a:"Two genetically identical clones of the parent cell.",hint:""},
+  {q:"Why is mitosis highly regulated in multicellular organisms?",a:"Loss of regulation leads to uncontrolled cell division, forming a tumour or cancer.",hint:"Cancer"},
+  {q:"Name four factors that increase the risk of uncontrolled cell division.",a:"Ionising radiation, cigarette smoke, asbestos, some viruses.",hint:""},
+  {q:"Do prokaryotes use spindle fibres during binary fission?",a:"No — spindle fibres are only used in eukaryotic mitotic division.",hint:""},
+  {q:"Compare binary fission and mitotic division: type of cell, chromosome type, nuclear division, spindle fibres.",a:"Binary fission: prokaryotic, single circular chromosome, no nuclear division, no spindle fibres. Mitotic: eukaryotic, many linear chromosomes, yes nuclear division, yes spindle fibres.",hint:""},
+];
+const mcqs = [
+  {q:"Which of the following is NOT a reason for cell division?",opts:["Growth and development","Asexual reproduction","Synthesis of ATP","Replacement of dead cells"],ans:2,exp:"ATP synthesis occurs through respiration, not cell division. Cell division is for growth, repair, and reproduction."},
+  {q:"What must occur before cell division to ensure daughter cells receive identical DNA?",opts:["Protein synthesis","DNA replication","Cytokinesis","Condensation of chromatin"],ans:1,exp:"DNA replication must occur before division so the parent cell has two identical copies — one for each daughter cell."},
+  {q:"Binary fission occurs in which type of cell?",opts:["Eukaryotic cells","Prokaryotic cells","Animal cells only","Plant cells only"],ans:1,exp:"Binary fission is the division method used by prokaryotic cells (bacteria and archaea)."},
+  {q:"During which phase of mitosis do chromosomes line up at the equator (metaphase plate)?",opts:["Prophase","Anaphase","Metaphase","Telophase"],ans:2,exp:"During metaphase, spindle fibres align chromosomes along the cell's equator (metaphase plate)."},
+  {q:"During anaphase, what is pulled to opposite poles?",opts:["Whole chromosomes","Sister chromatids","Centromeres only","Spindle fibres"],ans:1,exp:"During anaphase, spindle fibres pull sister chromatids apart at the centromere, moving them to opposite poles of the cell."},
+  {q:"Cytokinesis in animal cells involves:",opts:["A cell plate forming across the middle","Microfilaments forming a cleavage furrow","The nuclear membrane dividing","Spindle fibres pushing cells apart"],ans:1,exp:"In animal cells, a ring of microfilaments constricts inward to form a cleavage furrow, eventually pinching the cell into two."},
+  {q:"Which statement correctly compares binary fission and mitotic division?",opts:["Both use spindle fibres","Binary fission involves nuclear division","Both produce two genetically identical daughter cells","Mitosis produces more daughter cells"],ans:2,exp:"Both binary fission and mitotic division produce two genetically identical (cloned) daughter cells — this is a key similarity."},
+  {q:"Uncontrolled cell division can result in:",opts:["DNA replication","A tumour or cancer","Binary fission","Meiosis"],ans:1,exp:"If a cell loses regulation over cell division it divides uncontrollably, forming a mass of cells known as a tumour or cancer."},
+  {q:"In which phase of mitosis does the nuclear membrane break down?",opts:["Metaphase","Telophase","Anaphase","Prophase"],ans:3,exp:"During prophase, the nuclear membrane breaks down into small vesicles (not visible under a light microscope)."},
+  {q:"What happens to chromosomes at the END of telophase?",opts:["They remain condensed","They line up at the equator","They decondense back into chromatin","They duplicate"],ans:2,exp:"At the end of telophase, chromosomes decondense back into chromatin inside new nuclear membranes — signalling the end of mitosis."},
+];
+let fcIdx=0,fcKnown=new Set(),fcFlipped=false,answered=new Array(mcqs.length).fill(null),correct=0;
+function setMode(m){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));event.target.classList.add('on');document.getElementById('flashMode').classList.toggle('hidden',m!=='flash');document.getElementById('mcqMode').classList.toggle('hidden',m!=='mcq');if(m==='mcq')buildMCQ();}
+function showCard(){const c=cards[fcIdx];document.getElementById('fcQ').textContent=c.q;document.getElementById('fcA').textContent=c.a;document.getElementById('fcHint').textContent=c.hint?`Hint: ${c.hint}`:'';document.getElementById('fcLabel').textContent=`Card ${fcIdx+1} of ${cards.length}`;document.getElementById('fcProg').style.width=`${((fcIdx+1)/cards.length)*100}%`;document.getElementById('fcCount').textContent=`${fcKnown.size} known`;document.getElementById('fc').classList.remove('flipped');fcFlipped=false;}
+function flipCard(){document.getElementById('fc').classList.toggle('flipped');fcFlipped=!fcFlipped;}
+function nextCard(){if(fcIdx<cards.length-1){fcIdx++;showCard();}}
+function prevCard(){if(fcIdx>0){fcIdx--;showCard();}}
+function markCard(k){if(k)fcKnown.add(fcIdx);else fcKnown.delete(fcIdx);nextCard();}
+function buildMCQ(){const c=document.getElementById('mcqQuestions');if(c.children.length>0)return;mcqs.forEach((q,qi)=>{const d=document.createElement('div');d.className='q-card';d.innerHTML=`<div class="q-num">Question ${qi+1} of ${mcqs.length}</div><div class="q-text">${q.q}</div><div class="opts" id="opts${qi}">${q.opts.map((o,oi)=>`<div class="opt" id="opt${qi}_${oi}" onclick="choose(${qi},${oi})"><span class="opt-letter">${['A','B','C','D'][oi]}</span><span>${o}</span></div>`).join('')}</div><div class="q-feedback" id="fb${qi}"></div>`;c.appendChild(d);});}
+function choose(qi,oi){if(answered[qi]!==null)return;document.querySelectorAll(`#opts${qi} .opt`).forEach(o=>o.classList.remove('chosen'));document.getElementById(`opt${qi}_${oi}`).classList.add('chosen');answered[qi]=oi;}
+function submitQuiz(){correct=0;mcqs.forEach((q,qi)=>{const sel=answered[qi];if(sel===null)return;const opts=document.querySelectorAll(`#opts${qi} .opt`);opts.forEach(o=>o.classList.add('locked'));opts[q.ans].classList.add('correct');const fb=document.getElementById(`fb${qi}`);if(sel===q.ans){correct++;fb.className='q-feedback show ok';fb.textContent='✓ Correct! '+q.exp;}else{opts[sel].classList.add('wrong');fb.className='q-feedback show bad';fb.textContent='✗ Incorrect. '+q.exp;}});document.getElementById('scoreDisp').textContent=`${correct} / ${mcqs.length}`;const res=document.getElementById('results');res.classList.add('show');document.getElementById('resScore').textContent=`${correct} / ${mcqs.length}`;const pct=Math.round((correct/mcqs.length)*100);document.getElementById('resLabel').textContent=pct>=80?'🎉 Excellent work!':pct>=60?'👍 Good effort — review the ones you missed.':'📖 Keep studying — you\'ll get there!';res.scrollIntoView({behavior:'smooth'});}
+function resetQuiz(){answered=new Array(mcqs.length).fill(null);correct=0;document.getElementById('mcqQuestions').innerHTML='';document.getElementById('results').classList.remove('show');document.getElementById('scoreDisp').textContent='0 / 0';buildMCQ();}
+showCard();
+</script>
+</body>
+</html>
