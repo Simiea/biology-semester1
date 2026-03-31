@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Chapter 1.1 Living Things Consist of Cells</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0b0f1a; --surface:#111827; --surface2:#1a2235; --border:#1f2d45; --border2:#2d3f5c;
+    --text:#e4eaf4; --muted:#6b7fa0; --muted2:#3a4d6a;
+    --accent:#22d3ee; --accent-bg:rgba(34,211,238,0.08); --accent-bd:rgba(34,211,238,0.25);
+    --correct:#34d399; --correct-bg:rgba(52,211,153,0.1); --correct-bd:rgba(52,211,153,0.35);
+    --wrong:#f87171; --wrong-bg:rgba(248,113,113,0.1); --wrong-bd:rgba(248,113,113,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
+  a{text-decoration:none;}
+
+  /* HEADER */
+  .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .hdr-left{display:flex;align-items:center;gap:0.75rem;}
+  .hdr-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);}
+  .hdr-title{font-weight:800;font-size:0.9rem;letter-spacing:-0.01em;}
+  .hdr-sub{font-size:0.75rem;color:var(--muted);margin-top:0.1rem;}
+  .score-box{font-family:'Fira Code',monospace;font-size:0.8rem;color:var(--muted);display:flex;gap:1rem;}
+  .score-box span{color:var(--accent);}
+
+  /* MAIN */
+  .wrap{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+  /* MODE TABS */
+  .tabs{display:flex;gap:0.4rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.3rem;width:fit-content;margin-bottom:2rem;}
+  .tab{padding:0.45em 1.1em;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .tab.on{background:var(--surface2);color:var(--text);border:1px solid var(--border2);}
+
+  /* PROGRESS */
+  .prog-bar{height:4px;background:var(--surface2);border-radius:2px;margin-bottom:1.5rem;overflow:hidden;}
+  .prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease;}
+  .prog-label{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--muted2);margin-bottom:0.5rem;}
+
+  /* FLASHCARD */
+  .fc-wrap{perspective:1200px;margin-bottom:1.5rem;}
+  .fc{width:100%;min-height:220px;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+  .fc.flipped{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;background:var(--surface);}
+  .fc-back{transform:rotateY(180deg);background:var(--surface2);}
+  .fc-tag{font-family:'Fira Code',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;}
+  .fc-q{font-size:1.1rem;font-weight:700;line-height:1.45;letter-spacing:-0.01em;}
+  .fc-a{font-size:0.95rem;color:var(--correct);line-height:1.6;}
+  .fc-hint{font-size:0.75rem;color:var(--muted2);margin-top:0.5rem;font-style:italic;}
+  .fc-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:2rem;}
+  .fc-btn{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0.6em 1.4em;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .fc-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .fc-count{font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--muted);}
+  .fc-knew{display:flex;gap:0.5rem;justify-content:center;margin-bottom:2.5rem;}
+  .btn-knew{padding:0.5em 1.4em;border-radius:8px;border:1px solid;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.15s;}
+  .btn-yes{background:var(--correct-bg);border-color:var(--correct-bd);color:var(--correct);}
+  .btn-yes:hover{background:rgba(52,211,153,0.2);}
+  .btn-no{background:var(--wrong-bg);border-color:var(--wrong-bd);color:var(--wrong);}
+  .btn-no:hover{background:rgba(248,113,113,0.2);}
+
+  /* MCQ */
+  .q-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:1.75rem;margin-bottom:1.25rem;}
+  .q-num{font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:0.6rem;}
+  .q-text{font-size:0.97rem;font-weight:600;line-height:1.55;margin-bottom:1.1rem;letter-spacing:-0.01em;}
+  .opts{display:flex;flex-direction:column;gap:0.5rem;}
+  .opt{padding:0.75rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:0.88rem;color:var(--muted);transition:all 0.15s;display:flex;align-items:flex-start;gap:0.75rem;line-height:1.5;}
+  .opt:hover:not(.locked){border-color:var(--border2);color:var(--text);}
+  .opt.chosen{border-color:rgba(139,92,246,0.5);background:rgba(139,92,246,0.1);color:var(--text);}
+  .opt.correct{border-color:var(--correct-bd);background:var(--correct-bg);color:var(--correct);}
+  .opt.wrong{border-color:var(--wrong-bd);background:var(--wrong-bg);color:var(--wrong);}
+  .opt-letter{font-family:'Fira Code',monospace;font-size:0.75rem;font-weight:500;flex-shrink:0;margin-top:0.1rem;}
+  .q-feedback{margin-top:1rem;padding:0.75rem 1rem;border-radius:10px;font-size:0.85rem;line-height:1.55;display:none;border:1px solid;}
+  .q-feedback.show{display:block;}
+  .q-feedback.ok{background:var(--correct-bg);border-color:var(--correct-bd);color:var(--correct);}
+  .q-feedback.bad{background:var(--wrong-bg);border-color:var(--wrong-bd);color:var(--wrong);}
+  .submit-row{display:flex;justify-content:flex-end;margin-top:1rem;}
+  .btn-check{padding:0.55em 1.5em;border-radius:8px;border:none;background:var(--accent);color:#000;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity 0.15s;}
+  .btn-check:hover{opacity:0.85;}
+
+  /* RESULTS */
+  .results{display:none;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:2rem;text-align:center;margin-top:2rem;}
+  .results.show{display:block;}
+  .res-score{font-size:3rem;font-weight:800;letter-spacing:-0.03em;color:var(--accent);line-height:1;}
+  .res-label{color:var(--muted);font-size:0.9rem;margin-top:0.4rem;margin-bottom:1.5rem;}
+  .btn-reset{padding:0.6em 1.8em;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-weight:600;font-size:0.85rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+  .btn-reset:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* SECTION DIVIDER */
+  .sec-div{margin:2rem 0 1rem;font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted2);}
+
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+  <a href="index.html" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;text-decoration:none;display:flex;align-items:center;gap:0.5rem;background:#111827;border:1px solid #2d3f5c;border-radius:100px;padding:0.55em 1.2em;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;color:#6b7fa0;transition:all 0.18s;" onmouseover="this.style.borderColor='#34d399';this.style.color='#34d399';" onmouseout="this.style.borderColor='#2d3f5c';this.style.color='#6b7fa0';">← Home</a>
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-dot"></div>
+    <div>
+      <div class="hdr-title">Chapter 1.1 Quiz</div>
+      <div class="hdr-sub">Living Things Consist of Cells</div>
+    </div>
+  </div>
+  <div class="score-box">MCQ Score: <span id="scoreDisp">0 / 0</span></div>
+</header>
+
+<div class="wrap">
+
+  <!-- MODE TABS -->
+  <div class="tabs">
+    <button class="tab on" onclick="setMode('flash')">⚡ Flashcards</button>
+    <button class="tab" onclick="setMode('mcq')">📝 MCQ Quiz</button>
+  </div>
+
+  <!-- ══ FLASHCARD MODE ══ -->
+  <div id="flashMode">
+    <div class="prog-label" id="fcLabel">Card 1 of 20</div>
+    <div class="prog-bar"><div class="prog-fill" id="fcProg" style="width:5%"></div></div>
+
+    <div class="fc-wrap">
+      <div class="fc" id="fc" onclick="flipCard()">
+        <div class="fc-face fc-front">
+          <div class="fc-tag">Question — tap to reveal</div>
+          <div class="fc-q" id="fcQ"></div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag">Answer</div>
+          <div class="fc-a" id="fcA"></div>
+          <div class="fc-hint" id="fcHint"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-knew">
+      <button class="btn-knew btn-no" onclick="markCard(false)">✗ Still learning</button>
+      <button class="btn-knew btn-yes" onclick="markCard(true)">✓ Got it</button>
+    </div>
+
+    <div class="fc-nav">
+      <button class="fc-btn" onclick="prevCard()">← Prev</button>
+      <div class="fc-count" id="fcCount">0 known · 0 learning</div>
+      <button class="fc-btn" onclick="nextCard()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══ MCQ MODE ══ -->
+  <div id="mcqMode" class="hidden">
+    <div id="mcqQuestions"></div>
+    <div class="submit-row"><button class="btn-check" onclick="submitQuiz()">Submit Quiz</button></div>
+    <div class="results" id="results">
+      <div class="res-score" id="resScore"></div>
+      <div class="res-label" id="resLabel"></div>
+      <button class="btn-reset" onclick="resetQuiz()">Try Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── FLASHCARD DATA ───
+const cards = [
+  { q: "Who named cells 'cells' and why?", a: "Robert Hooke (1665) — cork cells viewed under his microscope reminded him of the rooms (cells) in monasteries.", hint: "Think: monastery rooms" },
+  { q: "Who proposed the original cell theory?", a: "Theodore Schwann, in the 19th century.", hint: "" },
+  { q: "State the three principles of the original cell theory.", a: "1. All organisms are made of cells. 2. Cells are the basic units of life. 3. Cells come from pre-existing cells that have multiplied.", hint: "" },
+  { q: "State the three modern additions to the cell theory.", a: "1. DNA is passed between cells during cell division. 2. Cells of organisms within a similar species are mostly the same structurally and chemically. 3. Energy flow occurs within cells.", hint: "" },
+  { q: "What is the smallest independent unit of life?", a: "The cell. It is the smallest unit capable of independently carrying out all life processes.", hint: "" },
+  { q: "Why are organelles considered non-living?", a: "Because organelles cannot carry out life's fundamental processes independently.", hint: "" },
+  { q: "Name the 10 life processes all living things carry out.", a: "Maintaining stable internal environment, controlled exchange of materials, response to stimuli, obtaining energy and chemical elements, transport of materials, removal of waste, cell division, growth and development, independent movement, reproduction.", hint: "" },
+  { q: "What is the difference between a unicellular and multicellular organism?", a: "Unicellular = one cell (e.g. bacteria, amoeba). Multicellular = more than one cell (e.g. animals, plants). All multicellular organisms are eukaryotes.", hint: "" },
+  { q: "Give 4 examples of unicellular organisms and their kingdom.", a: "E. coli (Bacteria, prokaryotic), Euglena (Protista, eukaryotic), Paramecium (Protista, eukaryotic), Baker's yeast (Fungi, eukaryotic).", hint: "" },
+  { q: "How many cells are estimated to be in the adult human body?", a: "Approximately 35 trillion cells.", hint: "" },
+  { q: "What does DNA stand for and why is it essential?", a: "DNA = deoxyribonucleic acid. It enables cells to synthesise proteins for cellular function and to divide to produce new cells.", hint: "" },
+  { q: "What are the 4 DNA bases and their pairing rules?", a: "Adenine (A) pairs with Thymine (T). Cytosine (C) pairs with Guanine (G). A only pairs with T; C only pairs with G.", hint: "A-T, C-G" },
+  { q: "What are chromosomes and why are they important?", a: "Chromosomes are DNA molecules wrapped around histone proteins. They condense DNA to fit inside cells and protect the genetic code from mutations.", hint: "" },
+  { q: "Approximately how much DNA do human cells contain?", a: "Approximately 2 metres of DNA per cell.", hint: "" },
+  { q: "What is the structure of the cell membrane?", a: "A thin (0.01 μm) phospholipid bilayer with proteins embedded in it. It separates the intracellular from the extracellular environment.", hint: "" },
+  { q: "What is the function of the cell membrane?", a: "It defines the cell, separates intracellular from extracellular environments, and controls the entry and exit of materials.", hint: "" },
+  { q: "What are the two major types of microscopes?", a: "Light microscope and electron microscope.", hint: "" },
+  { q: "Compare maximum magnification of light vs electron microscopes.", a: "Light: ~×2,000. Electron: ~×2,000,000.", hint: "" },
+  { q: "What is the formula for actual size using a microscope?", a: "Actual size = Image size ÷ Magnification. (IAM triangle: I over A×M)", hint: "" },
+  { q: "Convert: 0.01 mm to micrometres (μm).", a: "0.01 mm × 1000 = 10 μm", hint: "1 mm = 1000 μm" },
+];
+
+// ─── MCQ DATA ───
+const mcqs = [
+  { q: "Which of the following is NOT part of the original cell theory?", opts: ["All organisms are made of cells", "DNA is passed between cells during cell division", "Cells are the basic units of life", "Cells come from pre-existing cells"], ans: 1, exp: "'DNA is passed between cells during cell division' is a modern addition, not part of the original theory." },
+  { q: "Robert Hooke named cells 'cells' because:", opts: ["They reminded him of small boxes", "Cork cells reminded him of rooms in a monastery", "They were circular like bells", "He discovered them in bell-shaped organisms"], ans: 1, exp: "Hooke viewed cork under his microscope and named the structures 'cells' because they reminded him of the rooms (cells) in monasteries." },
+  { q: "Which life process does 'a turtle swimming' best represent?", opts: ["Response to stimuli", "Transport of materials", "Independent movement", "Growth and development"], ans: 2, exp: "A turtle swimming is an example of independent movement — a key life process." },
+  { q: "Organelles are considered non-living because:", opts: ["They are too small to see", "They cannot carry out life's processes independently", "They do not contain DNA", "They are only found in prokaryotes"], ans: 1, exp: "Organelles cannot independently perform all of life's fundamental processes — this is why they are non-living." },
+  { q: "Which pairing of DNA bases is correct?", opts: ["Adenine pairs with Guanine", "Cytosine pairs with Thymine", "Adenine pairs with Thymine", "Guanine pairs with Adenine"], ans: 2, exp: "A pairs with T (Adenine-Thymine) and C pairs with G (Cytosine-Guanine)." },
+  { q: "What is the maximum magnification of a standard light microscope?", opts: ["×400", "×2,000", "×2,000,000", "×500,000"], ans: 1, exp: "Light microscopes generally achieve ×400 but the most powerful is approximately ×2,000." },
+  { q: "An image of a cell is 45 mm and magnification is ×3000. What is the actual size?", opts: ["135 mm", "15 μm", "0.015 mm = 15 μm", "45 μm"], ans: 2, exp: "A = I ÷ M = 45 ÷ 3000 = 0.015 mm = 15 μm (multiply by 1000 to convert mm to μm)." },
+  { q: "Baker's yeast (Saccharomyces cerevisiae) belongs to which kingdom?", opts: ["Bacteria", "Protista", "Fungi", "Plantae"], ans: 2, exp: "Baker's yeast is a unicellular eukaryote belonging to the Fungi kingdom." },
+  { q: "Which statement about chromosomes is correct?", opts: ["Chromosomes are made of RNA wrapped around lipids", "Chromosomes are DNA wrapped around histone proteins", "Chromosomes are only found in prokaryotes", "Each human cell contains one chromosome"], ans: 1, exp: "Chromosomes consist of a DNA molecule wrapped around histone proteins — allowing 2 metres of DNA to fit inside a microscopic cell." },
+  { q: "Which of the following can only view non-living specimens?", opts: ["Light microscope", "Electron microscope", "Both", "Neither"], ans: 1, exp: "Electron microscopes require dead specimens because the beam of electrons and preparation process kills them. Light microscopes can view living specimens." },
+];
+
+// ─── STATE ───
+let fcIdx = 0, fcKnown = new Set(), fcFlipped = false;
+let answered = new Array(mcqs.length).fill(null);
+let correct = 0, total = 0;
+
+// ─── MODE ───
+function setMode(m) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  event.target.classList.add('on');
+  document.getElementById('flashMode').classList.toggle('hidden', m !== 'flash');
+  document.getElementById('mcqMode').classList.toggle('hidden', m !== 'mcq');
+  if (m === 'mcq') buildMCQ();
+}
+
+// ─── FLASHCARDS ───
+function showCard() {
+  const c = cards[fcIdx];
+  document.getElementById('fcQ').textContent = c.q;
+  document.getElementById('fcA').textContent = c.a;
+  document.getElementById('fcHint').textContent = c.hint ? `Hint: ${c.hint}` : '';
+  document.getElementById('fcLabel').textContent = `Card ${fcIdx + 1} of ${cards.length}`;
+  document.getElementById('fcProg').style.width = `${((fcIdx + 1) / cards.length) * 100}%`;
+  document.getElementById('fcCount').textContent = `${fcKnown.size} known · ${fcIdx - fcKnown.size < 0 ? 0 : fcIdx - [...fcKnown].filter(i=>i<fcIdx).length} learning`;
+  const fc = document.getElementById('fc');
+  fc.classList.remove('flipped');
+  fcFlipped = false;
+}
+
+function flipCard() {
+  document.getElementById('fc').classList.toggle('flipped');
+  fcFlipped = !fcFlipped;
+}
+
+function nextCard() { if (fcIdx < cards.length - 1) { fcIdx++; showCard(); } }
+function prevCard() { if (fcIdx > 0) { fcIdx--; showCard(); } }
+function markCard(knew) { if (knew) fcKnown.add(fcIdx); else fcKnown.delete(fcIdx); nextCard(); }
+
+// ─── MCQ ───
+function buildMCQ() {
+  const container = document.getElementById('mcqQuestions');
+  if (container.children.length > 0) return;
+  mcqs.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'q-card';
+    div.innerHTML = `
+      <div class="q-num">Question ${qi + 1} of ${mcqs.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts" id="opts${qi}">
+        ${q.opts.map((o,oi) => `
+          <div class="opt" id="opt${qi}_${oi}" onclick="choose(${qi},${oi})">
+            <span class="opt-letter">${['A','B','C','D'][oi]}</span>
+            <span>${o}</span>
+          </div>`).join('')}
+      </div>
+      <div class="q-feedback" id="fb${qi}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+function choose(qi, oi) {
+  if (answered[qi] !== null) return;
+  document.querySelectorAll(`#opts${qi} .opt`).forEach(o => o.classList.remove('chosen'));
+  document.getElementById(`opt${qi}_${oi}`).classList.add('chosen');
+  answered[qi] = oi;
+}
+
+function submitQuiz() {
+  correct = 0;
+  mcqs.forEach((q, qi) => {
+    const sel = answered[qi];
+    if (sel === null) return;
+    total++;
+    const opts = document.querySelectorAll(`#opts${qi} .opt`);
+    opts.forEach(o => o.classList.add('locked'));
+    opts[q.ans].classList.add('correct');
+    const fb = document.getElementById(`fb${qi}`);
+    if (sel === q.ans) {
+      correct++;
+      fb.className = 'q-feedback show ok';
+      fb.textContent = '✓ Correct! ' + q.exp;
+    } else {
+      opts[sel].classList.add('wrong');
+      fb.className = 'q-feedback show bad';
+      fb.textContent = '✗ Incorrect. ' + q.exp;
+    }
+  });
+  document.getElementById('scoreDisp').textContent = `${correct} / ${mcqs.length}`;
+  const res = document.getElementById('results');
+  res.classList.add('show');
+  document.getElementById('resScore').textContent = `${correct} / ${mcqs.length}`;
+  const pct = Math.round((correct / mcqs.length) * 100);
+  document.getElementById('resLabel').textContent = pct >= 80 ? '🎉 Excellent work!' : pct >= 60 ? '👍 Good effort — review the ones you missed.' : '📖 Keep studying — you\'ll get there!';
+  res.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answered = new Array(mcqs.length).fill(null);
+  correct = 0; total = 0;
+  document.getElementById('mcqQuestions').innerHTML = '';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('scoreDisp').textContent = '0 / 0';
+  buildMCQ();
+}
+
+showCard();
+</script>
+</body>
+</html>
