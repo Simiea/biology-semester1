@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Topic 1 — Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050b0a;
+  --surface: #0c1614;
+  --surface2: #111e1b;
+  --surface3: #162320;
+  --border: #1c3028;
+  --border2: #274538;
+  --text: #d8f0e6;
+  --muted: #4e7a62;
+  --muted2: #2a4a3a;
+  --accent: #34d399;
+  --accent2: #10b981;
+  --glow: rgba(52,211,153,0.18);
+
+  --c11: #22d3ee; --c12: #34d399; --c13: #a78bfa;
+  --c14: #fb923c; --c15: #f472b6; --c16: #4ade80;
+  --c17: #facc15; --cct: #38bdf8;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── ANIMATED BG ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%, rgba(52,211,153,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 70%, rgba(34,211,238,0.03) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+.hdr {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(5,11,10,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hdr-l { display:flex; align-items:center; gap:0.75rem; }
+
+.logo-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent), 0 0 28px rgba(52,211,153,0.4);
+  animation: throb 2.5s ease-in-out infinite;
+}
+
+@keyframes throb {
+  0%,100% { box-shadow: 0 0 14px var(--accent), 0 0 28px rgba(52,211,153,0.4); }
+  50%      { box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(52,211,153,0.6); }
+}
+
+.hdr-title { font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; letter-spacing:-0.01em; }
+.hdr-sub   { font-size:0.72rem; color:var(--muted); margin-top:0.1rem; }
+
+.hdr-r { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
+
+.counter-pill {
+  font-family:'Fira Code',monospace;
+  font-size:0.75rem; color:var(--muted);
+  background:var(--surface2); border:1px solid var(--border2);
+  border-radius:100px; padding:0.3em 0.9em;
+}
+.counter-pill .n { color:var(--accent); font-weight:500; }
+
+/* ── PROGRESS ── */
+.prog-wrap { background:var(--surface); border-bottom:1px solid var(--border); padding:0 1.5rem; }
+.prog-track { height:3px; background:var(--border); overflow:hidden; }
+.prog-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--accent2), var(--c11));
+  width:0%;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── FILTER BAR ── */
+.filter-wrap {
+  max-width: 860px; margin: 0 auto;
+  padding: 1.25rem 1.5rem 0;
+  position: relative; z-index: 1;
+}
+
+.filter-label {
+  font-family:'Fira Code',monospace; font-size:0.65rem;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--muted2); margin-bottom:0.6rem;
+}
+
+.filter-row {
+  display:flex; gap:0.45rem; flex-wrap:wrap;
+}
+
+.filt {
+  padding:0.4em 1em;
+  border-radius:100px;
+  border:1px solid var(--border2);
+  background:transparent;
+  color:var(--muted);
+  font-family:'Fira Code',monospace; font-size:0.68rem;
+  cursor:pointer; transition:all 0.18s;
+  letter-spacing:0.04em;
+}
+
+.filt:hover { border-color:var(--accent); color:var(--accent); }
+.filt.on {
+  background: rgba(52,211,153,0.12);
+  border-color:var(--accent);
+  color:var(--accent);
+  font-weight:500;
+}
+
+/* ── MAIN DECK AREA ── */
+.deck-wrap {
+  max-width:860px; margin:0 auto;
+  padding:1.5rem 1.5rem 5rem;
+  position:relative; z-index:1;
+}
+
+/* ── CHAPTER LABEL ── */
+.chapter-label {
+  display:flex; align-items:center; gap:0.75rem;
+  margin-bottom:1.25rem;
+  opacity:0; transform:translateY(8px);
+  animation: slideUp 0.4s ease forwards;
+}
+
+.ch-icon { font-size:1.4rem; }
+.ch-badge {
+  font-family:'Fira Code',monospace; font-size:0.65rem;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:0.25em 0.85em; border-radius:100px;
+  border:1px solid; background:transparent;
+}
+.ch-name { font-size:0.88rem; font-weight:700; letter-spacing:-0.01em; }
+.ch-progress {
+  margin-left:auto;
+  font-family:'Fira Code',monospace; font-size:0.72rem;
+  color:var(--muted);
+}
+
+/* ── CARD ── */
+.card-scene {
+  width:100%;
+  margin-bottom:1.25rem;
+  cursor:pointer;
+  user-select:none;
+  perspective: 1000px;
+}
+
+.card-3d {
+  border-radius:20px;
+  min-height:280px;
+  position: relative;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-face {
+  border-radius:20px;
+  display:flex; flex-direction:column;
+  padding:2rem 2.5rem;
+  border:1px solid var(--border2);
+  min-height:280px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  inset: 0;
+}
+
+.card-front { background: var(--surface); z-index: 2; }
+.card-back  { background: var(--surface2); transform: rotateY(180deg); justify-content:space-between; }
+
+.card-3d.flipped { transform: rotateY(180deg); }
+
+
+.card-front::before {
+  content:'';
+  position:absolute; inset:0;
+  border-radius:20px;
+  background: linear-gradient(135deg, rgba(52,211,153,0.03) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+.cf-top {
+  display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem;
+}
+
+.cf-tag {
+  font-family:'Fira Code',monospace; font-size:0.62rem;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--accent); opacity:0.7;
+}
+
+.cf-body {
+  flex:1; display:flex; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+.cf-question {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(1rem,2.5vw,1.35rem);
+  font-weight:700;
+  line-height:1.45;
+  letter-spacing:-0.01em;
+  color:var(--text);
+  max-width:600px;
+}
+
+.cf-bottom {
+  display:flex; align-items:center; justify-content:center;
+  gap:0.5rem; margin-top:1.5rem;
+  font-size:0.78rem; color:var(--muted);
+  font-family:'Fira Code',monospace;
+}
+
+.tap-hint { opacity:0.6; animation:fadeHint 3s ease-in-out infinite; }
+@keyframes fadeHint { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+
+/* BACK */
+.card-back::before {
+  content:'';
+  position:absolute; inset:0;
+  border-radius:20px;
+  background: linear-gradient(135deg, rgba(52,211,153,0.06) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+.cb-tag {
+  font-family:'Fira Code',monospace; font-size:0.62rem;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:1rem;
+  display:flex; align-items:center; gap:0.5rem;
+}
+
+.cb-answer {
+  flex:1;
+  font-size:0.93rem;
+  line-height:1.85;
+  color:var(--text);
+  white-space:pre-line;
+}
+
+.cb-answer strong { color:var(--accent); }
+
+/* ── SELF-MARK BUTTONS ── */
+.selfmark {
+  display:flex; gap:0.75rem; justify-content:center;
+  margin-top:1.25rem;
+}
+
+.sm-btn {
+  flex:1; max-width:200px;
+  padding:0.65em 0;
+  border-radius:12px; border:1px solid;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.85rem; font-weight:700;
+  cursor:pointer; transition:all 0.18s;
+  display:flex; align-items:center; justify-content:center; gap:0.5rem;
+}
+
+.sm-btn.got {
+  border-color:rgba(52,211,153,0.35);
+  background:rgba(52,211,153,0.1);
+  color:#34d399;
+}
+.sm-btn.got:hover { background:rgba(52,211,153,0.2); border-color:#34d399; }
+.sm-btn.nope {
+  border-color:rgba(248,113,113,0.35);
+  background:rgba(248,113,113,0.1);
+  color:#f87171;
+}
+.sm-btn.nope:hover { background:rgba(248,113,113,0.2); border-color:#f87171; }
+
+/* ── NAV BUTTONS ── */
+.nav-row {
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  margin-bottom:1.5rem;
+}
+
+.nav-btn {
+  padding:0.6em 1.4em;
+  border-radius:10px;
+  border:1px solid var(--border2);
+  background:var(--surface);
+  color:var(--muted);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.83rem; font-weight:600;
+  cursor:pointer; transition:all 0.18s;
+  display:flex; align-items:center; gap:0.4rem;
+}
+.nav-btn:hover { border-color:var(--accent); color:var(--accent); }
+.nav-btn:disabled { opacity:0.3; cursor:default; pointer-events:none; }
+
+.nav-center {
+  display:flex; flex-direction:column; align-items:center; gap:0.3rem;
+}
+
+.nav-card-num {
+  font-family:'Syne',sans-serif; font-size:1.4rem;
+  font-weight:800; letter-spacing:-0.02em;
+  color:var(--text);
+}
+.nav-card-total {
+  font-family:'Fira Code',monospace; font-size:0.68rem;
+  color:var(--muted);
+}
+
+/* ── MINI PROGRESS DOTS ── */
+.dot-row {
+  display:flex; justify-content:center;
+  gap:5px; flex-wrap:wrap; margin-bottom:1.5rem;
+  max-width:100%;
+}
+
+.mini-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--border2);
+  transition:all 0.25s ease;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.mini-dot.current { background:var(--accent); box-shadow:0 0 8px var(--accent); transform:scale(1.4); }
+.mini-dot.known   { background:var(--accent2); opacity:0.7; }
+.mini-dot.unsure  { background:#f87171; opacity:0.7; }
+
+/* ── KNOWN COUNTER STRIP ── */
+.known-strip {
+  display:flex; align-items:center; gap:1rem;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:0.85rem 1.25rem;
+  margin-bottom:1.5rem;
+}
+
+.ks-item {
+  display:flex; align-items:center; gap:0.5rem;
+  font-family:'Fira Code',monospace; font-size:0.78rem;
+  color:var(--muted);
+}
+.ks-val { font-size:1.1rem; font-weight:700; font-family:'Syne',sans-serif; }
+.ks-green .ks-val { color:var(--accent); }
+.ks-red   .ks-val { color:#f87171; }
+.ks-grey  .ks-val { color:var(--muted); }
+
+.ks-bar { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.ks-bar-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--c11)); border-radius:3px; transition:width 0.4s ease; }
+
+/* ── SHUFFLE BUTTON ── */
+.btn-shuffle {
+  padding:0.5em 1.25em;
+  border-radius:10px; border:1px solid var(--border2);
+  background:var(--surface2); color:var(--muted);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.8rem; font-weight:600; cursor:pointer;
+  transition:all 0.18s;
+}
+.btn-shuffle:hover { border-color:var(--accent); color:var(--accent); }
+
+/* ── WIN STATE ── */
+.win-state {
+  display:none;
+  text-align:center;
+  background:var(--surface); border:1px solid rgba(52,211,153,0.35);
+  border-radius:20px; padding:3rem 2rem;
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.win-state.show { display:block; }
+.win-emoji { font-size:3.5rem; margin-bottom:1rem; }
+.win-title { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:var(--accent); letter-spacing:-0.02em; margin-bottom:0.5rem; }
+.win-sub { font-size:0.9rem; color:var(--muted); margin-bottom:2rem; }
+.win-stats { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
+.win-stat { background:var(--surface2); border:1px solid var(--border2); border-radius:12px; padding:1rem 1.5rem; text-align:center; min-width:100px; }
+.win-stat-val { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:var(--accent); }
+.win-stat-lbl { font-size:0.72rem; color:var(--muted); font-family:'Fira Code',monospace; margin-top:0.2rem; }
+.btn-restart { padding:0.7em 2em; border-radius:10px; border:none; background:var(--accent); color:#000; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.9rem; font-weight:800; cursor:pointer; }
+.btn-restart:hover { opacity:0.88; }
+
+@keyframes popIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+@keyframes slideUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* card enter animation */
+
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo-dot"></div>
+    <div>
+      <div class="hdr-title">Biology Topic 1 — Flashcards</div>
+      <div class="hdr-sub">Cells &amp; Microorganisms · 7 Chapters</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="counter-pill"><span class="n" id="hdrCurrent">1</span> / <span id="hdrTotal">54</span></div>
+    <div class="counter-pill">Known: <span class="n" id="hdrKnown">0</span></div>
+    <button class="btn-shuffle" id="btnShuffle">&#8635; Shuffle</button>
+  </div>
+</header>
+<div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="progFill"></div></div></div>
+
+<!-- FILTER -->
+<div class="filter-wrap">
+  <div class="filter-label">Filter by chapter</div>
+  <div class="filter-row" id="filterRow"></div>
+</div>
+
+<!-- DECK -->
+<div class="deck-wrap" id="deckWrap">
+
+  <div id="chapterLabel" class="chapter-label"></div>
+
+  <!-- KNOWN STRIP -->
+  <div class="known-strip" id="knownStrip">
+    <div class="ks-item ks-green"><span class="ks-val" id="ksKnown">0</span>&nbsp;known</div>
+    <div class="ks-bar"><div class="ks-bar-fill" id="ksBarFill" style="width:0%"></div></div>
+    <div class="ks-item ks-red"><span class="ks-val" id="ksUnsure">0</span>&nbsp;still learning</div>
+    <div class="ks-item ks-grey"><span class="ks-val" id="ksUnpractised">54</span>&nbsp;unpractised</div>
+  </div>
+
+  <!-- DOT ROW -->
+  <div class="dot-row" id="dotRow"></div>
+
+  <!-- CARD -->
+  <div class="card-scene" id="cardScene">
+    <div class="card-3d" id="card3d">
+
+      <!-- FRONT -->
+      <div class="card-face card-front">
+        <div class="cf-top">
+          <div class="cf-tag" id="cfTag">Question</div>
+        </div>
+        <div class="cf-body">
+          <div class="cf-question" id="cfQuestion"></div>
+        </div>
+        <div class="cf-bottom">
+          <span class="tap-hint">tap to reveal answer</span>
+        </div>
+      </div>
+
+      <!-- BACK -->
+      <div class="card-face card-back">
+        <div class="cb-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" stroke="#34d399" stroke-width="1.2"/>
+            <path d="M4 6l1.5 1.5L8 4" stroke="#34d399" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Answer
+        </div>
+        <div class="cb-answer" id="cbAnswer"></div>
+        <div class="selfmark">
+          <button class="sm-btn got" id="btnGot">&#10003; Got it</button>
+          <button class="sm-btn nope" id="btnNope">&#10007; Still learning</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-row">
+    <button class="nav-btn" id="btnPrev">&#8592; Prev</button>
+    <div class="nav-center">
+      <div class="nav-card-num" id="navNum">1</div>
+      <div class="nav-card-total" id="navTotal">of 54</div>
+    </div>
+    <button class="nav-btn" id="btnNext">Next &#8594;</button>
+  </div>
+
+  <!-- WIN STATE -->
+  <div class="win-state" id="winState">
+    <div class="win-emoji">🎉</div>
+    <div class="win-title">Deck Complete!</div>
+    <div class="win-sub" id="winSub"></div>
+    <div class="win-stats" id="winStats"></div>
+    <button class="btn-restart" id="btnRestart">Restart deck</button>
+  </div>
+
+</div>
+
+<script>
+const ALL_CARDS = [{"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "What are the three parts of the modern cell theory?", "a": "1. All living things are made of one or more cells.\n2. The cell is the basic unit of structure and function in all living things.\n3. All cells arise from pre-existing cells through cell division."}, {"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "What is the difference between matter and energy?", "a": "Matter has mass and takes up space (e.g. stone, air, eyeball).\nEnergy does NOT have mass or take up space (e.g. light, sound, motion)."}, {"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "Name the 7 characteristics of life (MRS GREN).", "a": "Movement\nRespiration\nSensitivity (response to stimuli)\nGrowth\nReproduction\nExcretion\nNutrition"}, {"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "What is the role of DNA in a cell?", "a": "DNA carries the genetic instructions that control the structure and function of the cell. It contains the code for making proteins, which carry out virtually all cellular processes."}, {"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "Magnification formula — a cell appears 25 mm under a microscope and is actually 0.05 mm. What is the magnification?", "a": "Magnification = Image size ÷ Actual size\n= 25 mm ÷ 0.05 mm\n= ×500\n\nIAM triangle: Image = Actual × Magnification"}, {"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "Compare light microscopes and electron microscopes.", "a": "Light microscope: visible light, max ~×2,000, resolution 200 nm, can view living specimens.\nElectron microscope: beam of electrons, max ~×2,000,000, resolution 0.5 nm, dead/fixed specimens only. EM reveals internal cell ultrastructure."}, {"ch": "1.1", "chname": "Living Things Consist of Cells", "icon": "🔬", "q": "What are the parts of matter that cannot be broken apart without changing identity?", "a": "Particles — which include atoms, ions, and molecules. Most materials are made up of atoms, ions, molecules, or a mixture of these three."}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "What is the key structural difference between prokaryotes and eukaryotes?", "a": "Prokaryotes: NO membrane-bound nucleus — DNA floats freely in a nucleoid region. Also smaller (1-10 μm), no membrane-bound organelles.\nEukaryotes: TRUE membrane-bound nucleus. Larger (10-100 μm), have membrane-bound organelles."}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "Name 5 organelles found in eukaryotic cells and their functions.", "a": "1. Nucleus — stores DNA, controls cell activity\n2. Mitochondria — aerobic respiration, produces ATP\n3. Ribosomes — protein synthesis\n4. Golgi apparatus — packages and ships proteins\n5. Endoplasmic reticulum — synthesis and transport of proteins/lipids\n(Chloroplasts in plant cells — photosynthesis)"}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "What organelles are found in plant cells but NOT animal cells?", "a": "1. Chloroplasts — photosynthesis, contain chlorophyll\n2. Cell wall (cellulose) — structural support\n3. Large central vacuole — stores water, maintains turgor pressure\n(Also have: starch granules, plasmodesmata)"}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "Explain the endosymbiotic theory.", "a": "Mitochondria and chloroplasts were once free-living prokaryotes engulfed by larger cells — forming a symbiotic relationship.\nEvidence: they have their own circular DNA (like prokaryotes), reproduce by binary fission, and have double membranes."}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "What are ribosomes and what do they do?", "a": "Ribosomes are small organelles found in ALL cells (prokaryotic and eukaryotic). They are the site of protein synthesis — they read mRNA and assemble amino acids into proteins. Can be free in cytoplasm or on rough ER."}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "Which structures have cell walls? What are the walls made of in each?", "a": "Plants: cellulose\nFungi: chitin\nBacteria: peptidoglycan\nAnimal cells do NOT have cell walls."}, {"ch": "1.2", "chname": "Two Major Cell Types", "icon": "🦠", "q": "Give examples of prokaryotes and eukaryotes.", "a": "Prokaryotes: bacteria (E. coli, Streptococcus) and archaea (methanogens, thermophiles)\nEukaryotes: plants, animals, fungi (mushrooms, yeast), protists (amoeba, algae)"}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What is binary fission and which organisms use it?", "a": "Binary fission is asexual reproduction in prokaryotes. The circular DNA replicates, the cell elongates, then divides into two identical daughter cells. E. coli divides every ~20 minutes under ideal conditions."}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What are the 4 phases of mitosis in order? Use the mnemonic.", "a": "PMAT:\nProphase — chromosomes condense, spindle forms, nuclear envelope breaks down\nMetaphase — chromosomes align at cell equator\nAnaphase — sister chromatids pulled to opposite poles\nTelophase — nuclear envelopes reform, chromosomes decondense"}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What happens in PROPHASE of mitosis?", "a": "Chromosomes condense and become visible under a microscope.\nThe nuclear envelope breaks down.\nSpindle fibres form from centrioles (in animal cells).\nChromosomes consist of two sister chromatids joined at the centromere."}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What happens in METAPHASE of mitosis?", "a": "Chromosomes align along the cell equator (metaphase plate).\nSpindle fibres attach to centromeres of each chromosome.\nThis is the best phase to count and examine chromosomes."}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What happens in ANAPHASE of mitosis?", "a": "Spindle fibres shorten, pulling sister chromatids apart.\nChromatids move to opposite poles of the cell.\nEach pole receives a complete, identical set of chromosomes."}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What is cytokinesis and how does it differ between plant and animal cells?", "a": "Cytokinesis = division of the cytoplasm after nuclear division.\nAnimal cells: a cleavage furrow pinches the cell in two.\nPlant cells: a cell plate forms in the middle and grows outward.\nResult: two genetically identical daughter cells."}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What happens during the S phase of interphase and why is it critical?", "a": "S phase (Synthesis phase): DNA replication occurs. Each chromosome is copied so it consists of two identical sister chromatids. This ensures each daughter cell receives a complete, identical copy of the genome during mitosis."}, {"ch": "1.3", "chname": "Cell Division", "icon": "✂️", "q": "What is cancer and how does it relate to cell division?", "a": "Cancer is uncontrolled cell division caused by mutations that disrupt normal cell cycle regulation. Cells divide without stopping, forming tumours. Benign tumours stay localised; malignant tumours spread (metastasise) to other tissues."}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "What is ATP and why is it important?", "a": "ATP (adenosine triphosphate) is the universal energy currency of ALL cells. Energy from respiration is stored in ATP's high-energy phosphate bonds. When hydrolysed to ADP + Pi, energy is released for: muscle contraction, protein synthesis, active transport, etc."}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "Write the overall equation for aerobic respiration.", "a": "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP\n\nGlucose + oxygen → carbon dioxide + water + energy\nYields ~36-38 ATP per glucose molecule\nOccurs in cytoplasm (glycolysis) and mitochondria (Krebs cycle + ETC)"}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "Write the overall equation for photosynthesis.", "a": "6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂\n\nCarbon dioxide + water + light → glucose + oxygen\nOccurs in chloroplasts\nLight-dependent reactions (thylakoids) + Calvin cycle (stroma)"}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "What is the difference between autotrophs and heterotrophs?", "a": "Autotrophs (producers): make their own food from inorganic sources. Plants use photosynthesis. Some bacteria use chemosynthesis.\nHeterotrophs (consumers): cannot make their own food — must consume other organisms. Includes all animals, fungi, and most bacteria."}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "Describe lactic acid fermentation — when does it occur, what are the products, and why is it important?", "a": "Occurs when oxygen is insufficient (e.g. intense exercise).\nPyruvate (from glycolysis) → lactic acid\nRegenerates NAD⁺ so glycolysis can continue producing 2 ATP.\nCauses the 'burn' in muscles. Lactic acid builds up, causing fatigue.\nAlso used in yoghurt and cheese production."}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "Describe alcoholic (ethanol) fermentation — organism, conditions, products, and uses.", "a": "Performed by yeast (and some plants) under anaerobic conditions.\nPyruvate → ethanol + CO₂\nYields 2 ATP (glycolysis only).\nUses: bread-making (CO₂ makes dough rise), beer/wine production (ethanol is product)."}, {"ch": "1.4", "chname": "Cell Requirements", "icon": "⚡", "q": "Compare aerobic vs anaerobic respiration.", "a": "Aerobic: requires O₂, products = CO₂ + H₂O, ~36-38 ATP — very efficient\nAnaerobic: no O₂, products = lactic acid OR ethanol + CO₂, only 2 ATP — much less efficient\nAnaerobic allows continued ATP production when O₂ is unavailable (e.g. sprinting, yeast in dough)"}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "Describe the fluid mosaic model of the cell membrane.", "a": "The membrane is a fluid phospholipid bilayer with proteins embedded throughout (like tiles in a mosaic). Both lipids and proteins can move laterally. Proposed by Singer and Nicolson (1972). Proteins include: channels, carriers, receptors, and structural proteins."}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "Describe the structure of a phospholipid and why this causes the bilayer arrangement.", "a": "Each phospholipid has:\n• A hydrophilic (water-loving) phosphate HEAD — faces outward toward water\n• Two hydrophobic (water-fearing) fatty acid TAILS — face inward away from water\nThis amphipathic nature causes spontaneous bilayer formation in aqueous environments."}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "Define diffusion and state the factors that affect its rate.", "a": "Diffusion: passive movement of molecules from HIGH to LOW concentration (down concentration gradient). No energy required.\nRate increases with: steeper concentration gradient, higher temperature, greater surface area, shorter distance, smaller molecular size."}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "What is osmosis?", "a": "Osmosis is the movement of WATER molecules across a semi-permeable membrane from a region of HIGH water potential (low solute) to LOW water potential (high solute). It is a special type of diffusion — passive, no ATP required."}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "What happens to a plant cell in hypotonic, isotonic, and hypertonic solutions?", "a": "Hypotonic (fewer solutes outside): water enters → cell swells → turgid (cell wall prevents lysis)\nIsotonic (equal solutes): no net movement → normal shape (flaccid to turgid balance)\nHypertonic (more solutes outside): water leaves → cell shrinks → plasmolysis (membrane pulls away from wall)"}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "What is active transport and how does it differ from diffusion?", "a": "Active transport: moves molecules AGAINST their concentration gradient (low → high). Requires ATP and specific carrier proteins (pumps). Example: sodium-potassium pump (Na⁺ out, K⁺ in).\nDiffusion: passive, moves DOWN gradient (high → low), no ATP needed."}, {"ch": "1.5", "chname": "The Cell Membrane", "icon": "🔵", "q": "Why do small cells have a higher SA:V ratio and why does this matter?", "a": "As cells grow: volume increases as r³ but surface area only as r². Large cells have proportionally LESS membrane relative to their volume — diffusion can't supply the interior fast enough.\nSolution: organisms have MANY SMALL cells, not a few large ones. SA:V ratio limits maximum cell size."}, {"ch": "1.6", "chname": "Microorganisms", "icon": "🧬", "q": "Name and describe the 5 types of microorganisms.", "a": "1. Bacteria — prokaryotes, single-celled, e.g. E. coli\n2. Archaea — prokaryotes, extremophiles, e.g. methanogens\n3. Fungi — eukaryotes, cell wall of chitin, e.g. yeast, Penicillium\n4. Protists — eukaryotes, diverse (protozoa + algae), e.g. Plasmodium\n5. Viruses — non-cellular, DNA or RNA in protein coat, need host to reproduce"}, {"ch": "1.6", "chname": "Microorganisms", "icon": "🧬", "q": "Why are viruses considered non-living (or at the boundary of living)?", "a": "Viruses are NOT made of cells. They consist of genetic material (DNA or RNA) in a protein coat (capsid). They CANNOT: reproduce independently, carry out metabolism, maintain homeostasis, or grow. They can only reproduce by hijacking a host cell's machinery."}, {"ch": "1.6", "chname": "Microorganisms", "icon": "🧬", "q": "What is the human gut microbiome and what does it do?", "a": "The gut microbiome is the community of trillions of microorganisms (mainly bacteria) in the digestive tract. Functions: help digest complex carbohydrates, produce vitamins (e.g. vitamin K, B12), train the immune system, compete against pathogens, influence mood (gut-brain axis)."}, {"ch": "1.6", "chname": "Microorganisms", "icon": "🧬", "q": "How is genetic engineering used to produce human insulin?", "a": "1. Human insulin gene cut out using restriction enzymes\n2. Gene inserted into bacterial plasmid using DNA ligase\n3. Recombinant plasmid inserted into bacteria (E. coli)\n4. Bacteria transcribe and translate the gene, producing human insulin\n5. Insulin harvested and purified\nAdvantages: safer than pig insulin, large quantities, cheaper."}, {"ch": "1.6", "chname": "Microorganisms", "icon": "🧬", "q": "Which microorganism is used in bread-making and beer/wine production? What process do they perform?", "a": "Yeast (Saccharomyces cerevisiae) — a fungus.\nAlcoholic fermentation (anaerobic):\nGlucose → ethanol + CO₂\nBread: CO₂ causes dough to rise.\nBeer/wine: ethanol is the desired product."}, {"ch": "1.6", "chname": "Microorganisms", "icon": "🧬", "q": "What are the key differences between bacteria and archaea?", "a": "Both are prokaryotes (no nucleus).\nBacteria: cell wall contains peptidoglycan, found in most environments, includes pathogens.\nArchaea: different cell wall chemistry (no peptidoglycan), often found in extreme environments (hydrothermal vents, salt lakes, hot springs) — called extremophiles."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "What is the difference between food spoilage and food poisoning?", "a": "Food spoilage: microorganisms break down food → changes in colour, texture, smell, taste. Makes food unpalatable. May not always cause illness.\nFood poisoning: consuming food with harmful pathogens (e.g. Salmonella, Staph. aureus) or their toxins causes illness — nausea, vomiting, diarrhoea."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "Why does refrigeration slow food spoilage?", "a": "Most spoilage microorganisms have optimal growth temperatures of 20-40°C. Refrigeration (2-4°C) slows their metabolic reactions and reproduction rate significantly. It does NOT kill bacteria — it only slows them. Food removed from the fridge can still spoil."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "What conditions do microorganisms need to grow? (and how do preservation methods fight these?)", "a": "Microorganisms need: warm temperature (20-40°C), moisture, neutral pH, and nutrients.\nPreservation fights these:\nRefrigeration — removes warmth\nDrying — removes moisture\nPickling — creates acidic pH\nSalting — causes osmotic water loss\nVacuum packaging — removes O₂"}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "How does salting preserve food?", "a": "High salt concentration creates a HYPERTONIC environment around microbial cells. Water leaves the cells by osmosis (plasmolysis), dehydrating and killing the microorganisms. The cells shrink and can no longer function."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "How does pickling preserve food?", "a": "Acetic acid (vinegar) creates a LOW pH environment. Most food spoilage bacteria cannot survive acidic conditions. Low pH denatures their enzymes and disrupts cell membrane function. Fermentation pickling also produces lactic acid (e.g. sauerkraut, kimchi)."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "What is pasteurisation and who developed it?", "a": "Developed by Louis Pasteur. Involves heating liquids (e.g. milk, juice) to a specific temperature for a set time to kill most pathogens without significantly altering taste or nutrition.\nHTST method: 72°C for 15 seconds.\nDoes NOT sterilise — some heat-resistant organisms survive. Refrigeration after opening still needed."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "How does vacuum packaging preserve food?", "a": "Removes oxygen from the package. Most spoilage bacteria are aerobic and cannot grow without O₂. Also prevents oxidation (rancidity in fats) and enzymatic browning.\nNote: does NOT prevent anaerobic bacteria (e.g. Clostridium botulinum) — refrigeration still needed."}, {"ch": "1.7", "chname": "Microorganisms and Food", "icon": "🍽️", "q": "List 6 food preservation methods and the scientific principle behind each.", "a": "1. Refrigeration — slows metabolic rate of microorganisms\n2. Freezing — halts microbial activity\n3. Pasteurisation — heat kills pathogens\n4. Salting — osmosis removes water from cells (plasmolysis)\n5. Pickling — acid (low pH) inhibits microbial growth\n6. Vacuum packaging — removes O₂ for aerobic bacteria\nBonus: Drying/dehydration — removes water needed for growth"}, {"ch": "CT", "chname": "Cross-Topic Integration", "icon": "🌐", "q": "How does energy flow through a biological system from sunlight to cellular work?", "a": "1. Sunlight captured by autotrophs via PHOTOSYNTHESIS → glucose (1.4)\n2. Glucose broken down in AEROBIC RESPIRATION → ATP (1.4)\n3. ATP powers all CELLULAR WORK (movement, synthesis, transport) (1.4, 1.5)\nHeterotrophs access this energy by eating autotrophs or other heterotrophs (1.4)"}, {"ch": "CT", "chname": "Cross-Topic Integration", "icon": "🌐", "q": "100 bacteria undergo binary fission every 20 minutes. How many are there after 2 hours?", "a": "2 hours = 120 minutes\nDoublings = 120 ÷ 20 = 6\nPopulation = 100 × 2⁶ = 100 × 64 = 6,400 bacteria\nThis demonstrates exponential growth by binary fission (1.2, 1.3)"}, {"ch": "CT", "chname": "Cross-Topic Integration", "icon": "🌐", "q": "Using TWO concepts, explain why cells must be small.", "a": "1. SA:V ratio (1.5): as cells grow larger, volume increases faster than surface area. Less membrane relative to volume = less exchange capacity.\n2. Diffusion limits (1.4, 1.5): diffusion is slow over long distances — if a cell is too large, nutrients and O₂ cannot reach the interior fast enough.\nBoth factors explain why large organisms are made of MANY SMALL cells."}, {"ch": "CT", "chname": "Cross-Topic Integration", "icon": "🌐", "q": "Connect chapters 1.3, 1.5, and 1.7: what happens when you leave bread out for 5 days?", "a": "Mould spores (fungi — 1.6) land on bread and germinate. Warm, moist, nutrient-rich conditions are ideal for growth. Mould cells divide by mitosis (1.3) and grow hyphae. They perform aerobic respiration (1.4) using glucose from starch. As the population grows, enzymes break down bread structure → food spoilage (1.7). Preserving bread (refrigerating, vacuum sealing) removes the conditions needed for growth."}];
+
+const CH_COLORS = {
+  '1.1':'#22d3ee','1.2':'#34d399','1.3':'#a78bfa',
+  '1.4':'#fb923c','1.5':'#f472b6','1.6':'#4ade80',
+  '1.7':'#facc15','CT':'#38bdf8'
+};
+const CH_META = {
+  '1.1':{icon:'🔬',name:'Living Things Consist of Cells'},
+  '1.2':{icon:'🦠',name:'Two Major Cell Types'},
+  '1.3':{icon:'✂️',name:'Cell Division'},
+  '1.4':{icon:'⚡',name:'Cell Requirements'},
+  '1.5':{icon:'🔵',name:'The Cell Membrane'},
+  '1.6':{icon:'🧬',name:'Microorganisms'},
+  '1.7':{icon:'🍽️',name:'Microorganisms and Food'},
+  'CT': {icon:'🌐',name:'Cross-Topic Integration'},
+};
+
+let deck = [...ALL_CARDS];
+let idx = 0;
+let known = {};
+let flipped = false;
+let activeFilter = null;
+
+function filterDeck(ch) {
+  activeFilter = ch;
+  deck = ch ? ALL_CARDS.filter(c => c.ch === ch) : [...ALL_CARDS];
+  known = {};
+  idx = 0;
+  buildDots();
+  showCard();
+  updateStrip();
+  updateProg();
+  document.querySelectorAll('.filt').forEach(b => b.classList.toggle('on', b.dataset.ch === (ch||'all')));
+}
+
+function shuffleDeck() {
+  for (let i = deck.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]] = [deck[j],deck[i]];
+  }
+  idx = 0; flipped = false;
+  buildDots(); showCard(); updateProg();
+}
+
+function buildFilters() {
+  const row = document.getElementById('filterRow');
+  row.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.className = 'filt on'; allBtn.textContent = 'All ('+ALL_CARDS.length+')';
+  allBtn.dataset.ch = 'all';
+  allBtn.onclick = () => filterDeck(null);
+  row.appendChild(allBtn);
+  Object.entries(CH_META).forEach(([ch, meta]) => {
+    const count = ALL_CARDS.filter(c => c.ch === ch).length;
+    const b = document.createElement('button');
+    b.className = 'filt'; b.dataset.ch = ch;
+    b.textContent = meta.icon + ' ' + ch + ' (' + count + ')';
+    b.style.setProperty('--filt-color', CH_COLORS[ch]||'var(--accent)');
+    b.onclick = () => filterDeck(ch);
+    row.appendChild(b);
+  });
+}
+
+function buildDots() {
+  const row = document.getElementById('dotRow');
+  row.innerHTML = '';
+  deck.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className = 'mini-dot' + (i===idx?' current':'') + (known[i]===true?' known':'') + (known[i]===false?' unsure':'');
+    d.onclick = (e) => { e.stopPropagation(); jumpTo(i); };
+    row.appendChild(d);
+  });
+}
+
+function updateDots() {
+  const dots = document.querySelectorAll('.mini-dot');
+  dots.forEach((d, i) => {
+    d.className = 'mini-dot' + (i===idx?' current':'') + (known[i]===true?' known':'') + (known[i]===false?' unsure':'');
+  });
+}
+
+function showCard() {
+  if (idx >= deck.length) { showWin(); return; }
+  const card = deck[idx];
+  const color = CH_COLORS[card.ch] || 'var(--accent)';
+
+  // Reset flip
+  flipped = false;
+  const c3d = document.getElementById('card3d');
+  c3d.classList.remove('flipped');
+
+  // Chapter label
+  const meta = CH_META[card.ch] || {icon:'📖', name:card.ch};
+  const chLabel = document.getElementById('chapterLabel');
+  chLabel.style.animation = 'none'; chLabel.offsetHeight; chLabel.style.animation = '';
+  chLabel.innerHTML =
+    '<div class="ch-icon">'+meta.icon+'</div>' +
+    '<div class="ch-badge" style="color:'+color+';border-color:'+color+'44;">Ch '+card.ch+'</div>' +
+    '<div class="ch-name" style="color:'+color+'">'+meta.name+'</div>' +
+    '<div class="ch-progress">'+(idx+1)+' / '+deck.length+'</div>';
+
+  // Front
+  document.getElementById('cfTag').textContent = 'Chapter '+card.ch+' · Question';
+  document.getElementById('cfQuestion').textContent = card.q;
+
+  // Back
+  document.getElementById('cbAnswer').textContent = card.a;
+
+  // Card colour accent
+  const front = document.querySelector('.card-front');
+  front.style.borderColor = color+'33';
+  document.querySelector('.card-back').style.borderColor = color+'44';
+
+  // Apply card entry animation
+  const scene = document.getElementById('cardScene');
+  void scene.offsetWidth;
+
+  // Nav numbers
+  document.getElementById('navNum').textContent = idx+1;
+  document.getElementById('navTotal').textContent = 'of '+deck.length;
+  document.getElementById('hdrCurrent').textContent = idx+1;
+  document.getElementById('hdrTotal').textContent = deck.length;
+
+  // Nav buttons
+  document.getElementById('btnPrev').disabled = idx===0;
+  document.getElementById('btnNext').textContent = idx===deck.length-1 ? 'Finish ✓' : 'Next →';
+
+  updateDots();
+  updateProg();
+}
+
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('card3d').classList.toggle('flipped', flipped);
+}
+
+function markKnown(e, yes) {
+  e.stopPropagation();
+  known[idx] = yes;
+  updateStrip();
+  updateDots();
+  setTimeout(() => nextCard(), 260);
+}
+
+function nextCard() {
+  if (idx < deck.length-1) { idx++; showCard(); }
+  else { showWin(); }
+}
+
+function prevCard() {
+  if (idx > 0) { idx--; showCard(); }
+}
+
+function jumpTo(i) {
+  idx = i; showCard();
+}
+
+function updateStrip() {
+  const k = Object.values(known).filter(v=>v===true).length;
+  const u = Object.values(known).filter(v=>v===false).length;
+  const t = deck.length;
+  document.getElementById('ksKnown').textContent = k;
+  document.getElementById('ksUnsure').textContent = u;
+  document.getElementById('ksUnpractised').textContent = t-k-u;
+  document.getElementById('ksBarFill').style.width = (k/t*100)+'%';
+  document.getElementById('hdrKnown').textContent = k;
+}
+
+function updateProg() {
+  const done = Object.keys(known).length;
+  document.getElementById('progFill').style.width = (done/deck.length*100)+'%';
+}
+
+function showWin() {
+  document.getElementById('cardScene').style.display='none';
+  document.getElementById('navRow') && (document.getElementById('navRow').style.display='none');
+  document.querySelectorAll('.nav-row').forEach(r=>r.style.display='none');
+  const k = Object.values(known).filter(v=>v===true).length;
+  const u = Object.values(known).filter(v=>v===false).length;
+  const t = deck.length;
+  const pct = Math.round(k/t*100);
+  document.getElementById('winSub').textContent = pct>=80?'Excellent! You know this chapter well.':pct>=60?'Good work \u2014 review the ones you missed.':'Keep practising \u2014 you\'ll get there!';
+  document.getElementById('winStats').innerHTML =
+    '<div class="win-stat"><div class="win-stat-val" style="color:#34d399">'+k+'</div><div class="win-stat-lbl">Got it</div></div>' +
+    '<div class="win-stat"><div class="win-stat-val" style="color:#f87171">'+u+'</div><div class="win-stat-lbl">Still learning</div></div>' +
+    '<div class="win-stat"><div class="win-stat-val" style="color:var(--accent)">'+pct+'%</div><div class="win-stat-lbl">Success rate</div></div>';
+  document.getElementById('winState').classList.add('show');
+  document.getElementById('progFill').style.width='100%';
+}
+
+function restartDeck() {
+  known = {}; idx = 0;
+  document.getElementById('winState').classList.remove('show');
+  document.getElementById('cardScene').style.display='';
+  document.querySelectorAll('.nav-row').forEach(r=>r.style.display='');
+  updateStrip(); buildDots(); showCard();
+}
+
+// keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); if(!flipped)flipCard();else nextCard(); }
+  if (e.key==='ArrowLeft') { e.preventDefault(); prevCard(); }
+  if (e.key==='1'&&flipped) markKnown({stopPropagation:()=>{}}, true);
+  if (e.key==='2'&&flipped) markKnown({stopPropagation:()=>{}}, false);
+});
+
+// init
+buildFilters();
+buildDots();
+showCard();
+updateStrip();
+
+document.getElementById('btnShuffle').addEventListener('click', shuffleDeck);
+document.getElementById('card3d').addEventListener('click', flipCard);
+document.getElementById('btnGot').addEventListener('click', (e) => { e.stopPropagation(); markKnown(e, true); });
+document.getElementById('btnNope').addEventListener('click', (e) => { e.stopPropagation(); markKnown(e, false); });
+document.getElementById('btnPrev').addEventListener('click', prevCard);
+document.getElementById('btnNext').addEventListener('click', nextCard);
+document.getElementById('btnRestart').addEventListener('click', restartDeck);
+</script>
+</body>
+</html>
