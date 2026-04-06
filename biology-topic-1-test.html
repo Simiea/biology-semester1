@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Topic 1 — Practice Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07100d;--surface:#0d1a14;--surface2:#132018;--border:#1a3022;--border2:#254535;
+  --text:#ddf0e6;--muted:#5a8a6a;--muted2:#2a4a38;
+  --accent:#34d399;--accent-bg:rgba(52,211,153,0.08);--accent-bd:rgba(52,211,153,0.28);
+  --green:#34d399;--green-bg:rgba(52,211,153,0.09);--green-bd:rgba(52,211,153,0.32);
+  --red:#f87171;--red-bg:rgba(248,113,113,0.09);--red-bd:rgba(248,113,113,0.32);
+  --yellow:#fbbf24;--yellow-bg:rgba(251,191,36,0.09);--yellow-bd:rgba(251,191,36,0.32);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.09);--purple-bd:rgba(167,139,250,0.32);
+  --teal:#22d3ee;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:1rem;flex-wrap:wrap;}
+.hdr-l{display:flex;align-items:center;gap:0.75rem;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+.hdr-title{font-weight:800;font-size:0.9rem;}
+.hdr-sub{font-size:0.72rem;color:var(--muted);margin-top:0.1rem;}
+.hdr-r{display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;}
+.score-pill{font-family:'Fira Code',monospace;font-size:0.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border2);border-radius:100px;padding:0.3em 0.9em;}
+.score-pill span{color:var(--accent);}
+.prog-wrap{background:var(--surface);border-bottom:1px solid var(--border);}
+.prog-track{height:3px;background:var(--border);}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#10b981);transition:width 0.4s ease;width:0%;}
+.wrap{max-width:800px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+
+.chapter-divider{
+  display:flex;align-items:center;gap:1rem;margin:3rem 0 1.25rem;
+  padding:1.25rem 1.5rem;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:14px;border-left:4px solid var(--accent);
+}
+.chap-icon{font-size:1.6rem;flex-shrink:0;}
+.chap-info{flex:1;min-width:0;}
+.chap-num{font-family:'Fira Code',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.15rem;}
+.chap-title{font-size:1rem;font-weight:800;letter-spacing:-0.01em;}
+.chap-count{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--muted);margin-left:auto;flex-shrink:0;}
+
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1rem;transition:border-color 0.2s;}
+.q-card.answered-ok{border-color:var(--green-bd);}
+.q-card.answered-bad{border-color:var(--red-bd);}
+.q-meta{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;}
+.q-num{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--muted2);letter-spacing:0.1em;}
+.q-type-badge{font-size:0.62rem;font-family:'Fira Code',monospace;padding:0.2em 0.65em;border-radius:100px;border:1px solid;}
+.q-type-badge.mcq{color:var(--purple);border-color:var(--purple-bd);background:var(--purple-bg);}
+.q-type-badge.short{color:var(--yellow);border-color:var(--yellow-bd);background:var(--yellow-bg);}
+.q-text{font-size:0.97rem;font-weight:600;line-height:1.55;margin-bottom:1.1rem;}
+.opts{display:flex;flex-direction:column;gap:0.45rem;}
+.opt{padding:0.7rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:0.87rem;color:var(--muted);transition:all 0.14s;display:flex;align-items:flex-start;gap:0.7rem;line-height:1.5;}
+.opt:hover:not(.locked){border-color:var(--border2);color:var(--text);}
+.opt.chosen{border-color:rgba(167,139,250,0.5);background:rgba(167,139,250,0.1);color:var(--text);}
+.opt.correct{border-color:var(--green-bd);background:var(--green-bg);color:var(--green);}
+.opt.wrong{border-color:var(--red-bd);background:var(--red-bg);color:var(--red);}
+.opt-letter{font-family:'Fira Code',monospace;font-size:0.72rem;font-weight:500;flex-shrink:0;margin-top:0.1rem;}
+.short-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:0.75rem 1rem;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;line-height:1.6;resize:vertical;min-height:80px;transition:border-color 0.15s;}
+.short-input:focus{outline:none;border-color:var(--accent);}
+.short-input::placeholder{color:var(--muted2);}
+.short-btns{display:flex;gap:0.5rem;margin-top:0.6rem;flex-wrap:wrap;}
+.btn-reveal{padding:0.45em 1.1em;border-radius:8px;border:1px solid var(--accent-bd);background:var(--accent-bg);color:var(--accent);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;}
+.btn-reveal:hover{background:rgba(52,211,153,0.16);}
+.btn-self-ok{padding:0.45em 1em;border-radius:8px;border:1px solid var(--green-bd);background:var(--green-bg);color:var(--green);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;display:none;}
+.btn-self-bad{padding:0.45em 1em;border-radius:8px;border:1px solid var(--red-bd);background:var(--red-bg);color:var(--red);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;display:none;}
+.feedback{margin-top:0.9rem;padding:0.8rem 1rem;border-radius:10px;font-size:0.84rem;line-height:1.6;display:none;border:1px solid;}
+.feedback.show{display:block;}
+.feedback.ok{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
+.feedback.bad{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+.feedback.reveal{background:var(--yellow-bg);border-color:var(--yellow-bd);color:var(--yellow);}
+
+.filter-bar{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem;}
+.filter-btn{padding:0.35em 0.9em;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Fira Code',monospace;font-size:0.67rem;cursor:pointer;transition:all 0.15s;}
+.filter-btn:hover,.filter-btn.on{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
+
+.submit-row{display:flex;justify-content:center;margin:2.5rem 0 1rem;}
+.btn-submit{padding:0.8em 2.5em;border-radius:12px;border:none;background:var(--accent);color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:800;cursor:pointer;transition:all 0.15s;}
+.btn-submit:hover{opacity:0.88;transform:translateY(-1px);}
+
+.results{display:none;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:2.5rem;text-align:center;margin-top:2rem;}
+.results.show{display:block;}
+.res-big{font-size:4rem;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-0.03em;}
+.res-sub{font-size:1rem;color:var(--muted);margin-top:0.5rem;margin-bottom:2rem;}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:2rem;}
+.res-cell{background:var(--surface2);border-radius:10px;padding:1rem;border:1px solid var(--border);}
+.res-cell-val{font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;}
+.res-cell-lbl{font-size:0.75rem;color:var(--muted);margin-top:0.2rem;font-family:'Fira Code',monospace;}
+.btn-retry{padding:0.65em 2em;border-radius:10px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;}
+.btn-retry:hover{border-color:var(--accent);color:var(--accent);}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="dot"></div>
+    <div>
+      <div class="hdr-title">Biology Topic 1 — Practice Test</div>
+      <div class="hdr-sub">Cells and Microorganisms &nbsp;·&nbsp; All 7 chapters &nbsp;·&nbsp; 53 questions</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="score-pill">MCQ: <span id="mcqDisp">0/45</span></div>
+    <div class="score-pill">Short: <span id="shortDisp">0/8</span></div>
+  </div>
+</header>
+<div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="progFill"></div></div></div>
+
+<div class="wrap">
+  <div class="filter-bar" id="filterBar"></div>
+  <div id="questionsWrap"></div>
+  <div class="submit-row"><button class="btn-submit" onclick="submitAll()">Mark test</button></div>
+  <div class="results" id="results">
+    <div class="res-big" id="resBig"></div>
+    <div class="res-sub" id="resSub"></div>
+    <div class="res-grid">
+      <div class="res-cell"><div class="res-cell-val" id="rMcq" style="color:var(--green)"></div><div class="res-cell-lbl">MCQ correct</div></div>
+      <div class="res-cell"><div class="res-cell-val" id="rShort" style="color:var(--yellow)"></div><div class="res-cell-lbl">Short answered</div></div>
+      <div class="res-cell"><div class="res-cell-val" id="rPct" style="color:var(--accent)"></div><div class="res-cell-lbl">MCQ score</div></div>
+    </div>
+    <button class="btn-retry" onclick="retryTest()">Reset &amp; retry</button>
+  </div>
+</div>
+
+<script>
+const questions=[{"section": "1.1 Living Things Consist of Cells", "type": "mcq", "q": "Which statement is part of the MODERN cell theory?", "opts": ["All cells are identical in structure", "All living things are made of one or more cells, cells are the basic unit of life, and all cells arise from pre-existing cells", "Cells can spontaneously generate from non-living material", "Only animals are made of cells"], "ans": 1, "exp": "The modern cell theory has three parts: (1) all living things are made of one or more cells, (2) the cell is the basic unit of structure and function in living things, and (3) all cells arise from pre-existing cells (cell division)."}, {"section": "1.1 Living Things Consist of Cells", "type": "mcq", "q": "What is the difference between matter and energy?", "opts": ["Matter has energy; energy has mass", "Matter has mass and takes up space; energy (e.g. light, sound) does not have mass or take up space", "Matter and energy are the same thing", "Energy takes up space but has no mass"], "ans": 1, "exp": "Matter has mass and takes up space (e.g. a stone, air, your eyeball). Energy does not have mass or take up space (e.g. light, sound, motion). This distinction is fundamental to understanding life processes."}, {"section": "1.1 Living Things Consist of Cells", "type": "mcq", "q": "Which of the following is NOT one of the seven characteristics of life?", "opts": ["Reproduction", "Response to stimuli", "Requires sunlight", "Growth and development"], "ans": 2, "exp": "The seven characteristics of life are: movement, respiration, sensitivity (response to stimuli), growth, reproduction, excretion, and nutrition (MRS GREN). 'Requires sunlight' is not a characteristic - many organisms live without sunlight (e.g. deep sea creatures, chemosynthetic bacteria)."}, {"section": "1.1 Living Things Consist of Cells", "type": "mcq", "q": "What is the role of DNA in a cell?", "opts": ["It provides energy for cellular processes", "It carries the genetic instructions that control the structure and function of the cell", "It forms the cell membrane", "It digests waste products"], "ans": 1, "exp": "DNA (deoxyribonucleic acid) carries the genetic instructions that control every aspect of a cell's structure and function. It contains the code for making proteins, which carry out virtually all cellular processes."}, {"section": "1.1 Living Things Consist of Cells", "type": "mcq", "q": "A cell is 0.05 mm in actual size. Under a microscope it appears 25 mm. What is the magnification?", "opts": ["x5", "x50", "x500", "x5000"], "ans": 2, "exp": "Magnification = image size / actual size = 25 mm / 0.05 mm = x500. Always use the same units for both measurements. This is the IAM triangle: Image = Actual x Magnification."}, {"section": "1.1 Living Things Consist of Cells", "type": "mcq", "q": "Which type of microscope provides the highest resolution and can view internal cell structures in detail?", "opts": ["Light microscope", "Electron microscope", "Magnifying glass", "Compound optical microscope"], "ans": 1, "exp": "Electron microscopes use a beam of electrons instead of light, giving a resolution of 0.5 nm and magnification up to x2,000,000. This allows internal cell ultrastructure to be seen. Light microscopes are limited to x400 (generally) and 200 nm resolution."}, {"section": "1.1 Living Things Consist of Cells", "type": "short", "q": "Describe the three parts of the modern cell theory and explain how it differs from the original cell theory.", "ans": "Modern cell theory: (1) All living things are made of one or more cells. (2) The cell is the basic unit of structure and function in all living organisms. (3) All cells arise from pre-existing cells through cell division. The original cell theory (Schleiden and Schwann) stated that all living things are made of cells and cells are the basic unit - but did not include that cells come from pre-existing cells. Virchow added this third point."}, {"section": "1.2 Two Major Cell Types", "type": "mcq", "q": "What is the key structural difference between prokaryotic and eukaryotic cells?", "opts": ["Prokaryotes are larger than eukaryotes", "Prokaryotes have no membrane-bound nucleus; eukaryotes have a true nucleus enclosed by a nuclear membrane", "Prokaryotes have mitochondria; eukaryotes do not", "Eukaryotes have no cell wall; prokaryotes always do"], "ans": 1, "exp": "The defining difference is the nucleus. Prokaryotes (bacteria, archaea) have no membrane-bound nucleus - their DNA floats freely as a nucleoid region. Eukaryotes (animals, plants, fungi, protists) have a true nucleus enclosed by a nuclear envelope."}, {"section": "1.2 Two Major Cell Types", "type": "mcq", "q": "Which organelle is responsible for producing ATP through cellular respiration?", "opts": ["Ribosome", "Nucleus", "Mitochondria", "Vacuole"], "ans": 2, "exp": "Mitochondria are the 'powerhouse of the cell' - they carry out aerobic cellular respiration to produce ATP (adenosine triphosphate), the cell's energy currency. They have a double membrane with inner folds called cristae that increase surface area."}, {"section": "1.2 Two Major Cell Types", "type": "mcq", "q": "Which organelle do plant cells have that animal cells do NOT?", "opts": ["Mitochondria", "Ribosomes", "Chloroplasts", "Cell membrane"], "ans": 2, "exp": "Chloroplasts are found in plant cells (and algae) but not animal cells. They contain chlorophyll and carry out photosynthesis, converting light energy into chemical energy (glucose). Animal cells cannot photosynthesise."}, {"section": "1.2 Two Major Cell Types", "type": "mcq", "q": "The endosymbiotic theory suggests that mitochondria and chloroplasts originated as:", "opts": ["Parts of the nucleus that broke off", "Free-living prokaryotes that were engulfed by larger cells and formed a symbiotic relationship", "Mutations in the cell membrane", "Vesicles produced by the Golgi apparatus"], "ans": 1, "exp": "Endosymbiotic theory proposes that mitochondria and chloroplasts were once free-living prokaryotes that were engulfed by larger cells. Evidence: they have their own circular DNA (like prokaryotes), reproduce by binary fission, and have double membranes."}, {"section": "1.2 Two Major Cell Types", "type": "mcq", "q": "What is the function of ribosomes?", "opts": ["Storing genetic material", "Protein synthesis - translating mRNA into proteins", "Producing ATP", "Controlling what enters and exits the cell"], "ans": 1, "exp": "Ribosomes are the site of protein synthesis. They read the mRNA sequence and assemble amino acids in the correct order to make proteins. Found in all cells - prokaryotic and eukaryotic - and can be free in the cytoplasm or attached to the rough ER."}, {"section": "1.2 Two Major Cell Types", "type": "mcq", "q": "Which structure is present in plant cells, fungi, and bacteria but NOT animal cells?", "opts": ["Plasma membrane", "Cell wall", "Mitochondria", "Nucleus"], "ans": 1, "exp": "Cell walls are found in plants (cellulose), fungi (chitin), and bacteria (peptidoglycan), but NOT in animal cells. The cell wall provides structural support and maintains cell shape, but is distinct from the cell membrane which is inside it."}, {"section": "1.2 Two Major Cell Types", "type": "short", "q": "Compare prokaryotic and eukaryotic cells. Include: nucleus, size, examples, organelles, and DNA structure.", "ans": "Prokaryotes: no membrane-bound nucleus (DNA in nucleoid region), smaller (1-10 micrometres), examples: bacteria and archaea, no membrane-bound organelles (but have ribosomes), circular DNA. Eukaryotes: true membrane-bound nucleus, larger (10-100 micrometres), examples: plants, animals, fungi, protists, have membrane-bound organelles (mitochondria, ER, Golgi, chloroplasts in plants), linear DNA packaged with histones."}, {"section": "1.3 Cell Division", "type": "mcq", "q": "What type of cell division do prokaryotes use to reproduce?", "opts": ["Mitosis", "Meiosis", "Binary fission", "Budding"], "ans": 2, "exp": "Prokaryotes reproduce by binary fission - a simple form of asexual reproduction where the circular DNA replicates, the cell elongates, and then divides into two identical daughter cells. This can occur very rapidly (E. coli divides every 20 minutes under ideal conditions)."}, {"section": "1.3 Cell Division", "type": "mcq", "q": "What is the correct order of the phases of mitosis?", "opts": ["Metaphase, Prophase, Anaphase, Telophase", "Prophase, Metaphase, Anaphase, Telophase", "Anaphase, Prophase, Telophase, Metaphase", "Telophase, Anaphase, Metaphase, Prophase"], "ans": 1, "exp": "The correct order is PMAT: Prophase (chromosomes condense, spindle forms), Metaphase (chromosomes align at equator), Anaphase (chromatids pulled to poles), Telophase (nuclear envelopes reform, chromosomes decondense). Followed by cytokinesis (cytoplasm divides)."}, {"section": "1.3 Cell Division", "type": "mcq", "q": "What happens during ANAPHASE of mitosis?", "opts": ["Chromosomes condense and become visible", "Chromosomes line up at the cell equator", "Sister chromatids are pulled apart to opposite poles by spindle fibres", "Nuclear envelopes reform around each set of chromosomes"], "ans": 2, "exp": "Anaphase: spindle fibres shorten and pull sister chromatids apart, moving them to opposite poles of the cell. Each pole receives a complete set of chromosomes. After anaphase, there are two sets of chromosomes at opposite ends of the cell."}, {"section": "1.3 Cell Division", "type": "mcq", "q": "What is cytokinesis?", "opts": ["The replication of DNA before cell division", "The division of the nucleus", "The division of the cytoplasm following nuclear division, producing two separate daughter cells", "The condensation of chromosomes in prophase"], "ans": 2, "exp": "Cytokinesis is the physical division of the cytoplasm that follows mitosis (nuclear division). In animal cells it occurs by a cleavage furrow; in plant cells a cell plate forms. The result is two separate daughter cells, each with a complete nucleus."}, {"section": "1.3 Cell Division", "type": "mcq", "q": "Cancer is fundamentally a disease of:", "opts": ["Excessive cell death", "Uncontrolled cell division where the cell cycle regulatory mechanisms break down", "DNA becoming too stable", "Cells becoming too large"], "ans": 1, "exp": "Cancer results from mutations that disrupt the normal cell cycle regulation. Cells divide uncontrollably, forming tumours. Key mutations can affect tumour suppressor genes (e.g. p53) or proto-oncogenes. Benign tumours stay localised; malignant tumours metastasise."}, {"section": "1.3 Cell Division", "type": "mcq", "q": "Before mitosis can occur, DNA must be:", "opts": ["Destroyed and rebuilt", "Replicated during the S phase of interphase, so each chromosome consists of two identical sister chromatids", "Moved to the cytoplasm", "Converted from RNA"], "ans": 1, "exp": "During the S phase (Synthesis phase) of interphase, DNA replication occurs. Each chromosome is copied so it consists of two identical sister chromatids joined at the centromere. This ensures each daughter cell receives a complete and identical set of genetic information."}, {"section": "1.3 Cell Division", "type": "short", "q": "Describe what happens at each phase of mitosis (Prophase, Metaphase, Anaphase, Telophase) and explain why the process produces genetically identical daughter cells.", "ans": "Prophase: chromosomes condense and become visible, nuclear envelope breaks down, spindle fibres form from centrioles. Metaphase: chromosomes align along the cell equator (metaphase plate), attached to spindle fibres at centromeres. Anaphase: spindle fibres shorten, pulling sister chromatids to opposite poles. Telophase: nuclear envelopes reform around each set of chromosomes, chromosomes decondense. Followed by cytokinesis. Daughter cells are genetically identical because DNA was replicated exactly before division, and mitosis distributes one complete copy to each daughter cell."}, {"section": "1.4 Cell Requirements", "type": "mcq", "q": "What is ATP and why is it important to cells?", "opts": ["A structural protein that forms cell walls", "The cell's energy currency - it stores and transfers energy for cellular processes", "A type of DNA found in mitochondria", "A hormone that regulates cell division"], "ans": 1, "exp": "ATP (adenosine triphosphate) is the universal energy currency of all cells. Energy released from respiration is stored in the high-energy phosphate bonds of ATP. When cells need energy, ATP is hydrolysed to ADP + Pi, releasing usable energy for processes like muscle contraction, protein synthesis, and active transport."}, {"section": "1.4 Cell Requirements", "type": "mcq", "q": "What is the overall equation for aerobic cellular respiration?", "opts": ["CO2 + H2O + light energy -> C6H12O6 + O2", "C6H12O6 + 6O2 -> 6CO2 + 6H2O + ATP energy", "C6H12O6 -> 2C3H6O3 + ATP", "6H2O + 6CO2 -> C6H12O6 + 6O2"], "ans": 1, "exp": "Aerobic respiration: C6H12O6 + 6O2 -> 6CO2 + 6H2O + ATP (energy). Glucose is completely oxidised using oxygen, releasing maximum ATP (approximately 36-38 ATP per glucose molecule). CO2 and water are waste products."}, {"section": "1.4 Cell Requirements", "type": "mcq", "q": "What is the difference between autotrophs and heterotrophs?", "opts": ["Autotrophs eat other organisms; heterotrophs make their own food", "Autotrophs produce their own food from inorganic sources (e.g. photosynthesis); heterotrophs must consume other organisms for energy", "Autotrophs use anaerobic respiration; heterotrophs use aerobic", "Autotrophs are animals; heterotrophs are plants"], "ans": 1, "exp": "Autotrophs (producers) make their own organic molecules from inorganic sources. Plants use light energy (photosynthesis). Heterotrophs (consumers) cannot make their own food and must obtain energy by consuming other organisms or organic matter."}, {"section": "1.4 Cell Requirements", "type": "mcq", "q": "The overall equation for photosynthesis is:", "opts": ["C6H12O6 + 6O2 -> 6CO2 + 6H2O", "6CO2 + 6H2O + light energy -> C6H12O6 + 6O2", "CO2 + H2O -> CH4 + O2", "6O2 + C6H12O6 -> 6CO2 + 6H2O + ATP"], "ans": 1, "exp": "Photosynthesis: 6CO2 + 6H2O + light energy -> C6H12O6 + 6O2. Carbon dioxide and water are converted to glucose and oxygen using light energy. The process occurs in chloroplasts and has two stages: light-dependent reactions (thylakoids) and the Calvin cycle (stroma)."}, {"section": "1.4 Cell Requirements", "type": "mcq", "q": "Lactic acid fermentation in humans occurs when:", "opts": ["Oxygen is abundant and ATP production is maximised", "Oxygen is limited - pyruvate is converted to lactate to regenerate NAD+ so glycolysis can continue", "Glucose is converted directly to CO2", "Cells are at rest"], "ans": 1, "exp": "Lactic acid fermentation is anaerobic - occurs when oxygen supply is insufficient (e.g. during intense exercise). Pyruvate (from glycolysis) is converted to lactic acid, regenerating NAD+ which allows glycolysis to continue producing a small amount of ATP. This causes muscle fatigue and the 'burn' during exercise."}, {"section": "1.4 Cell Requirements", "type": "mcq", "q": "Which process do yeast use to produce CO2 and ethanol?", "opts": ["Aerobic respiration", "Lactic acid fermentation", "Alcoholic fermentation", "Photosynthesis"], "ans": 2, "exp": "Yeast perform alcoholic (ethanol) fermentation under anaerobic conditions: pyruvate -> ethanol + CO2. This is exploited in brewing (alcohol production) and bread-making (CO2 causes dough to rise). Unlike lactic acid fermentation, the end product is ethanol, not lactate."}, {"section": "1.4 Cell Requirements", "type": "short", "q": "Compare aerobic respiration and anaerobic respiration. Include: oxygen requirement, products, ATP yield, and an example of where each occurs.", "ans": "Aerobic respiration: requires oxygen, produces CO2 and H2O, yields ~36-38 ATP per glucose, occurs in all eukaryotic cells (in cytoplasm and mitochondria). Anaerobic respiration: no oxygen required, produces lactic acid (in animals/bacteria) or ethanol + CO2 (in yeast/plants), yields only 2 ATP per glucose (glycolysis only). Examples: aerobic - muscle cells during moderate exercise; anaerobic - muscles during intense sprint, yeast in bread-making. Anaerobic is much less efficient but allows continued ATP production when oxygen is unavailable."}, {"section": "1.5 The Cell Membrane", "type": "mcq", "q": "The fluid mosaic model describes the cell membrane as:", "opts": ["A rigid solid layer surrounding the cell", "A phospholipid bilayer in which proteins are embedded and can move laterally, like a mosaic in a fluid", "A single layer of proteins", "A static structure that does not change"], "ans": 1, "exp": "The fluid mosaic model (Singer & Nicolson, 1972) describes the membrane as a fluid phospholipid bilayer with proteins embedded throughout (like tiles in a mosaic). Both lipids and proteins can move laterally. Proteins include channels, carriers, receptors, and structural proteins."}, {"section": "1.5 The Cell Membrane", "type": "mcq", "q": "How is a phospholipid structured, and why does this determine the bilayer arrangement?", "opts": ["It has two charged heads and one tail", "It has a hydrophilic (water-loving) phosphate head and two hydrophobic (water-fearing) fatty acid tails; tails face inward away from water, heads face outward", "It is entirely hydrophobic", "It has three tails and no head"], "ans": 1, "exp": "Phospholipids have a hydrophilic (polar) phosphate head that interacts with water, and two hydrophobic (non-polar) fatty acid tails that avoid water. In aqueous environments, phospholipids spontaneously arrange into a bilayer - heads facing the watery environments inside and outside the cell, tails pointing inward."}, {"section": "1.5 The Cell Membrane", "type": "mcq", "q": "Diffusion is best described as:", "opts": ["The movement of water across a semi-permeable membrane", "The movement of molecules from a region of high concentration to low concentration (down a concentration gradient), requiring no energy", "The movement of molecules against a concentration gradient using ATP", "The movement of large molecules by vesicles"], "ans": 1, "exp": "Diffusion is passive movement of molecules from high to low concentration (down their concentration gradient). No energy (ATP) is required. The rate is affected by concentration gradient steepness, temperature, surface area, and distance."}, {"section": "1.5 The Cell Membrane", "type": "mcq", "q": "A plant cell is placed in a very salty solution (hypertonic). What happens?", "opts": ["Water enters the cell by osmosis causing it to swell", "Water leaves the cell by osmosis; the cell membrane pulls away from the cell wall (plasmolysis)", "Salt enters the cell by diffusion", "Nothing changes as plant cells are rigid"], "ans": 1, "exp": "In a hypertonic solution (more solutes outside), water moves out of the cell by osmosis (water moves from high water potential inside to low water potential outside). The cell shrinks. In plant cells, the membrane pulls away from the rigid cell wall - this is called plasmolysis. The cell becomes flaccid."}, {"section": "1.5 The Cell Membrane", "type": "mcq", "q": "Active transport differs from diffusion in that it:", "opts": ["Moves molecules down a concentration gradient", "Requires ATP and moves molecules AGAINST their concentration gradient using carrier proteins", "Only works for water molecules", "Does not require any proteins"], "ans": 1, "exp": "Active transport uses ATP energy to move molecules AGAINST their concentration gradient (from low to high concentration). It requires specific carrier proteins (pumps). Example: the sodium-potassium pump moves Na+ out and K+ in against their gradients to maintain membrane potential in nerve cells."}, {"section": "1.5 The Cell Membrane", "type": "mcq", "q": "Why do small cells have a higher surface area to volume ratio than large cells, and why does this matter?", "opts": ["Smaller cells have less DNA", "Smaller cells have proportionally more membrane surface relative to their internal volume, allowing more efficient exchange of materials with the environment", "Larger cells are more efficient", "Surface area to volume ratio has no effect on cell function"], "ans": 1, "exp": "As cells grow larger, volume increases faster than surface area (volume = r^3, surface area = r^2). A small cell has a high SA:V ratio, meaning lots of membrane for exchange relative to the volume needing to be supplied. If a cell gets too large, diffusion cannot supply the interior fast enough - this limits cell size and is why large organisms have many small cells."}, {"section": "1.5 The Cell Membrane", "type": "short", "q": "Explain osmosis and distinguish between hypotonic, isotonic, and hypertonic solutions. Describe what happens to a red blood cell in each.", "ans": "Osmosis is the movement of water molecules across a semi-permeable membrane from a region of high water potential (low solute) to low water potential (high solute). Hypotonic solution (less solutes than cell): water enters the cell by osmosis. Red blood cell swells and may lyse (crenate). Isotonic solution (same solute concentration): no net movement of water. Red blood cell maintains normal shape. Hypertonic solution (more solutes than cell): water leaves the cell. Red blood cell shrinks (crenation)."}, {"section": "1.6 Microorganisms", "type": "mcq", "q": "Which of the following is NOT a microorganism?", "opts": ["Bacteria", "Archaea", "Fern", "Protozoa"], "ans": 2, "exp": "Ferns are multicellular plants - they are not microorganisms. The five types of microorganisms are: bacteria, archaea, fungi (including yeasts), protists (protozoa and algae), and viruses."}, {"section": "1.6 Microorganisms", "type": "mcq", "q": "Viruses are different from all other microorganisms because they:", "opts": ["Are larger than bacteria", "Are not made of cells and cannot reproduce independently - they require a host cell", "Can perform photosynthesis", "Have a nucleus"], "ans": 1, "exp": "Viruses are non-cellular - they are not made of cells. They consist of genetic material (DNA or RNA) enclosed in a protein coat (capsid). They can only reproduce by hijacking a host cell's machinery. Some scientists argue viruses are non-living because they cannot reproduce, metabolise, or maintain homeostasis independently."}, {"section": "1.6 Microorganisms", "type": "mcq", "q": "The human gut microbiome refers to:", "opts": ["Harmful bacteria that cause disease", "The community of trillions of microorganisms living in the digestive tract, which play roles in digestion, immunity, and health", "Only viruses in the gut", "A disease caused by intestinal bacteria"], "ans": 1, "exp": "The gut microbiome consists of trillions of microorganisms (mainly bacteria) living in the digestive tract. They help digest complex carbohydrates, produce vitamins (e.g. vitamin K), train the immune system, compete against pathogens, and influence mental health through the gut-brain axis."}, {"section": "1.6 Microorganisms", "type": "mcq", "q": "Genetic engineering of microorganisms is used to produce insulin because:", "opts": ["Bacteria naturally produce human insulin", "The human insulin gene can be inserted into bacteria, which then produce human insulin in large quantities cheaply and safely", "Insulin can only be extracted from microorganisms", "Bacteria are immune to insulin"], "ans": 1, "exp": "Recombinant DNA technology: the human insulin gene is cut out using restriction enzymes and inserted into bacterial plasmids using ligase. The bacteria then transcribe and translate the gene, producing human insulin. This is safer than pig insulin (fewer allergic reactions), cheaper, and can be produced in large quantities."}, {"section": "1.6 Microorganisms", "type": "mcq", "q": "Which microorganisms are used in the production of bread, beer, and wine?", "opts": ["Bacteria", "Archaea", "Fungi (yeast)", "Protozoa"], "ans": 2, "exp": "Yeast (fungi, specifically Saccharomyces cerevisiae) perform alcoholic fermentation: glucose -> ethanol + CO2. In bread-making, CO2 makes dough rise. In beer and wine production, ethanol is the desired product. Yeast are the key microorganism in fermented food and beverage production."}, {"section": "1.6 Microorganisms", "type": "short", "q": "Describe the five main types of microorganisms, giving one key feature and one example of each.", "ans": "1. Bacteria: prokaryotes (no nucleus), single-celled, example: Escherichia coli. 2. Archaea: prokaryotes, survive extreme environments (extremophiles), example: Methanobacterium (in volcanic vents). 3. Fungi: eukaryotes, can be single-celled (yeast) or multicellular (mould), cell walls made of chitin, example: Saccharomyces cerevisiae (baker's yeast). 4. Protists: eukaryotes, diverse group including protozoa and algae, example: Plasmodium (causes malaria). 5. Viruses: non-cellular, DNA or RNA in protein coat, require host cell to reproduce, example: influenza virus."}, {"section": "1.7 Microorganisms and Food", "type": "mcq", "q": "What is the difference between food spoilage and food poisoning?", "opts": ["They are the same thing", "Food spoilage is the deterioration of food quality by microorganisms (making it unpalatable); food poisoning is illness caused by consuming food containing harmful pathogens or their toxins", "Food spoilage always causes illness; food poisoning does not", "Food poisoning only comes from meat"], "ans": 1, "exp": "Food spoilage: microorganisms (bacteria, fungi) break down food, causing changes in colour, texture, smell, and taste. The food becomes unpalatable but may not always cause illness. Food poisoning: consuming food contaminated with pathogens (e.g. Salmonella, Staphylococcus aureus) or their toxins causes illness with symptoms like nausea, vomiting, and diarrhoea."}, {"section": "1.7 Microorganisms and Food", "type": "mcq", "q": "Why does refrigeration slow food spoilage?", "opts": ["Cold temperatures kill all bacteria", "Low temperatures slow the metabolic rate of microorganisms, reducing their reproduction rate and enzymatic activity", "Refrigerators remove oxygen", "Cold temperatures make food taste better"], "ans": 1, "exp": "Most microorganisms that cause food spoilage have optimal growth temperatures around 20-40\u00b0C. Refrigeration (2-4\u00b0C) slows their metabolic reactions and reproduction significantly, extending food shelf life. It does not kill bacteria - it only slows them. This is why food left at room temperature after refrigeration can still spoil."}, {"section": "1.7 Microorganisms and Food", "type": "mcq", "q": "How does salting and pickling preserve food?", "opts": ["Salt and acid kill bacteria by denaturing their DNA", "High salt concentrations cause water to leave microbial cells by osmosis (plasmolysis); acid (vinegar) creates a pH too low for most bacteria to survive", "Salt adds nutrients that prevent spoilage", "Pickling removes all oxygen"], "ans": 1, "exp": "Salting: high salt concentration creates a hypertonic environment. Water leaves microbial cells by osmosis, causing plasmolysis and cell death. Pickling: acetic acid (vinegar) creates a low pH environment hostile to most spoilage microorganisms. Both methods create conditions in which bacteria cannot grow."}, {"section": "1.7 Microorganisms and Food", "type": "mcq", "q": "Pasteurisation involves:", "opts": ["Removing all microorganisms by filtration", "Heating food to a specific temperature for a set time to kill most pathogens while preserving flavour, then rapidly cooling", "Freezing food to -18 degrees C", "Adding preservative chemicals to food"], "ans": 1, "exp": "Pasteurisation (developed by Louis Pasteur) heats liquids (e.g. milk, juice) to 72\u00b0C for 15 seconds (HTST method) to kill most pathogens without significantly altering taste or nutritional value. It does not sterilise - some heat-resistant organisms survive. Refrigeration after opening is still needed."}, {"section": "1.7 Microorganisms and Food", "type": "mcq", "q": "Which condition is MOST favourable for microbial growth and food spoilage?", "opts": ["Low temperature, dry, acidic", "Warm temperature (20-40 degrees C), high moisture, neutral pH, presence of nutrients", "Frozen, high salt concentration", "High temperature above 100 degrees C"], "ans": 1, "exp": "Microorganisms thrive in: warm temperatures (20-40\u00b0C - optimal for most pathogens), high moisture content, neutral to slightly acidic pH, and nutrient-rich environments. Food preservation methods work by eliminating one or more of these conditions."}, {"section": "1.7 Microorganisms and Food", "type": "mcq", "q": "Vacuum packaging preserves food mainly by:", "opts": ["Lowering the temperature inside the package", "Removing oxygen, which prevents growth of aerobic spoilage bacteria and prevents oxidation", "Adding preservative gases", "Increasing the salt concentration"], "ans": 1, "exp": "Vacuum packaging removes oxygen from the package. Most spoilage bacteria are aerobic and cannot grow without oxygen. It also prevents oxidation (which causes rancidity in fats) and reduces enzymatic browning. Note: it does not prevent anaerobic bacteria like Clostridium botulinum, which is why refrigeration is still important."}, {"section": "1.7 Microorganisms and Food", "type": "short", "q": "List and explain five food preservation methods, including the scientific principle behind each method.", "ans": "1. Refrigeration: low temperature slows microbial metabolic rate and reproduction. 2. Freezing: very low temperatures halt microbial activity; ice crystals can damage cells. 3. Heat treatment (pasteurisation/sterilisation): high temperatures denature proteins and enzymes, killing pathogens. 4. Salting: high salt creates hypertonic environment, water leaves microbial cells by osmosis causing plasmolysis. 5. Pickling: acidic conditions (low pH from vinegar/fermentation) create environment hostile to most bacteria. Additional methods: vacuum packaging (removes oxygen for aerobes), drying/dehydration (removes water needed for growth), adding preservatives (chemical agents that inhibit microbial growth)."}, {"section": "Cross-Topic Integration", "type": "mcq", "q": "A scientist observes that a population of bacteria doubles every 20 minutes. After 2 hours starting from 100 bacteria, how many are there?", "opts": ["1,200", "6,400", "12,800", "100,000"], "ans": 1, "exp": "2 hours = 120 minutes. Doublings = 120/20 = 6. Population = 100 x 2^6 = 100 x 64 = 6,400 bacteria. This exponential growth demonstrates binary fission - each bacterium divides into two identical daughter cells approximately every 20 minutes under ideal conditions."}, {"section": "Cross-Topic Integration", "type": "mcq", "q": "Which sequence correctly describes energy flow in most ecosystems?", "opts": ["ATP -> glucose -> sunlight -> organisms", "Sunlight -> photosynthesis (glucose) -> aerobic respiration -> ATP -> cellular work", "CO2 -> O2 -> ATP -> glucose", "Consumers -> producers -> sunlight"], "ans": 1, "exp": "Energy flows: sunlight is captured by autotrophs through photosynthesis to make glucose. Glucose is then broken down in aerobic respiration (in all organisms) to produce ATP. ATP powers all cellular work. Heterotrophs access this energy by consuming autotrophs (or other heterotrophs)."}, {"section": "Cross-Topic Integration", "type": "mcq", "q": "Why must cells be small? Which two concepts from different chapters both explain this?", "opts": ["Cell theory and DNA replication", "The SA:V ratio (1.5) and the limitations of diffusion (1.5) - larger cells cannot exchange materials fast enough across their membrane relative to their volume", "Binary fission and osmosis", "Mitosis speed and ATP availability"], "ans": 1, "exp": "Two reasons: (1) SA:V ratio - as cells enlarge, volume increases faster than surface area, reducing the ratio. Less membrane per unit volume means less exchange capacity. (2) Diffusion is slow over large distances - if a cell is too large, diffusion cannot supply the interior quickly enough. Both limit cell size and explain why large organisms have many small cells."}, {"section": "Cross-Topic Integration", "type": "mcq", "q": "E. coli bacteria in your gut can ferment complex carbohydrates you cannot digest. This process is best described as:", "opts": ["Photosynthesis by gut microorganisms", "Anaerobic fermentation by gut bacteria breaking down complex carbohydrates into simpler products, producing short-chain fatty acids and gases", "Aerobic respiration in the gut", "Mitosis of gut cells stimulated by bacteria"], "ans": 1, "exp": "The gut microbiome includes bacteria like Bacteroides and Firmicutes that ferment dietary fibre (complex carbohydrates) anaerobically. Products include short-chain fatty acids (SCFAs like butyrate) that feed the gut lining, as well as gases (H2, CO2, CH4). This links cell requirements (1.4), microorganisms (1.6), and anaerobic fermentation."}, {"section": "Cross-Topic Integration", "type": "short", "q": "A slice of bread is left uncovered at room temperature for 5 days. Using your knowledge from chapters 1.1, 1.4, 1.6, and 1.7, explain what happens and why.", "ans": "Mould spores (fungal microorganisms - 1.6) are present in the air and settle on the bread. Bread provides an ideal growth environment: warm temperature, moisture, and nutrients (glucose from starch). Mould cells (eukaryotic - 1.1, 1.2) germinate and grow by cell division (mitosis - 1.3). They perform aerobic respiration (1.4) - breaking down glucose and starch in the bread for ATP to fuel growth. As populations increase (binary fission in bacteria, hyphal growth in fungi), they produce enzymes that break down the bread structure, causing visible discolouration, texture changes and off-odours (food spoilage - 1.7). Preserving bread (refrigerating, vacuum sealing) removes the warm/moist/oxygenated conditions microorganisms need."}];
+const sections=["1.1 Living Things Consist of Cells", "1.2 Two Major Cell Types", "1.3 Cell Division", "1.4 Cell Requirements", "1.5 The Cell Membrane", "1.6 Microorganisms", "1.7 Microorganisms and Food", "Cross-Topic Integration"];
+const chapterMeta={
+  "1.1 Living Things Consist of Cells":  {icon:"🔬", num:"Chapter 1.1"},
+  "1.2 Two Major Cell Types":             {icon:"🦠", num:"Chapter 1.2"},
+  "1.3 Cell Division":                    {icon:"✂️",  num:"Chapter 1.3"},
+  "1.4 Cell Requirements":                {icon:"⚡",  num:"Chapter 1.4"},
+  "1.5 The Cell Membrane":                {icon:"🔵", num:"Chapter 1.5"},
+  "1.6 Microorganisms":                   {icon:"🧬", num:"Chapter 1.6"},
+  "1.7 Microorganisms and Food":          {icon:"🍽️", num:"Chapter 1.7"},
+  "Cross-Topic Integration":              {icon:"🌐", num:"Cross-Topic"}
+};
+
+let mcqAnswered={},shortRevealed={},shortSelfMark={};
+let mcqCorrect=0,submitted=false;
+
+function build(){
+  const bar=document.getElementById('filterBar');
+  bar.innerHTML='';
+  const allBtn=document.createElement('button');
+  allBtn.className='filter-btn on';allBtn.textContent='All chapters';
+  allBtn.onclick=()=>filterSec(null,allBtn);bar.appendChild(allBtn);
+  sections.forEach(s=>{
+    const b=document.createElement('button');b.className='filter-btn';
+    const meta=chapterMeta[s];
+    b.textContent=(meta?meta.num:s);b.title=s;
+    b.onclick=()=>filterSec(s,b);bar.appendChild(b);
+  });
+
+  const wrap=document.getElementById('questionsWrap');wrap.innerHTML='';
+  let secEl=null,curSec=null,qNum=0;
+
+  questions.forEach((q,qi)=>{
+    if(q.section!==curSec){
+      curSec=q.section;secEl=document.createElement('div');
+      secEl.className='sec-block';secEl.dataset.sec=q.section;
+      const meta=chapterMeta[q.section]||{icon:'📖',num:q.section};
+      const cnt=questions.filter(x=>x.section===q.section).length;
+      const div=document.createElement('div');div.className='chapter-divider';
+      div.innerHTML='<div class="chap-icon">'+meta.icon+'</div><div class="chap-info"><div class="chap-num">'+meta.num+'</div><div class="chap-title">'+q.section+'</div></div><div class="chap-count">'+cnt+' questions</div>';
+      secEl.appendChild(div);wrap.appendChild(secEl);
+    }
+
+    qNum++;
+    const card=document.createElement('div');card.className='q-card';card.id='qcard-'+qi;
+    const meta='<div class="q-meta"><span class="q-num">Q'+qNum+'</span><span class="q-type-badge '+q.type+'">'+(q.type==='mcq'?'MCQ':'Short answer')+'</span></div>';
+    const qText='<div class="q-text">'+q.q+'</div>';
+    let body='';
+    if(q.type==='mcq'){
+      const opts=q.opts.map((o,oi)=>'<div class="opt" id="opt'+qi+'_'+oi+'" onclick="chooseOpt('+qi+','+oi+')"><span class="opt-letter">'+['A','B','C','D'][oi]+'</span><span>'+o+'</span></div>').join('');
+      body='<div class="opts">'+opts+'</div>';
+    }else{
+      body='<textarea class="short-input" id="shortTa'+qi+'" placeholder="Write your answer here..."></textarea><div class="short-btns"><button class="btn-reveal" onclick="revealShort('+qi+')">Show model answer</button><button class="btn-self-ok" id="selfok'+qi+'" onclick="selfMark('+qi+',true)">I got it</button><button class="btn-self-bad" id="selfbad'+qi+'" onclick="selfMark('+qi+',false)">Missed it</button></div>';
+    }
+    card.innerHTML=meta+qText+body+'<div class="feedback" id="fb'+qi+'"></div>';
+    secEl.appendChild(card);
+  });
+}
+
+function filterSec(sec,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  document.querySelectorAll('.sec-block').forEach(b=>{b.style.display=(!sec||b.dataset.sec===sec)?'':'none';});
+}
+function chooseOpt(qi,oi){
+  if(submitted||mcqAnswered[qi]!==undefined)return;
+  document.querySelectorAll('#qcard-'+qi+' .opt').forEach(o=>o.classList.remove('chosen'));
+  document.getElementById('opt'+qi+'_'+oi).classList.add('chosen');
+  mcqAnswered[qi]=oi;updateProg();
+}
+function revealShort(qi){
+  const q=questions[qi];const fb=document.getElementById('fb'+qi);
+  fb.className='feedback show reveal';fb.textContent='Model answer: '+q.ans;
+  shortRevealed[qi]=true;
+  document.getElementById('selfok'+qi).style.display='inline-block';
+  document.getElementById('selfbad'+qi).style.display='inline-block';
+  updateProg();
+}
+function selfMark(qi,ok){
+  if(shortSelfMark[qi]!==undefined)return;shortSelfMark[qi]=ok;
+  const card=document.getElementById('qcard-'+qi);const fb=document.getElementById('fb'+qi);
+  const q=questions[qi];
+  if(ok){card.classList.add('answered-ok');fb.className='feedback show ok';fb.textContent='Marked correct. '+q.ans;}
+  else{card.classList.add('answered-bad');fb.className='feedback show bad';fb.textContent='Marked incorrect. Model answer: '+q.ans;}
+  document.getElementById('selfok'+qi).style.display='none';
+  document.getElementById('selfbad'+qi).style.display='none';
+  document.getElementById('shortDisp').textContent=Object.keys(shortSelfMark).length+'/8';
+  updateProg();
+}
+function updateProg(){
+  const total=Object.keys(mcqAnswered).length+Object.keys(shortRevealed).length;
+  document.getElementById('progFill').style.width=(total/questions.length*100)+'%';
+}
+function submitAll(){
+  if(submitted)return;submitted=true;mcqCorrect=0;
+  questions.forEach((q,qi)=>{
+    if(q.type!=='mcq')return;
+    const sel=mcqAnswered[qi];
+    const opts=document.querySelectorAll('#qcard-'+qi+' .opt');
+    opts.forEach(o=>o.classList.add('locked'));opts[q.ans].classList.add('correct');
+    const fb=document.getElementById('fb'+qi);const card=document.getElementById('qcard-'+qi);
+    if(sel===q.ans){mcqCorrect++;fb.className='feedback show ok';fb.textContent='Correct! '+q.exp;card.classList.add('answered-ok');}
+    else{if(sel!==undefined)opts[sel].classList.add('wrong');fb.className='feedback show bad';fb.textContent=(sel===undefined?'Not answered. ':'Incorrect. ')+q.exp;card.classList.add('answered-bad');}
+  });
+  document.getElementById('mcqDisp').textContent=mcqCorrect+'/45';
+  const pct=Math.round(mcqCorrect/45*100);
+  const sc=Object.values(shortSelfMark).filter(v=>v).length;
+  document.getElementById('rMcq').textContent=mcqCorrect+'/45';
+  document.getElementById('rShort').textContent=sc+'/8';
+  document.getElementById('rPct').textContent=pct+'%';
+  document.getElementById('resBig').textContent=mcqCorrect+'/45';
+  document.getElementById('resSub').textContent=pct>=80?'Excellent work! Strong understanding across all 7 chapters.':pct>=60?'Good effort - focus on the chapters with wrong answers.':'Keep revising - go back to the notes and try again.';
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+  document.getElementById('progFill').style.width='100%';
+}
+function retryTest(){
+  mcqAnswered={};shortRevealed={};shortSelfMark={};mcqCorrect=0;submitted=false;
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('mcqDisp').textContent='0/45';
+  document.getElementById('shortDisp').textContent='0/8';
+  document.getElementById('progFill').style.width='0%';
+  build();window.scrollTo({top:0,behavior:'smooth'});
+}
+build();
+</script>
+</body>
+</html>
